@@ -5,19 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: Date, intlOptions?: Intl.DateTimeFormatOptions) {
-  if (!date) return 'Fecha desconocida';
-  if (typeof window === 'undefined') return date.toString();
-
-  return new Intl.DateTimeFormat(navigator.language, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    ...intlOptions,
-  }).format(date);
-};
 
 
 type PlaceholderOptions = {

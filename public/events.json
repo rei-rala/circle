@@ -1,0 +1,152 @@
+[
+  {
+    "id": "1",
+    "title": "Picnic en el Parque Lezama",
+    "map": "https://goo.gl/maps/xyz123",
+    "date": "2024-08-25T11:30:00.000000-0300",
+    "description": "Disfrutemos de un día al aire libre con comida casera y juegos en el Parque Lezama.",
+    "place": {
+      "name": "Parque Lezama",
+      "formatted_address": "Av. Brasil, C1154 Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.622982,
+          "lng": -58.370161
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo1.jpg"
+        }
+      ],
+      "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+      "reference": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+      "url": "https://goo.gl/maps/xyz123"
+    }
+  },
+  {
+    "id": "2",
+    "title": "Noche de cine en Puerto Madero",
+    "map": "https://goo.gl/maps/abc456",
+    "date": "2024-09-05T17:00:00.000000-0300",
+    "description": "Una noche para ver las últimas películas en la pantalla grande, en el corazón de Puerto Madero.",
+    "place": {
+      "name": "Puerto Madero",
+      "formatted_address": "Dique 1, C1107 Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.6083,
+          "lng": -58.3624
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo2.jpg"
+        }
+      ],
+      "place_id": "ChIJSXoGsUXEwEYRJrInz2G-S0s",
+      "reference": "ChIJSXoGsUXEwEYRJrInz2G-S0s",
+      "url": "https://goo.gl/maps/abc456"
+    }
+  },
+  {
+    "id": "3",
+    "title": "Excursión en los Bosques de Palermo",
+    "map": "https://goo.gl/maps/def789",
+    "date": "2024-09-12T05:00:00.000000-0300",
+    "description": "Exploraremos la naturaleza en una caminata por los Bosques de Palermo.",
+    "place": {
+      "name": "Bosques de Palermo",
+      "formatted_address": "Av. del Libertador, C1426 Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.569822,
+          "lng": -58.413017
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo3.jpg"
+        }
+      ],
+      "place_id": "ChIJgWq8mQIGf5URPOhOY6LrHQk",
+      "reference": "ChIJgWq8mQIGf5URPOhOY6LrHQk",
+      "url": "https://goo.gl/maps/def789"
+    }
+  },
+  {
+    "id": "4",
+    "title": "Cena temática en el Barrio Chino",
+    "map": "https://goo.gl/maps/ghi012",
+    "date": "2024-09-20T16:30:00.000000-0300",
+    "description": "Una cena especial con un tema sorpresa en el Barrio Chino de Buenos Aires.",
+    "place": {
+      "name": "Barrio Chino",
+      "formatted_address": "Arribeños 2100, C1428AOF Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.5677,
+          "lng": -58.4372
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo4.jpg"
+        }
+      ],
+      "place_id": "ChIJP7GAVfLe5IkRBAzFiIDo5k0",
+      "reference": "ChIJP7GAVfLe5IkRBAzFiIDo5k0",
+      "url": "https://goo.gl/maps/ghi012"
+    }
+  },
+  {
+    "id": "5",
+    "title": "Jornada de juegos en la Plaza Serrano",
+    "map": "https://goo.gl/maps/jkl345",
+    "date": "2024-10-01T12:00:00.000000-0300",
+    "description": "Un día lleno de diversión con una variedad de juegos en la Plaza Serrano.",
+    "place": {
+      "name": "Plaza Serrano",
+      "formatted_address": "Plaza Serrano, C1414DQF Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.590411,
+          "lng": -58.432675
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo5.jpg"
+        }
+      ],
+      "place_id": "ChIJYz6j8W3e5IkRuyW8HhBndV4",
+      "reference": "ChIJYz6j8W3e5IkRuyW8HhBndV4",
+      "url": "https://goo.gl/maps/jkl345"
+    }
+  },
+  {
+    "id": "6",
+    "title": "Visita a la Feria de Mataderos",
+    "map": "https://goo.gl/maps/mno678",
+    "date": "2024-10-15T07:00:00.000000-0300",
+    "description": "Exploraremos la creatividad local en la Feria de Mataderos. Ideal para comprar regalos únicos.",
+    "place": {
+      "name": "Feria de Mataderos",
+      "formatted_address": "Av. Lisandro de la Torre 2400, C1440 Buenos Aires, Argentina",
+      "geometry": {
+        "location": {
+          "lat": -34.6575,
+          "lng": -58.5058
+        }
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photo6.jpg"
+        }
+      ],
+      "place_id": "ChIJXZG-e5Tj5IkRnaJspDzJjqc",
+      "reference": "ChIJXZG-e5Tj5IkRnaJspDzJjqc",
+      "url": "https://goo.gl/maps/mno678"
+    }
+  }
+]

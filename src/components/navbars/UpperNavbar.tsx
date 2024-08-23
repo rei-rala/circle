@@ -1,12 +1,14 @@
 import { MenuIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { cn } from "@/lib/utils";
+import { ClassValue } from "clsx";
 
 const BRAND = "The Circle ⭕";
 
-export function UpperNavbar() {
+export function UpperNavbar({ className }: { className?: ClassValue }) {
     return (
-        <header className="bg-[#111111] flex items-center justify-between px-4 py-3 shadow">
+        <header className={cn("bg-[#111111] flex items-center justify-between px-4 py-3 shadow", className)}>
             <button className="p-2 rounded-full hover:bg-[#333333]">
                 <MenuIcon className="w-6 h-6" />
                 <span className="sr-only">Alternar menú</span>
@@ -28,6 +30,6 @@ export function UpperNavbar() {
                     </Avatar>
                 </Link>
             </div>
-        </header>
+        </ header>
     )
 }
