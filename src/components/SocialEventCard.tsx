@@ -14,6 +14,12 @@ import { Button } from './ui/button';
 
 export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
     console.log(event)
+
+
+    const handleCopyClick = () => {
+        navigator?.clipboard.writeText(event.place?.formatted_address || "");
+    }
+
     return (
         <Card className="bg-[#222222] p-4 rounded-lg text-white">
             <CardHeader>
@@ -81,7 +87,10 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                                         <p>
                                             {event.place.formatted_address}
                                         </p>
-                                        <span className='relative bottom-1 flex gap-1 text-xs cursor-pointer text-[#aaa] hover:text-white hover:underline'>
+                                        <span
+                                            onClick={handleCopyClick}
+                                            className='relative bottom-1 flex gap-1 text-xs cursor-pointer text-[#aaa] hover:text-white hover:underline'
+                                        >
                                             <CopyIcon className="w-4 h-4" />
                                             Copiar
                                         </span>
