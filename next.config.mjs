@@ -12,6 +12,11 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "maps.googleapis.com",
                 pathname: "/**"
+            },
+            {
+                protocol: "https",
+                hostname: "lh5.googleusercontent.com",
+                pathname: "/**"
             }
         ],
     },

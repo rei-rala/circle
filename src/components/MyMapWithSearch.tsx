@@ -4,27 +4,28 @@ import React, { useRef } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
 import { CustomGoogleMaps } from './CustomGoogleMaps';
 
+const defaultMarkerPosition = {
+  lat: -34.603851,
+  lng: -58.381775
+};
+
 type MyMapsWithSearchProps = {
-  markerPosition: MarkerPosition,
-  setMarkerPosition: ({ lat, lng }: MarkerPosition) => void,
-  setMapsPlace: (googleMapsPlace: any) => void
+  customInput?: any;
+  setMarkerPosition?: ({ lat, lng }: MarkerPosition) => void,
+  mapsPlace: google.maps.places.PlaceResult | null,
+  setMapsPlace?: (googleMapsPlace: any) => void
 }
 
-function MyMapWithSearch({ markerPosition, setMarkerPosition, setMapsPlace }: MyMapsWithSearchProps) {
+function MyMapWithSearch({ customInput, mapsPlace, setMapsPlace }: MyMapsWithSearchProps) {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const markerPosition = mapsPlace?.geometry?.location || defaultMarkerPosition;
 
   const handlePlaceChanged = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
 
       if (place) {
-        setMapsPlace(place);
-      }
-      if (place.geometry) {
-        setMarkerPosition({
-          lat: place.geometry.location?.lat() ?? 0,
-          lng: place.geometry.location?.lng() ?? 0,
-        });
+        setMapsPlace && setMapsPlace(place);
       }
     }
   };
@@ -35,11 +36,14 @@ function MyMapWithSearch({ markerPosition, setMarkerPosition, setMapsPlace }: My
         onLoad={(autocomplete) => autocompleteRef.current = autocomplete}
         onPlaceChanged={handlePlaceChanged}
       >
-        <input
-          type="text"
-          className='text-primary p-2 w-full rounded-sm border-solid border-1 border-red-500'
-          placeholder="Buscar un lugar..."
-        />
+        {
+          customInput ??
+          <input
+            type="text"
+            className='text-primary p-2 w-full rounded-sm border-solid border-1 border-red-500'
+            placeholder="Buscar un lugar..."
+          />
+        }
       </Autocomplete>
       <CustomGoogleMaps markerPosition={markerPosition} />
     </div>

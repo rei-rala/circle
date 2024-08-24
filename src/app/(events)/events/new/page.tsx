@@ -1,6 +1,7 @@
+import { NewEventPageComponent } from "@/components/component/new-event-page";
 
-export default function EventsPage() {
+export default function NewEventPage() {
     return (
-        <h1>creacion evento</h1>
+       <NewEventPageComponent />
     );
 }

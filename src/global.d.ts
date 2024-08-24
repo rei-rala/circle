@@ -4,10 +4,21 @@ type MarkerPosition = {
     lng: number
 }
 
-type SocialEvent = {
+type Attendee = {
     id: string,
+    name: string,
+    photo: string,
+}
+
+type SocialEvent = {
+    id?: string,
     title: string,
     date: Date,
     description: string,
-    coords: MarkerPosition
+    photo?: string,
+    place: null | (google.maps.places.PlaceResult & {
+        photos: (google.maps.places.PlacePhoto & { url: string })[],
+    }),
+    minAttendees: number,
+    attendees: Attendee[],
 } 

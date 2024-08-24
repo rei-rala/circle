@@ -9,11 +9,11 @@ export function getDistanceFromNow(date: Date | string) {
 }
 
 export function getFullDate(date: Date | string) {
-    return format(date, "dd/MM/yyyy")
+    return format(date, "dd/MM/yyyy", { locale: es });
 }
 
 export function getHour(date: Date | string) {
-    return format(date, "HH:mm")
+    return format(date, "HH:mm", { locale: es });
 }
 
 export function getFullDateAndHourWithSeparator(date: Date | string, separator = "a las") {

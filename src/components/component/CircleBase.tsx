@@ -1,41 +1,22 @@
-
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { EventCard, EventCardProps } from "../EventCard";
+import { SocialEventCardSmall } from "../SocialEventCardSmall";
 
 export async function CircleBase() {
   const response = await fetch("http://localhost:3000/events.json");
-  const events: EventCardProps[] = await response.json();
+  const events: SocialEvent[] = await response.json();
 
-  return (
-
-    <div className="flex-1 overflow-auto bg-[#1a1a1a]">
-      <div className="grid gap-4">
-        <Card className="bg-[#222222] p-4 rounded-lg  text-white">
-          <CardHeader>
-            <CardTitle>Próximos Eventos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              {
-                events.map((event, i) => i < 3 && <EventCard key={`event${event.id}`} event={event} />)
-              }
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-[#222222] p-4 rounded-lg  text-white">
-          <CardHeader>
-            <CardTitle>Eventos Sugeridos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 ">
-              {
-                events.map((event, i) => i >= 3 && <EventCard key={`event${event.id}`} event={event} />)
-              }
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+  return (<>
+    <h2 className="my-2">Próximos Eventos</h2>
+    <div className="grid gap-4">
+      {
+        events.map((event, i) => i < 3 && <SocialEventCardSmall key={`event${event.id}`} event={event} />)
+      }
     </div>
-
+    <h2 className="my-2">Eventos Sugeridos</h2>
+    <div className="grid gap-4 ">
+      {
+        events.map((event, i) => i >= 3 && <SocialEventCardSmall key={`event${event.id}`} event={event} />)
+      }
+    </div>
+  </>
   )
 }
