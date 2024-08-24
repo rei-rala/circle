@@ -9,6 +9,7 @@ type FeatureFlags = {
 
 type FeatureContextType = {
     features: FeatureFlags;
+    lowerNavbarFeaturesCount: number;
 }
 
 const defaultContextValue: FeatureContextType = {
@@ -18,6 +19,7 @@ const defaultContextValue: FeatureContextType = {
         socialEventsGroups: false,
         userSettings: false,
     },
+    lowerNavbarFeaturesCount: 0,
 };
 
 const FeatureContext = createContext<FeatureContextType>(defaultContextValue);
@@ -28,8 +30,11 @@ type FeatureProviderProps = {
 }
 
 export const FeatureProvider: React.FC<FeatureProviderProps> = ({ children, features }) => {
+    const lowerNavbarFeatures = [features.userSettings, features.socialEventsCalendar, features.socialEventsGroups]
+    const lowerNavbarFeaturesCount = lowerNavbarFeatures.filter((feature) => feature).length;
+
     return (
-        <FeatureContext.Provider value={{ features }}>
+        <FeatureContext.Provider value={{ features, lowerNavbarFeaturesCount }}>
             {children}
         </FeatureContext.Provider>
     );

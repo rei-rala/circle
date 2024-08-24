@@ -2,7 +2,8 @@ import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
-import { SocialEventsSearch } from "./features/SocialEventsSearch";
+import { SocialEventsSearch } from "./features/upper/SocialEventsSearch";
+import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
 
 const BRAND = "The Circle ⭕";
 
@@ -21,6 +22,7 @@ export function UpperNavbar({ className }: { className?: ClassValue }) {
             <div className="flex items-center gap-2">
                 <SocialEventsSearch />
             </div>
+            <UserMenuTempWrapper isUpper className="absolute right-0 p-4 rounded-full hover:bg-[#333333]" />
         </ header>
     )
 }
