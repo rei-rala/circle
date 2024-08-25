@@ -1,18 +1,14 @@
 "use client"
 
-import { CalendarIcon, CaseSensitiveIcon, ClockIcon, CopyIcon, FilePenIcon, LinkIcon, MapIcon, MapPinIcon, RouteIcon, UsersIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { SelectSingleEventHandler } from "react-day-picker";
+import { CalendarIcon, ClockIcon, FilePenIcon, UsersIcon } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
-import MyMapWithSearch from "../MyMapWithSearch";
 import { getFullDate, getHour, isDateInPast, shiftDateByDays } from "@/lib/date-fns";
-import { toast } from "sonner";
 import { PlaceInfo } from "./socialEventFormPartials.tsx/PlaceInfo";
 import { EventField } from "./socialEventFormPartials.tsx/EventField";
 import { setHours, setMinutes } from "date-fns";
@@ -22,6 +18,7 @@ const defaultSocialEvent: SocialEvent = {
     title: "",
     description: "",
     date: null,
+    status: "draft",
     time: "",
     place: null,
     minAttendees: 0,
@@ -35,7 +32,6 @@ export const SocialEventForm = ({
     socialEvent?: SocialEvent | null;
     mode?: 'create' | 'edit' | "delete" | 'read-only';
 }) => {
-    const [sonnerShown, setSonnerShown] = useState(false);
     const [socialEvent, setSocialEvent] = useState<SocialEvent>(initialSocialEvent || defaultSocialEvent);
     const isPastEvent = useMemo(() => isDateInPast(socialEvent.date), [socialEvent.date]);
 
@@ -109,15 +105,6 @@ export const SocialEventForm = ({
             console.log(socialEvent);
         }
     }
-
-
-    useEffect(() => {
-        if (!sonnerShown && isPastEvent) {
-            toast.error("No puedes editar eventos pasados", { important: true, duration: 10_000 });
-            setSonnerShown(true);
-        }
-    }, [sonnerShown, isPastEvent]);
-
 
     return (
         <form

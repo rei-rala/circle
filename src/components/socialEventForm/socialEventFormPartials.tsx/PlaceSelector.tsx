@@ -5,7 +5,6 @@ import { MapPinIcon } from "lucide-react"
 import { Dispatch, SetStateAction } from "react"
 
 
-
 export const PlaceSelector = ({ mapsPlace, setSocialEvent, disabled }: { mapsPlace?: google.maps.places.PlaceResult | null, setSocialEvent: Dispatch<SetStateAction<SocialEvent>>, disabled: boolean }) => {
     const handlePlaceChange = (place: google.maps.places.PlaceResult) => {
         setSocialEvent((prev) => ({

@@ -14,10 +14,13 @@ type Attendee = {
     photo: string,
 }
 
+type SocialEventStatus = "draft" | "published" | "cancelled" | "completed"
+
 type SocialEvent = {
     id?: string,
     title: string,
     date: Date | null,
+    status: SocialEventStatus,
     time?: string,
     description: string,
     photo?: string,

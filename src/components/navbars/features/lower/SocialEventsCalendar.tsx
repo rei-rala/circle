@@ -14,7 +14,7 @@ export const SocialEventsCalendar = ({ className }: { className: string }) => {
     if (!socialEventsCalendar) return null;
 
     return (
-        <Link href="#" className={className} prefetch={false}>
+        <Link href="" className={className} prefetch={false}>
             <CalendarIcon className="w-6 h-6" />
             <span className="sr-only">Eventos</span>
         </Link>

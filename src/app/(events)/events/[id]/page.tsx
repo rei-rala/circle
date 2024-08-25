@@ -10,16 +10,15 @@ async function EventDetailsPage({ params }: { params: { id: string } }) {
     const { data: event } = await getSocialEventById(id);
 
     if (!event) {
-        return <h1 className='text-white'>no encontrado {id}</h1>
+        return <h1 className='text-white'>[debug] no encontrado {id}</h1>
     }
     return (
         <div className="overflow-auto">
-            <Link href={`/events/${id}/edit`}>Editar</Link>
+            <Link href={`/events/${id}/edit`}>[debug] Editar</Link>
 
             <Suspense fallback="Cargando card de evento">
                 <SocialEventCard event={event} />
             </Suspense>
-            <GoBackButton />
         </div>
     );
 };

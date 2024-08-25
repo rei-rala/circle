@@ -7,10 +7,9 @@ import { CopyIcon, CaseSensitiveIcon, RouteIcon, LinkIcon } from "lucide-react";
 
 export const PlaceInfo = ({
   place,
-  disabled
 }: {
   place: google.maps.places.PlaceResult;
-  disabled: boolean;
+  disabled?: boolean;
 }) => {
   const handleCopyUrl = (e: any) => {
     e.preventDefault();
@@ -61,7 +60,7 @@ export const PlaceInfo = ({
             placeholder="Link del lugar"
             value={place.url}
           />
-          <Button onClick={handleCopyUrl} disabled={disabled}>
+          <Button onClick={handleCopyUrl}>
             <CopyIcon className="w-5 h-5" />
           </Button>
         </div>
