@@ -16,6 +16,7 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
             socialEventsCalendar: false,
             socialEventsGroups: false,
             userSettings: false,
+            burgerMenu: false,
         }}>
             <PopoverManagerProvider>
                 <LoadScript

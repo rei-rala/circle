@@ -5,6 +5,7 @@ type FeatureFlags = {
     socialEventsCalendar?: boolean;
     socialEventsGroups?: boolean;
     userSettings?: boolean;
+    burgerMenu?: boolean;
 }
 
 type FeatureContextType = {
@@ -18,6 +19,7 @@ const defaultContextValue: FeatureContextType = {
         socialEventsCalendar: false,
         socialEventsGroups: false,
         userSettings: false,
+        burgerMenu: false,
     },
     lowerNavbarFeaturesCount: 0,
 };
