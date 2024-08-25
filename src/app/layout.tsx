@@ -4,6 +4,7 @@ import "./globals.css";
 import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 import { UpperNavbar } from "@/components/navbars/UpperNavbar";
 import { AppWithProviders } from "./providers";
+import { auth } from "@/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,10 +18,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = auth();
+
   return (
     <html lang="es">
       <body className={inter.className}>
-        <AppWithProviders>
+        <AppWithProviders session={session}>
           <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
             <UpperNavbar className="w-full flex-shrink-0" />
             <div className="flex-grow overflow-y-auto bg-[#1a1a1a] p-5">
