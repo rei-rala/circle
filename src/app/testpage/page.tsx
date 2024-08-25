@@ -2,19 +2,13 @@
 "use client"
 
 import MyMapWithSearch from "@/components/MyMapWithSearch";
-import Image from "next/image";
 import { useState } from "react";
 
-const initialMarker: MarkerPosition = {
-    lat: -34.6037, // Default latitude (e.g., Buenos Aires)
-    lng: -58.3816, // Default longitude (e.g., Buenos Aires)
-};
+
 
 export default function TestPage() {
-    const [markerPosition, setMarkerPosition] = useState<MarkerPosition>(initialMarker)
     const [mapsPlace, setMapsPlace] = useState<google.maps.places.PlaceResult>()
     const { place_id = null, photos = [], name = null, formatted_address = null, url = null } = mapsPlace ?? {}
-    console.log(mapsPlace)
 
     return (
         <>
@@ -39,7 +33,7 @@ export default function TestPage() {
                 } */}
             </div>
 
-            <MyMapWithSearch setMapsPlace={setMapsPlace} markerPosition={markerPosition} setMarkerPosition={setMarkerPosition} />
+            <MyMapWithSearch mapsPlace={mapsPlace} setMapsPlace={setMapsPlace} />
         </>
     )
 }

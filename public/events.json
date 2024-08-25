@@ -3,7 +3,7 @@
     "id": "1",
     "title": "Picnic en el Parque Lezama",
     "map": "https://goo.gl/maps/xyz123",
-    "date": "2024-08-25T11:30:00.000000-0300",
+    "date": "2024-08-24T11:30:00.000000-0300",
     "photo": "https://lh5.googleusercontent.com/p/AF1QipOcE00FD2V5g9faY99z_m24Ig-4L24AkLr7Nvrc=w114-h114-n-k-no",
     "description": "Disfrutemos de un día al aire libre con comida casera y juegos en el Parque Lezama.",
     "place": {
@@ -37,8 +37,8 @@
       "formatted_address": "Dique 1, C1107 Buenos Aires, Argentina",
       "geometry": {
         "location": {
-          "lat": -34.6083,
-          "lng": -58.3624
+          "lat": -34.620977365827834,
+          "lng": -58.36488357116397
         }
       },
       "photos": [

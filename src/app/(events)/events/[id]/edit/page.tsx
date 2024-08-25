@@ -1,14 +1,21 @@
 import { SocialEventForm } from "@/components/socialEventForm/SocialEventForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSocialEventById } from "@/services/socialEvents.services";
 
-export default function NewEventPage() {
+export default async function EditEventPage({
+    params,
+}: {
+    params: { id: string };
+}) {
+    const { data: socialEvent } = await getSocialEventById(params.id);
+
     return (
         <Card className="bg-[#222222] p-4 rounded-lg">
             <CardHeader>
-                <CardTitle>Crear Evento</CardTitle>
+                <CardTitle>Editar Evento</CardTitle>
             </CardHeader>
             <CardContent>
-                <SocialEventForm />
+                <SocialEventForm socialEvent={socialEvent} />
             </CardContent>
         </Card>
     );

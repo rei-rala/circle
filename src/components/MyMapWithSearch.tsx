@@ -12,7 +12,7 @@ const defaultMarkerPosition = {
 type MyMapsWithSearchProps = {
   customInput?: any;
   setMarkerPosition?: ({ lat, lng }: MarkerPosition) => void,
-  mapsPlace: google.maps.places.PlaceResult | null,
+  mapsPlace?: google.maps.places.PlaceResult | null,
   setMapsPlace?: (googleMapsPlace: any) => void
 }
 

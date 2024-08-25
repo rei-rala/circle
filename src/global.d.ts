@@ -1,3 +1,7 @@
+type ApiResponse<T> = {
+    data: T | null,
+    success?: boolean,
+}
 
 type MarkerPosition = {
     lat: number,
@@ -13,12 +17,11 @@ type Attendee = {
 type SocialEvent = {
     id?: string,
     title: string,
-    date: Date,
+    date: Date | null,
+    time?: string,
     description: string,
     photo?: string,
-    place: null | (google.maps.places.PlaceResult & {
-        photos: (google.maps.places.PlacePhoto & { url: string })[],
-    }),
+    place?:  google.maps.places.PlaceResult | null,
     minAttendees: number,
     attendees: Attendee[],
 } 

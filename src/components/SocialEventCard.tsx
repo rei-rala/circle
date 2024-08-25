@@ -10,12 +10,8 @@ import Image from 'next/image';
 import { CustomGoogleMaps } from '@/components/CustomGoogleMaps';
 import { getDistanceFromNow, getFullDate, getHour } from '@/lib/date-fns';
 import Link from 'next/link';
-import { Button } from './ui/button';
 
 export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
-    console.log(event)
-
-
     const handleCopyClick = () => {
         navigator?.clipboard.writeText(event.place?.formatted_address || "");
     }
@@ -26,7 +22,7 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                 <CardTitle>
                     <div>{event.title}</div>
                 </CardTitle>
-                <p className='capitalize'>{getDistanceFromNow(event.date)} </p>
+                {event.date && <p className='capitalize'>{getDistanceFromNow(event.date)} </p>}
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4">
