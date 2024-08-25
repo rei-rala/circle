@@ -6,7 +6,7 @@ import { MenuIcon } from "lucide-react";
 
 export const BurgerMenu = () => {
     const { features: { burgerMenu } } = useFeatureContext();
-console.log(burgerMenu);
+
     if (!burgerMenu) return null;
 
     return (
