@@ -52,12 +52,12 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                             <div className="flex items-center gap-2">
                                 <CalendarIcon className="w-5 h-5" />
                                 <div>
-                                    {getFullDate(event.date)}
+                                    {event.date && getFullDate(event.date)}
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <ClockIcon className="w-5 h-5" />
-                                <div>{getHour(event.date)}</div>
+                                <div>{event.date && getHour(event.date)}</div>
                             </div>
                             {event.place &&
                                 <>

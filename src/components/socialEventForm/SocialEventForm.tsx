@@ -33,7 +33,7 @@ export const SocialEventForm = ({
     mode?: 'create' | 'edit' | "delete" | 'read-only';
 }) => {
     const [socialEvent, setSocialEvent] = useState<SocialEvent>(initialSocialEvent || defaultSocialEvent);
-    const isPastEvent = useMemo(() => isDateInPast(socialEvent.date), [socialEvent.date]);
+    const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
     const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent;
     const minDate = shiftDateByDays();
