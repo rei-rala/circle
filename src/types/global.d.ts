@@ -1,3 +1,5 @@
+type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "socialMedia" | "hideEmail" | "hideImage">
+
 type ApiResponse<T> = {
     data: T | null,
     success?: boolean,

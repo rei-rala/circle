@@ -1,14 +1,17 @@
 "use client"
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import { Input } from "../../ui/input"
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import { ImageIcon, LocateIcon, MailIcon, MessageCircleMoreIcon, PlusIcon, ScanFaceIcon, UserIcon, XIcon } from "lucide-react";
+import { ImageIcon, ImageOffIcon, LocateIcon, MailIcon, MailXIcon, MessageCircleMoreIcon, PlusIcon, ScanFaceIcon, UserIcon, XIcon } from "lucide-react";
 import { User } from "next-auth";
+import { useSession } from "next-auth/react";
+import { updateUserProfile } from "@/app/profile/actions";
+import Image from "next/image";
 
 const defaultFormUser: User = {
     alias: "",
@@ -19,8 +22,36 @@ const defaultFormUser: User = {
     hideImage: false
 }
 
-export const ProfileForm = ({ user }: { user?: User | null }) => {
-    const [formUser, setFormUser] = useState(user ?? defaultFormUser);
+const keys: (keyof UserProfileDTO)[] = ["alias", "bio", "location", "socialMedia", "hideEmail", "hideImage"];
+
+
+function checkUserProfileChanges(newUser: UserProfileDTO, user?: User | null): boolean {
+    if (!user) return false;
+
+    for (const key of keys) {
+        if (key === 'socialMedia') {
+            if (newUser[key].length !== user[key].length) return true;
+
+            for (let i = 0; i < newUser[key].length; i++) {
+                if (newUser[key][i] !== user[key][i]) return true;
+            }
+        } else {
+            if (newUser[key] !== user[key]) return true;
+        }
+    }
+
+    return false;
+}
+
+
+export const ProfileForm = () => {
+    const session = useSession();
+    const [formUser, setFormUser] = useState(session.data?.user ?? defaultFormUser);
+
+    const hasChanges = useMemo(() => {
+        return checkUserProfileChanges(formUser, session?.data?.user);
+    }, [formUser, session?.data?.user])
+
 
     const checkboxFields: { field: keyof User, label: string }[] = [
         {
@@ -32,17 +63,14 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
         }
     ]
 
-    const handleFormFieldChange = (e: any) => {
-        console.log({
-            e,
-            target: e.target,
-        })
-        // const { name, value } = e.target;
+    const handleFormFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
 
-        // setFormUser({
-        //     ...formUser,
-        //     [name]: value
-        // });
+        if (Object.keys(defaultFormUser).includes(name))
+            setFormUser({
+                ...formUser,
+                [name]: value
+            });
     }
 
     const handleCheckboxChange = (field: keyof User, value: boolean) => {
@@ -82,22 +110,32 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
         });
     };
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log(await updateUserProfile(formUser));
+        session.update();
+    }
+
     return (
-        <form className="grid gap-6">
+        <form className="grid gap-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                     <div className="flex items-center gap-2">
                         <UserIcon className="w-5 h-5" />
-                        <Label htmlFor="name">Alias</Label>
+                        <Label htmlFor="alias">Alias</Label>
                     </div>
-                    <Input id="name" placeholder="Ingresa tu alias" value={formUser.alias} onChange={handleFormFieldChange} />
+                    <Input id="alias" name="alias" placeholder="Ingresa tu alias" value={formUser.alias} onChange={handleFormFieldChange} />
                 </div>
                 <div className="grid gap-2">
                     <div className="flex items-center gap-2">
-                        <MailIcon className="w-5 h-5" />
+                        {
+                            formUser.hideEmail
+                                ? <MailXIcon className="w-5 h-5" />
+                                : <MailIcon className="w-5 h-5" />
+                        }
                         <Label htmlFor="email">Correo Electrónico</Label>
                     </div>
-                    <Input id="email" type="email" placeholder="Ingresa tu correo electrónico" value={formUser.email!} onChange={handleFormFieldChange} disabled />
+                    <Input id="email" name="email" type="email" placeholder="Ingresa tu correo electrónico" value={String(formUser.email)} onChange={handleFormFieldChange} disabled />
                 </div>
             </div>
             <div className="grid grid-cols-1 gap-4">
@@ -106,7 +144,7 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
                         <LocateIcon className="w-5 h-5" />
                         <Label htmlFor="location">Ubicación</Label>
                     </div>
-                    <Input id="location" placeholder="Ingresa tu ubicación" value={formUser.location} onChange={handleFormFieldChange} />
+                    <Input id="location" name="location" placeholder="Ingresa tu ubicación" value={formUser.location} onChange={handleFormFieldChange} />
                 </div>
             </div>
             <div className="grid gap-2">
@@ -114,7 +152,7 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
                     <ScanFaceIcon className="w-5 h-5" />
                     <Label htmlFor="bio">Biografía</Label>
                 </div>
-                <Textarea id="bio" placeholder="Ingresa tu biografía" value={formUser.bio} onChange={handleFormFieldChange} />
+                <Textarea id="bio" name="bio" placeholder="Ingresa tu biografía" value={formUser.bio} onChange={handleFormFieldChange} />
             </div>
             <div className="grid gap-2">
                 <div className="flex items-center gap-2">
@@ -157,17 +195,23 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
             </div>
             <div className="grid gap-2">
                 <div className="flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5" />
+                    {
+                        formUser.hideImage
+                            ? <ImageOffIcon className="w-5 h-5" />
+                            : <ImageIcon className="w-5 h-5" />
+                    }
                     <Label htmlFor="image">Imagen de Google {formUser.hideImage && "(privada)"}</Label>
                 </div>
-                <img
-                    src={formUser.image ?? "/placeholder-user.svg"}
+
+                <Image
+                    src={session.data?.user.image || "/placeholder-user.jpg"}
                     alt="Imagen del usuario"
                     width={200}
                     height={200}
-                    className="rounded-full m-auto md:m-0"
+                    className="rounded-full m-auto md:m-0 text-white"
                     style={{ aspectRatio: "200/200", objectFit: "cover" }}
                 />
+
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -186,7 +230,7 @@ export const ProfileForm = ({ user }: { user?: User | null }) => {
             </div>
 
             <div className="flex justify-end">
-                <Button type="submit">Guardar Cambios</Button>
+                <Button type="submit" disabled={!hasChanges}>Guardar Cambios</Button>
             </div>
         </form>
     )

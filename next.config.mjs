@@ -15,7 +15,7 @@ const nextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "lh5.googleusercontent.com",
+                hostname: "*.googleusercontent.com",
                 pathname: "/**"
             }
         ],

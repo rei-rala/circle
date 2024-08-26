@@ -16,10 +16,11 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  bio         String?
-  location    String?
-  socialMedia String[]
-  
+  alias       String   @default("")
+  bio         String   @default("")
+  location    String   @default("")
+  socialMedia String[] @default([])
+
   hideEmail Boolean @default(false)
   hideImage Boolean @default(false)
 

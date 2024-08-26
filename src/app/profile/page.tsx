@@ -1,11 +1,13 @@
 import { ProfileForm } from "@/components/forms/profileForm/ProfileForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import getServerSession from "@/lib/getServerSession";
+import { redirect } from "next/navigation";
 import React from "react";
 
 // using auth.js session
 export default async function ProfilePage() {
     const session = await getServerSession();
+    if (!session) redirect("/api/auth/signin?callbackUrl=/profile");
 
     return (
         <div className="p-4 grid gap-4">
@@ -17,7 +19,7 @@ export default async function ProfilePage() {
                     <CardTitle>Profile Information</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ProfileForm user={session?.user} />
+                    <ProfileForm />
                 </CardContent>
             </Card>
         </div>
