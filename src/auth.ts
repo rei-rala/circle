@@ -6,7 +6,10 @@ import GoogleProvider from "next-auth/providers/google"
 
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // trustHost: process.env.NODE_ENV === "development", //bugged for development
+  trustHost: process.env.NODE_ENV === "development" || undefined, //fixes a bug for development
+  theme: {
+    logo: "/icon.png"
+  },
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [GoogleProvider],
   callbacks: {

@@ -1,3 +1,5 @@
+import { User } from "next-auth"
+
 type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "socialMedia" | "hideEmail" | "hideImage">
 
 type ApiResponse<T> = {
@@ -10,23 +12,36 @@ type MarkerPosition = {
     lng: number
 }
 
-type Attendee = {
-    id: string,
-    name: string,
-    photo: string,
-}
-
 type SocialEventStatus = "draft" | "published" | "cancelled" | "completed"
 
 type SocialEvent = {
-    id?: string,
-    title: string,
-    date: Date | null,
-    status: SocialEventStatus,
-    time?: string,
-    description: string,
-    photo?: string,
-    place?:  google.maps.places.PlaceResult | null,
-    minAttendees: number,
-    attendees: Attendee[],
-} 
+    id: string
+    ownerId: string
+    owner: User
+    title: string
+    date: Date
+    status: SocialEventStatus
+    time: string
+    description: string
+    photo: string
+    place: google.maps.places.PlaceResult | null // Store the google.maps.places.PlaceResult data as JSON
+    minAttendees: number
+    attendees: Attendee[]
+
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+
+    user: User
+    userId: string
+}
+
+type Attendee = {
+    id: string;
+    eventId: string;
+    event: SocialEvent;
+    userId: string;
+    user: User;
+    joinedAt: Date;
+    leftAt: Date | null;
+}
