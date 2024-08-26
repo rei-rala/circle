@@ -21,8 +21,7 @@ export async function getSocialEvents(): Promise<ApiResponse<SocialEvent[]>> {
 
 export async function getSocialEventById(id: string): Promise<ApiResponse<SocialEvent>> {
     const { data: socialEvents } = await getSocialEvents();
-
-    const event = (socialEvents ?? []).find(e => e.id === id) ?? null
+    const event = (socialEvents ?? []).find(e => e.id == id) ?? null
 
     return {
         data: event

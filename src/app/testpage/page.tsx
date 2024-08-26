@@ -4,8 +4,6 @@
 import MyMapWithSearch from "@/components/MyMapWithSearch";
 import { useState } from "react";
 
-
-
 export default function TestPage() {
     const [mapsPlace, setMapsPlace] = useState<google.maps.places.PlaceResult>()
     const { place_id = null, photos = [], name = null, formatted_address = null, url = null } = mapsPlace ?? {}

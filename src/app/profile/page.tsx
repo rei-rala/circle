@@ -12,11 +12,11 @@ export default async function ProfilePage() {
     return (
         <div className="p-4 grid gap-4">
             <div className="flex items-center justify-between">
-                <div className="text-2xl font-semibold">Edit Profile</div>
+                <div className="text-2xl font-semibold">Mi perfil</div>
             </div>
             <Card className="bg-[#222222] p-4 rounded-lg">
                 <CardHeader>
-                    <CardTitle>Profile Information</CardTitle>
+                    <CardTitle>Editar Perfil</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ProfileForm />

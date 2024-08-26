@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 import { UpperNavbar } from "@/components/navbars/UpperNavbar";
 import { AppWithProviders } from "./providers";
-import getServerSession from "@/lib/getServerSession";
+import { Suspense } from "react";
+
+import "./globals.css";
+import Loading from "@/components/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,16 +20,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
-
   return (
     <html lang="es">
       <body className={inter.className}>
-        <AppWithProviders session={session}>
+        <AppWithProviders>
           <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
             <UpperNavbar className="w-full flex-shrink-0" />
             <div className="flex-grow overflow-y-auto bg-[#1a1a1a] p-5">
-              {children}
+              <Suspense fallback={<Loading />}>
+                {children}
+              </Suspense>
             </div>
             <LowerNavbar className="w-full flex-shrink-0" />
           </div>

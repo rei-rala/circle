@@ -1,25 +1,12 @@
-import { SocialEventCard } from '../../../../components/SocialEventCard';
 import { Suspense } from 'react';
-import { getSocialEventById } from '@/services/socialEvents.services';
-import Link from 'next/link';
+import Loading from '@/components/Loading';
+import { EventDetailsPageComponent } from '@/pages/EventsDetailsPage';
 
 
-async function EventDetailsPage({ params }: { params: { id: string } }) {
-    const id = params.id;
-    const { data: event } = await getSocialEventById(id);
-
-    if (!event) {
-        return <h1 className='text-white'>[debug] no encontrado {id}</h1>
-    }
+export default async function EventDetailsPage({ params: { id } }: { params: { id: string } }) {
     return (
-        <div className="overflow-auto">
-            <Link href={`/events/${id}/edit`}>[debug] Editar</Link>
-
-            <Suspense fallback="Cargando card de evento">
-                <SocialEventCard event={event} />
-            </Suspense>
-        </div>
+        <Suspense fallback={<Loading title="Evento" />}>
+            <EventDetailsPageComponent id={id} />
+        </Suspense>
     );
 };
-
-export default EventDetailsPage;
