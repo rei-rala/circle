@@ -25,14 +25,14 @@ export const CreateMenu = ({ className }: { className: string }) => {
 
     return (
         <Popover open={isOpen}>
-            <PopoverTrigger asChild className={className}>
-                <Link href={POPOVER_ID} prefetch={false} onClick={toggleCurrentPopoverId}>
+            <PopoverTrigger asChild className={className} onClick={toggleCurrentPopoverId}>
+                <Link href={POPOVER_ID} prefetch={false}>
                     <PlusIcon className="w-6 h-6" />
                     <span className="sr-only">Crear Evento</span>
                 </Link>
             </PopoverTrigger>
-            <PopoverContent>
-                <div className="flex flex-col gap-4 w-auto">
+            <PopoverContent className="min-w-fit w-20">
+                <div className="flex flex-col gap-4">
                     <h3 className="font-semibold leading-none">Crear</h3>
                     <Separator />
                     <div className="flex flex-col gap-3">

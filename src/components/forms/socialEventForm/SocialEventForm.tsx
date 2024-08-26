@@ -2,12 +2,12 @@
 
 import { CalendarIcon, ClockIcon, FilePenIcon, UsersIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { Label } from "../ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Textarea } from "../ui/textarea";
-import { Separator } from "../ui/separator";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { getFullDate, getHour, isDateInPast, shiftDateByDays } from "@/lib/date-fns";
 import { PlaceInfo } from "./socialEventFormPartials.tsx/PlaceInfo";
 import { EventField } from "./socialEventFormPartials.tsx/EventField";

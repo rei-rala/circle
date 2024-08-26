@@ -1,0 +1,25 @@
+import { ProfileForm } from "@/components/forms/profileForm/ProfileForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import getServerSession from "@/lib/getServerSession";
+import React from "react";
+
+// using auth.js session
+export default async function ProfilePage() {
+    const session = await getServerSession();
+
+    return (
+        <div className="p-4 grid gap-4">
+            <div className="flex items-center justify-between">
+                <div className="text-2xl font-semibold">Edit Profile</div>
+            </div>
+            <Card className="bg-[#222222] p-4 rounded-lg">
+                <CardHeader>
+                    <CardTitle>Profile Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ProfileForm user={session?.user} />
+                </CardContent>
+            </Card>
+        </div>
+    );
+}

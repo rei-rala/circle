@@ -1,6 +1,5 @@
 import { SocialEventCard } from '../../../../components/SocialEventCard';
 import { Suspense } from 'react';
-import { GoBackButton } from '@/components/GoBackButton';
 import { getSocialEventById } from '@/services/socialEvents.services';
 import Link from 'next/link';
 

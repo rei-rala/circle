@@ -19,7 +19,6 @@ export function LowerNavbar({ className }: { className?: ClassValue }) {
             <CreateMenu className="p-2 rounded-full hover:bg-[#333333]" />
             <SocialEventsGroups />
             <UserMenuTempWrapper />
-
         </nav>
     )
 }

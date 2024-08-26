@@ -1,5 +1,4 @@
-import { GoBackButton } from "@/components/GoBackButton";
-import { SocialEventForm } from "@/components/socialEventForm/SocialEventForm";
+import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { isDateInPast } from "@/lib/date-fns";
 import { getSocialEventById } from "@/services/socialEvents.services";

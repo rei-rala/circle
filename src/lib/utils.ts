@@ -5,6 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function truncateString(str: string, maxLength: number, ellipsis = "...") {
+  return str.length > maxLength ? str.substring(0, maxLength) + ellipsis : str;
+}
+
+export function getEmailUserName(email: string) {
+  return email.split("@")[0];
+}
 
 
 type PlaceholderOptions = {

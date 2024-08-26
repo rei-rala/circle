@@ -4,13 +4,14 @@ import { Toaster } from "@/components/ui/sonner"
 import { FeatureProvider } from "@/contexts/FeatureProvider"
 import { PopoverManagerProvider } from "@/contexts/PopoverManagerProvider"
 import { Libraries, LoadScript } from "@react-google-maps/api"
+import { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
 
 const NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 const GOOGLE_MAPS_LIBRARIES: Libraries = ["places", "geometry"]
 
-export const AppWithProviders = ({ children, session }: { children: ReactNode, session: any }) => {
+export const AppWithProviders = ({ children, session }: { children: ReactNode, session?: Session | null }) => {
     return (
         <FeatureProvider features={{
             socialEventsSearch: false,
