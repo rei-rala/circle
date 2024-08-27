@@ -1,4 +1,4 @@
-import { User } from "next-auth"
+type EditorMode = 'create' | 'edit' | "delete" | 'read-only';
 
 type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "socialMedia" | "hideEmail" | "hideImage">
 
@@ -19,7 +19,7 @@ type SocialEvent = {
     ownerId: string
     owner: User
     title: string
-    date: Date
+    date: Date | null
     status: SocialEventStatus
     time: string
     description: string

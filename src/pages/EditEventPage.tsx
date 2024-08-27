@@ -1,14 +1,27 @@
 import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { isDateInPast } from "@/lib/date-fns";
+import getServerSession from "@/lib/getServerSession";
 import { getSocialEventById } from "@/services/socialEvents.services";
+import { notFound } from "next/navigation";
 
 export async function EditEventPageComponent({
     id,
+    mode,
 }: {
-    id: string
+    id: string,
+    mode: EditorMode
 }) {
-    const { data: socialEvent } = await getSocialEventById(id);
+    const [session, { data: socialEvent }] = await Promise.all([getServerSession(), getSocialEventById(id)]);
+   
+    if (
+        !session?.user?.id ||
+        !socialEvent ||
+        (socialEvent.ownerId && session.user.id !== socialEvent.ownerId) ||
+        session.user.role !== "admin"
+    ) {
+        return notFound();
+    }
 
     return (
         <>
@@ -32,7 +45,7 @@ export async function EditEventPageComponent({
                     <CardTitle>Editar Evento</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <SocialEventForm socialEvent={socialEvent} />
+                    <SocialEventForm socialEvent={socialEvent} mode={mode} />
                 </CardContent>
             </Card>
         </>

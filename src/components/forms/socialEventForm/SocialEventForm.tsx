@@ -14,25 +14,29 @@ import { EventField } from "./socialEventFormPartials.tsx/EventField";
 import { setHours, setMinutes } from "date-fns";
 import { PlaceSelector } from "./socialEventFormPartials.tsx/PlaceSelector";
 
-const defaultSocialEvent: SocialEvent = {
+type SocialEventDTO = Pick<SocialEvent, "id" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
+
+const defaultSocialEvent: SocialEventDTO = {
+    id: "",
     title: "",
+    photo: "",
     description: "",
     date: null,
     status: "draft",
     time: "",
     place: null,
     minAttendees: 0,
-    attendees: [],
 }
+
 
 export const SocialEventForm = ({
     socialEvent: initialSocialEvent,
     mode = 'create'
 }: {
     socialEvent?: SocialEvent | null;
-    mode?: 'create' | 'edit' | "delete" | 'read-only';
+    mode?: EditorMode;
 }) => {
-    const [socialEvent, setSocialEvent] = useState<SocialEvent>(initialSocialEvent || defaultSocialEvent);
+    const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(initialSocialEvent as SocialEventDTO | null || defaultSocialEvent);
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
     const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent;

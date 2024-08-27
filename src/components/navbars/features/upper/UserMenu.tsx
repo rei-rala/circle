@@ -7,7 +7,8 @@ import { Popover } from "@radix-ui/react-popover"
 import { PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider"
 import { Separator } from "@/components/ui/separator"
-import { getEmailUserName } from "@/lib/utils"
+import { cn, getEmailUserName } from "@/lib/utils"
+import clsx from "clsx"
 
 const POPOVER_ID = "user-menu"
 // this is a upper navbar component, but we use it at the bottom while features are being implemented
@@ -26,6 +27,9 @@ export const UserMenu = ({ className }: { className?: string }) => {
             : setCurrentPopoverId(POPOVER_ID);
     }
 
+    const borderColor = session?.user.role === "admin"
+        ? "border-red-700 hover:border-red-400"
+        : "border-slate-400 hover:border-white"
 
     return (
         <Popover open={isOpen}>
@@ -35,7 +39,7 @@ export const UserMenu = ({ className }: { className?: string }) => {
                 onClick={toggleCurrentPopoverId}
                 disabled={status === "loading"}
             >
-                <Avatar className="w-8 h-8 border-2 border-solid border-slate-400 hover:border-white cursor-pointer">
+                <Avatar className={cn(borderColor, "w-8 h-8 border-2 border-solid cursor-pointer")}>
                     <AvatarImage
                         src={
                             session?.user?.image && !session.user.hideImage

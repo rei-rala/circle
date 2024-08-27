@@ -14,6 +14,7 @@ import { updateUserProfile } from "@/app/profile/actions";
 import Image from "next/image";
 
 const defaultFormUser: User = {
+    role: null,
     alias: "",
     bio: "",
     location: "",
