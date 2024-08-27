@@ -25,7 +25,5 @@ export async function updateUserProfile(values: UserProfileDTO) {
         }
     })
 
-    console.log(updated)
-
     return Boolean(updated)
 }

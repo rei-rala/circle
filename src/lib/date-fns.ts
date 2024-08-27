@@ -24,7 +24,6 @@ export function shiftDateByDays(date?: Date | string | null, days?: number) {
 }
 
 export function isDateInPast(date?: Date | string | number | null) {
-    console.log({ d: date, dd: date && isValid(new Date(date)) })
     if (
         !date ||
         typeof date === "string" && date && !isValid(new Date(date))

@@ -33,3 +33,33 @@ export function generatePlaceholderLink({
 }: PlaceholderOptions = {}): string {
   return `https://placehold.co/${width}x${height}/${backgroundColor}/${textColor}.png?font=${font}&text=${encodeURIComponent(text)}`;
 }
+
+
+/**
+ * No pregunten por que queria hacerlo asi, pero compara dos objetos y retorna true si son diferentes.
+ * Todavia no funciona (?)
+ * Debe haber otra manera, pero me gusto como quedo
+ */
+export function compareChangesObject<T extends object>(newObject: T, oldObject: T): boolean {
+  const keys = Object.keys(newObject) as (keyof T)[];
+
+  for (const key of keys) {
+    const newValue = newObject[key];
+    const oldValue = oldObject[key];
+
+    if (typeof newValue !== typeof oldValue) return true;
+
+    if (Array.isArray(newValue) && Array.isArray(oldValue)) {
+      if (newValue.length !== oldValue.length) return true;
+      for (let i = 0; i < newValue.length; i++) {
+        if (compareChangesObject(newValue[i], oldValue[i])) return true;
+      }
+    } else if (typeof newValue === "object" && newValue !== null && typeof oldValue === "object" && oldValue !== null) {
+      if (compareChangesObject(newValue, oldValue)) return true;
+    } else if (newValue !== oldValue) {
+      return true;
+    }
+  }
+
+  return false;
+}
