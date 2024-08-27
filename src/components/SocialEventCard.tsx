@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { generatePlaceholderLink } from '@/lib/utils';
 import { Separator } from '@radix-ui/react-separator';
-import { CopyIcon, LandPlotIcon, RouteIcon } from 'lucide-react';
+import { CopyIcon, LandPlotIcon, RouteIcon, UsersIcon } from 'lucide-react';
 import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
 import Image from 'next/image';
 
@@ -45,6 +45,18 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                             </div>
                         </div>
                     </div>
+
+                    <Separator />
+                    <div className="flex flex-col items-start gap-4">
+                        <div className="flex-1">
+                            <div className="text-lg font-medium">{event.title}</div>
+                            <p className="text-sm text-[#aaa] mt-2">
+                                Organizado por:
+                                <b>{event.owner.name}</b>
+                            </p>
+                        </div>
+                    </div>
+
                     <Separator />
                     <div className="grid gap-2">
                         <div className="font-medium">Detalles del Evento</div>
@@ -59,6 +71,18 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                                 <ClockIcon className="w-5 h-5" />
                                 <div>{event.date && getHour(event.date)}</div>
                             </div>
+
+                            {
+                                event.minAttendees && event.minAttendees !== 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <UsersIcon className="w-5 h-5" />
+                                        <div>
+                                            Mínimo de asistentes: {event.minAttendees}
+                                        </div>
+                                    </div>
+                                )
+                            }
+
                             {event.place &&
                                 <>
                                     <div className="flex items-center gap-2">

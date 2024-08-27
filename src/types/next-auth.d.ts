@@ -11,10 +11,12 @@ declare module 'next-auth' {
         alias: string;
         bio: string;
         location: string;
+        phone: string;
         socialMedia: string[];
         
         hideEmail: boolean;
         hideImage: boolean;
+        hidePhone: boolean;
     }
     
 }

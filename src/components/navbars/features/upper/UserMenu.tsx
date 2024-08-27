@@ -38,20 +38,23 @@ export const UserMenu = ({ className }: { className?: string }) => {
                 className={className}
                 onClick={toggleCurrentPopoverId}
                 disabled={status === "loading"}
+                aria-roledescription="user menu"
             >
-                <Avatar className={cn(borderColor, "w-8 h-8 border-2 border-solid cursor-pointer")}>
-                    <AvatarImage
-                        src={
-                            session?.user?.image && !session.user.hideImage
-                                ? session.user.image
-                                : "/placeholder-user.jpg"
-                        }
-                        alt={`Avatar de ${session?.user ? session.user.email : "Usuario"}`}
-                    />
-                    <AvatarFallback>
-                        {session?.user?.name ? session.user.name[0] : "X"}
-                    </AvatarFallback>
-                </Avatar>
+                <Link href={POPOVER_ID}>
+                    <Avatar className={cn(borderColor, "w-8 h-8 border-2 border-solid cursor-pointer")}>
+                        <AvatarImage
+                            src={
+                                session?.user?.image && !session.user.hideImage
+                                    ? session.user.image
+                                    : "/placeholder-user.jpg"
+                            }
+                            alt={`Avatar de ${session?.user ? session.user.email : "Usuario"}`}
+                        />
+                        <AvatarFallback>
+                            {session?.user?.name ? session.user.name[0] : "X"}
+                        </AvatarFallback>
+                    </Avatar>
+                </Link>
             </PopoverTrigger>
             <PopoverContent side="bottom" className="w-fit" alignOffset={-10}>
                 <div className="flex flex-col gap-4 w-auto">

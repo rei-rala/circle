@@ -5,7 +5,7 @@ import { prisma } from "@/prisma";
 
 export async function updateUserProfile(values: UserProfileDTO) {
     const session = await auth();
-    const { alias, bio, location, socialMedia, hideEmail, hideImage } = values;
+    const { alias, bio, location, phone, socialMedia, hideEmail, hideImage, hidePhone } = values;
 
     if (!(session?.user.id)) {
         return false;
@@ -19,9 +19,11 @@ export async function updateUserProfile(values: UserProfileDTO) {
             alias,
             bio,
             location,
+            phone,
             socialMedia,
             hideEmail,
-            hideImage
+            hideImage,
+            hidePhone,
         }
     })
 

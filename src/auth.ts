@@ -18,9 +18,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.alias = user.alias;
       session.user.location = user.location;
       session.user.socialMedia = user.socialMedia;
+      session.user.role = user.role;
+      session.user.phone = user.phone;
+      
       session.user.hideEmail = user.hideEmail;
       session.user.hideImage = user.hideImage;
-      session.user.role = user.role;
+      session.user.hidePhone = user.hidePhone;
 
       return session;
     },

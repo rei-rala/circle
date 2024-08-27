@@ -15,18 +15,19 @@ enum SocialEventStatus {
 }
 
 model SocialEvent {
-  id           String            @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId      String            @db.ObjectId
-  owner        User              @relation(name: "EventOwner", fields: [ownerId], references: [id])
-  title        String
-  date         DateTime?
-  status       SocialEventStatus
-  time         String?
-  description  String
-  photo        String?
-  place        Json? // Store the google.maps.places.PlaceResult data as JSON
-  minAttendees Int
-  attendees    Attendee[]        @relation("EventAttendees")
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId         String            @db.ObjectId
+  owner           User              @relation(name: "EventOwner", fields: [ownerId], references: [id])
+  title           String
+  date            DateTime?
+  status          SocialEventStatus
+  time            String?
+  description     String
+  photo           String?
+  place           Json? // Store the google.maps.places.PlaceResult data as JSON
+  minAttendees    Int
+  attendees       Attendee[]        @relation("EventAttendees")
+  publicAttendees Boolean
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -36,22 +37,24 @@ model SocialEvent {
   userId String? @db.ObjectId
 }
 
-model User {  
+model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
 
-  role          String?
+  role String?
 
   alias       String   @default("")
   bio         String   @default("")
   location    String   @default("")
+  phone       String   @default("")
   socialMedia String[] @default([])
 
   hideEmail Boolean @default(false)
   hideImage Boolean @default(false)
+  hidePhone Boolean @default(false)
 
   createdEvents  SocialEvent[] @relation("EventOwner")
   attendedEvents Attendee[]    @relation("UserAttendees")

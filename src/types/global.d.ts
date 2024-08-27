@@ -1,6 +1,6 @@
 type EditorMode = 'create' | 'edit' | "delete" | 'read-only';
 
-type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "socialMedia" | "hideEmail" | "hideImage">
+type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
 
 type ApiResponse<T> = {
     data: T | null,
@@ -27,6 +27,7 @@ type SocialEvent = {
     place: google.maps.places.PlaceResult | null // Store the google.maps.places.PlaceResult data as JSON
     minAttendees: number
     attendees: Attendee[]
+    publicAttendees: boolean
 
     createdAt: Date
     updatedAt: Date
