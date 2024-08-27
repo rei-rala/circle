@@ -8,12 +8,25 @@ import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
 import Image from 'next/image';
 
 import { CustomGoogleMaps } from '@/components/CustomGoogleMaps';
-import { getDistanceFromNow, getFullDate, getHour } from '@/lib/date-fns';
+import { getDistanceFromNow, getFullDate, getHour, isDateInPast } from '@/lib/date-fns';
 import Link from 'next/link';
+import { UserHoverCard } from './UserHoverCard';
+import type { Session } from 'next-auth';
+import { toast } from 'sonner';
 
-export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
+export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
     const handleCopyClick = () => {
-        navigator?.clipboard.writeText(event.place?.formatted_address || "");
+        const copyError = "Error al copiar"
+        const copyText = event.place?.formatted_address || copyError;
+
+        navigator?.clipboard.writeText(copyText);
+
+        if (copyText === copyError) {
+            toast.error(copyError)
+        } else {
+            toast.success("Dirección copiada al portapapeles")
+        }
+
     }
 
     return (
@@ -46,15 +59,9 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                         </div>
                     </div>
 
-                    <Separator />
-                    <div className="flex flex-col items-start gap-4">
-                        <div className="flex-1">
-                            <div className="text-lg font-medium">{event.title}</div>
-                            <p className="text-sm text-[#aaa] mt-2">
-                                Organizado por:
-                                <b>{event.owner.name}</b>
-                            </p>
-                        </div>
+                    <div className="flex gap-2 text-sm text-[#aaa] mt-2">
+                        <span>Organizado por:</span>
+                        <UserHoverCard user={event.owner} />
                     </div>
 
                     <Separator />
@@ -86,8 +93,8 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                             {event.place &&
                                 <>
                                     <div className="flex items-center gap-2">
-                                        <LandPlotIcon className="w-5 h-5" />
-                                        <p>
+                                        <p className='flex flex-1 gap-2 items-center'>
+                                            <LandPlotIcon className="w-5 h-5" />
                                             {event.place.name}
                                         </p>
                                         <Link
@@ -96,20 +103,20 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                                             rel="noreferrer"
                                             className="text-[#aaa] hover:text-white hover:underline"
                                         >
-                                            <span className='relative bottom-1 flex gap-1 text-xs'>
+                                            <span className='relative md:bottom-1 flex gap-1 text-xs'>
                                                 <ExternalLinkIcon className="w-4 h-4" />
                                                 Abrir en Maps
                                             </span>
                                         </Link>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <RouteIcon className="w-5 h-5" />
-                                        <p>
+                                        <p className='flex flex-1 gap-2 items-center'>
+                                            <RouteIcon className="w-5 h-5" />
                                             {event.place.formatted_address}
                                         </p>
                                         <span
                                             onClick={handleCopyClick}
-                                            className='relative bottom-1 flex gap-1 text-xs cursor-pointer text-[#aaa] hover:text-white hover:underline'
+                                            className='relative md:bottom-1 flex gap-1 text-xs cursor-pointer text-[#aaa] hover:text-white hover:underline'
                                         >
                                             <CopyIcon className="w-4 h-4" />
                                             Copiar
@@ -118,9 +125,13 @@ export const SocialEventCard = ({ event }: { event: SocialEvent }) => {
                                 </>
                             }
                         </div>
-                        <div className="flex items-center gap-2">
-                            <CustomGoogleMaps markerPosition={event.place?.geometry?.location} />
-                        </div>
+                        {
+                            session?.user &&
+                            !isDateInPast(event.date) &&
+                            <div className="flex items-center gap-2">
+                                <CustomGoogleMaps markerPosition={event.place?.geometry?.location} />
+                            </div>
+                        }
                     </div>
                 </div>
             </CardContent>

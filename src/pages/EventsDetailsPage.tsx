@@ -28,7 +28,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
                 }
             </div>
 
-            <SocialEventCard event={event} />
+            <SocialEventCard event={event} session={session} />
         </div>
     );
 };

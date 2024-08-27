@@ -53,7 +53,7 @@ export default function RootLayout({
         <AppWithProviders>
           <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
             <UpperNavbar className="w-full flex-shrink-0" />
-            <div className="flex-grow overflow-y-auto bg-[#1a1a1a] p-5">
+            <div className="flex-grow overflow-y-auto bg-[#1a1a1a] p-5 pb-10">
               <Suspense fallback={<Loading />}>
                 {children}
               </Suspense>

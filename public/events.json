@@ -1,6 +1,22 @@
 [
   {
     "id": "1",
+    "owner": {
+      "id": "66cd10afe45fe69f8be05221",
+      "name": "Juan Perez",
+      "email": "aaa@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocI6N_VJzNcOZMMs4fPnfHUll19LZ6q1sCI40CZzW2jUtNZ28w=s96-c",
+      "alias": "alias de jp",
+      "bio": "bio de prueba un toque largo user test hardcode",
+      "location": "depende la hora",
+      "phone": "123123",
+      "socialMedia": [
+        "http://facebook.com/#test",
+        "http://twitter.com/#test",
+        "http://instagram.com/#test"
+      ]
+    },
     "title": "Picnic en el Parque Lezama",
     "map": "https://goo.gl/maps/xyz123",
     "date": "2024-08-24T11:30:00.000000-0300",
@@ -27,6 +43,9 @@
   },
   {
     "id": "2",
+    "owner": {
+      "name": "Juan Perez"
+    },
     "title": "Noche de cine en Puerto Madero",
     "map": "https://goo.gl/maps/abc456",
     "date": "2024-09-05T17:00:00.000000-0300",
@@ -53,6 +72,9 @@
   },
   {
     "id": "3",
+    "owner": {
+      "name": "Juan Perez"
+    },
     "title": "Excursión en los Bosques de Palermo",
     "map": "https://goo.gl/maps/def789",
     "date": "2024-09-12T05:00:00.000000-0300",
@@ -78,6 +100,9 @@
   },
   {
     "id": "4",
+    "owner": {
+      "name": "Juan Perez"
+    },
     "title": "Cena temática en el Barrio Chino",
     "map": "https://goo.gl/maps/ghi012",
     "date": "2024-09-20T16:30:00.000000-0300",
@@ -103,6 +128,9 @@
   },
   {
     "id": "5",
+    "owner": {
+      "name": "Juan Perez"
+    },
     "title": "Jornada de juegos en la Plaza Serrano",
     "map": "https://goo.gl/maps/jkl345",
     "date": "2024-10-01T12:00:00.000000-0300",
@@ -128,6 +156,9 @@
   },
   {
     "id": "6",
+    "owner": {
+      "name": "Juan Perez"
+    },
     "title": "Visita a la Feria de Mataderos",
     "map": "https://goo.gl/maps/mno678",
     "date": "2024-10-15T07:00:00.000000-0300",

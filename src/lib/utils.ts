@@ -13,6 +13,10 @@ export function getEmailUserName(email: string) {
   return email.split("@")[0];
 }
 
+export function getUrlDomain(url: string) {
+  return new URL(url).hostname;
+}
+
 
 type PlaceholderOptions = {
   width?: number;
