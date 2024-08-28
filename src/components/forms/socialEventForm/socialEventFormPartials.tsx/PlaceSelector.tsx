@@ -1,3 +1,5 @@
+"use client";
+
 import MyMapWithSearch from "@/components/MyMapWithSearch"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -6,10 +8,23 @@ import { Dispatch, SetStateAction } from "react"
 
 
 export const PlaceSelector = ({ mapsPlace, setSocialEvent, disabled }: { mapsPlace?: google.maps.places.PlaceResult | null, setSocialEvent: Dispatch<SetStateAction<any>>, disabled: boolean }) => {
+    console.log("placeSelector", mapsPlace?.geometry)
+    
     const handlePlaceChange = (place: google.maps.places.PlaceResult) => {
-        setSocialEvent((prev: SocialEvent) => ({
-            ...prev, place: place as google.maps.places.PlaceResult & { photos: (google.maps.places.PlacePhoto & { url: string })[] }
-        }))
+        setSocialEvent((prev: SocialEvent) => {
+            const { name, url, formatted_address, geometry, place_id } = place;
+            return ({
+                ...prev,
+                place: {
+                    name,
+                    url,
+                    formatted_address,
+                    geometry,
+                    place_id,
+                }
+            })
+        }
+        )
     }
 
     return (
@@ -22,7 +37,7 @@ export const PlaceSelector = ({ mapsPlace, setSocialEvent, disabled }: { mapsPla
                 mapsPlace={mapsPlace}
                 setMapsPlace={handlePlaceChange}
                 customInput={
-                    < Input
+                    <Input
                         id="maps-place"
                         placeholder="Busca una ubicación en Google Maps"
                         disabled={disabled}

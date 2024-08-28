@@ -1,23 +1,29 @@
 import { SocialEventCardSmall } from "@/components/SocialEventCardSmall";
+import { prisma } from "@/prisma";
 
 export default async function Home() {
-  const response = await fetch("http://localhost:3000/events.json");
-  const events: SocialEvent[] = await response.json();
+  // find events that are not in the past and not deleted
+  const events = await prisma.socialEvent.findMany({
+    where: {
+      date: {
+        gt: new Date(),
+      },
+      status: "PUBLISHED",
+    },
+    orderBy: {
+      date: "asc",
+    },
+  }) as SocialEvent[]
 
   return (
     <>
       <h2 className="my-2">Próximos Eventos</h2>
       <div className="grid gap-4">
         {
-          events.map((event, i) => i < 3 && <SocialEventCardSmall key={`event${event.id}`} event={event} />)
+          events.map((event, i) => <SocialEventCardSmall key={`event${event.id}`} event={event} />)
         }
       </div>
-      <h2 className="my-2">Eventos Sugeridos</h2>
-      <div className="grid gap-4 ">
-        {
-          events.map((event, i) => i >= 3 && <SocialEventCardSmall key={`event${event.id}`} event={event} />)
-        }
-      </div>
+
     </>
   )
 }

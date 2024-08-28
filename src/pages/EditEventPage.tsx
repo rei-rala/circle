@@ -2,7 +2,7 @@ import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventF
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { isDateInPast } from "@/lib/date-fns";
 import getServerSession from "@/lib/getServerSession";
-import { getSocialEventById } from "@/services/socialEvents.services";
+import { prisma } from "@/prisma";
 import { notFound } from "next/navigation";
 
 export async function EditEventPageComponent({
@@ -12,13 +12,27 @@ export async function EditEventPageComponent({
     id: string,
     mode: EditorMode
 }) {
-    const [session, { data: socialEvent }] = await Promise.all([getServerSession(), getSocialEventById(id)]);
-   
+
+    const session = await getServerSession();
+    const socialEvent = await prisma.socialEvent.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            owner: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                }
+            }
+        }
+    }) as SocialEvent | null
+
     if (
-        !session?.user?.id ||
-        !socialEvent ||
-        (socialEvent.ownerId && session.user.id !== socialEvent.ownerId) ||
-        session.user.role !== "admin"
+        (session === null || socialEvent === null) &&
+        (session?.user.role !== "admin" || !(socialEvent?.ownerId === session?.user.id))
     ) {
         return notFound();
     }

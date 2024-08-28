@@ -4,16 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CopyIcon, CaseSensitiveIcon, RouteIcon, LinkIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export const PlaceInfo = ({
-  place,
+  place: initialPlace,
 }: {
   place: google.maps.places.PlaceResult;
   disabled?: boolean;
 }) => {
+  const place = typeof initialPlace === "string" ? JSON.parse(initialPlace) : initialPlace;
+
   const handleCopyUrl = (e: any) => {
     e.preventDefault();
-    place?.url && navigator.clipboard.writeText(place.url);
+
+    if (place.url && navigator) {
+      navigator.clipboard.writeText(place.url);
+      toast.success("Link copiado al portapapeles");
+    }
+
   }
 
   return (

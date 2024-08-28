@@ -1,15 +1,36 @@
 import React from 'react';
 import Link from 'next/link';
 import { SocialEventCard } from '@/components/SocialEventCard';
-import { getSocialEventById } from '@/services/socialEvents.services';
 import { notFound } from 'next/navigation';
 import getServerSession from '@/lib/getServerSession';
 import { isDateInPast } from '@/lib/date-fns';
+import { prisma } from '@/prisma';
 
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
     const session = await getServerSession();
-    const { data: event } = await getSocialEventById(id);
+    //const { data: event } = await getSocialEventById(id);
+    
+    const event = await prisma.socialEvent.findUnique({
+        where: { id: id },
+        include: {
+            owner: {
+                select: {
+                    id: true,
+                    alias: true,
+                    name: true,
+                    bio: true,
+                    email: true,
+                    role: true,
+                    image: true,
+                    location: true,
+                    phone: true,
+                    socialMedia: true,
+                }
+            }
+        }
+    }) as SocialEvent;
+        
 
     if (!event) return notFound();
 

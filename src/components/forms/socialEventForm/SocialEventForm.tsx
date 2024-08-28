@@ -13,6 +13,9 @@ import { PlaceInfo } from "./socialEventFormPartials.tsx/PlaceInfo";
 import { EventField } from "./socialEventFormPartials.tsx/EventField";
 import { setHours, setMinutes } from "date-fns";
 import { PlaceSelector } from "./socialEventFormPartials.tsx/PlaceSelector";
+import { createEvent, updateEvent } from "@/app/(events)/events/actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type SocialEventDTO = Pick<SocialEvent, "id" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
 
@@ -22,7 +25,7 @@ const defaultSocialEvent: SocialEventDTO = {
     photo: "",
     description: "",
     date: null,
-    status: "draft",
+    status: "DRAFT",
     time: "",
     place: null,
     minAttendees: 0,
@@ -36,7 +39,27 @@ export const SocialEventForm = ({
     socialEvent?: SocialEvent | null;
     mode?: EditorMode;
 }) => {
-    const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(initialSocialEvent as SocialEventDTO | null || defaultSocialEvent);
+    const router = useRouter();
+    const [socialEvent, setSocialEvent] = useState<SocialEventDTO>({
+        ...initialSocialEvent,
+        place: typeof initialSocialEvent?.place === 'string' ? JSON.parse(initialSocialEvent.place) : initialSocialEvent?.place
+    } as SocialEventDTO | null || defaultSocialEvent);
+
+
+    // if (typeof initialSocialEvent?.place === "string") {
+    //     try {
+    //         const place = JSON.parse(initialSocialEvent.place);
+
+    //         setSocialEvent(socialEvent => ({
+    //             ...socialEvent,
+    //             place
+    //         }))
+    //     } catch (err) {
+    //         console.log("Error parseando socialEvent.place")
+    //         console.log(err)
+    //     }
+    // }
+
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
     const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent;
@@ -103,10 +126,43 @@ export const SocialEventForm = ({
     }, [disabled]);
 
 
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
-        if (!disabled) {
+        if (disabled) {
             console.log(socialEvent);
+            return;
+        }
+
+        const socialEventToUpdate = {
+            ...socialEvent,
+            place: JSON.stringify(socialEvent.place) as any,
+        }
+
+        switch (mode) {
+            case "create":
+                const created = await createEvent(socialEventToUpdate);
+                if (created) {
+                    toast.success("Evento creado exitosamente");
+                    router.replace(`/events/${created.id}`);
+                } else {
+                    toast.error("No se pudo crear el evento");
+                }
+                break;
+            case "edit":
+                const updated = await updateEvent(socialEventToUpdate);
+                if (updated) {
+                    toast.success("Evento actualizado exitosamente");
+                } else {
+                    toast.error("No se pudo actualizar el evento");
+                }
+                break;
+                //case "delete":
+                //actionFunction = deleteEvent as typeof actionFunction;
+                //actionText = "Eliminación";
+                break;
+            default:
+                toast.error("La acción no está permitida");
+                return;
         }
     }
 

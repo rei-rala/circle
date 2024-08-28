@@ -14,7 +14,11 @@ export function getEmailUserName(email: string) {
 }
 
 export function getUrlDomain(url: string) {
-  return new URL(url).hostname;
+  try {
+    return new URL(url).hostname;
+  } catch (err) {
+    return truncateString(url, 20);
+  }
 }
 
 

@@ -1,7 +1,5 @@
 type EditorMode = 'create' | 'edit' | "delete" | 'read-only';
 
-type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
-
 type ApiResponse<T> = {
     data: T | null,
     success?: boolean,
@@ -12,15 +10,16 @@ type MarkerPosition = {
     lng: number
 }
 
-type SocialEventStatus = "draft" | "published" | "cancelled" | "completed"
+
+type SocialEventStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED" | "DELETED"
 
 type SocialEvent = {
     id: string
     ownerId: string
     owner: User
     title: string
-    date: Date | null
     status: SocialEventStatus
+    date: Date | null
     time: string
     description: string
     photo: string
@@ -46,3 +45,6 @@ type Attendee = {
     joinedAt: Date;
     leftAt: Date | null;
 }
+
+type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
+type SocialEventDTO = Pick<SocialEvent, "id" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">

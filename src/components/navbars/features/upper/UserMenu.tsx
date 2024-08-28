@@ -8,11 +8,12 @@ import { PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider"
 import { Separator } from "@/components/ui/separator"
 import { cn, getEmailUserName } from "@/lib/utils"
-import clsx from "clsx"
+import { usePathname } from "next/navigation"
 
 const POPOVER_ID = "user-menu"
 // this is a upper navbar component, but we use it at the bottom while features are being implemented
 export const UserMenu = ({ className }: { className?: string }) => {
+    const pathName = usePathname();
     const { data: session, status } = useSession();
     const { currentPopoverId, setCurrentPopoverId, closePopover } = usePopoverManagerContext();
     const isOpen = currentPopoverId === POPOVER_ID;
@@ -70,7 +71,7 @@ export const UserMenu = ({ className }: { className?: string }) => {
                         {
                             [
                                 { children: "Mi perfil", href: "/profile", hidden: !session },
-                                { children: session ? "Cerrar Sesión" : "Iniciar Sesión", href: session ? "/api/auth/signout" : "/api/auth/signin" },
+                                { children: session ? "Cerrar Sesión" : "Iniciar Sesión", href: session ? `/api/auth/signout?callbackUrl=${pathName}` : "/api/auth/signin" },
                             ].map(({ children, href, hidden }) => (
                                 !hidden &&
                                 (

@@ -86,9 +86,19 @@ export const ProfileForm = () => {
         session.data?.user ?? defaultFormUser
     );
 
-    const hasChanges = useMemo(() => {
-        return checkUserProfileChanges(formUser, session?.data?.user);
-    }, [formUser, session?.data?.user]);
+    const [adminCardHidePreference, setAdminCardHidePreference] = useState(localStorage.getItem("adminCardHidePreference") === "true");
+
+    const { profileChanged, adminPreferenceChanged } = useMemo(() => {
+        const profileChanged = checkUserProfileChanges(formUser, session?.data?.user);
+        const adminPreferenceChanged = (localStorage.getItem("adminCardHidePreference") === "true") !== adminCardHidePreference;
+
+        return {
+            profileChanged,
+            adminPreferenceChanged
+        };
+    }, [formUser, session?.data?.user, adminCardHidePreference]);
+
+    const disableForm = profileChanged || adminPreferenceChanged;
 
     const checkboxFields: { field: keyof User; label: string }[] = [
         {
@@ -156,12 +166,21 @@ export const ProfileForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (await updateUserProfile({ ...formUser })) {
+
+        if (!disableForm) return;
+
+        if (adminPreferenceChanged) {
+            localStorage.setItem("adminCardHidePreference", String(adminCardHidePreference));
+            setAdminCardHidePreference(adminCardHidePreference);
+            toast.success("Preferencia de ocultar cartel admin actualizada correctamente");
+        }
+
+        if (profileChanged && await updateUserProfile(formUser)) {
             toast.success("Perfil actualizado correctamente");
             session.update();
-            return;
+        } else if (profileChanged) {
+            toast.error("No se pudo actualizar el perfil");
         }
-        toast.error("No se pudo actualizar el perfil");
     };
 
     return (
@@ -309,6 +328,17 @@ export const ProfileForm = () => {
                 (
                     <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
                         <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                        >
+                            <Checkbox
+                                id={"adminCardHidePreference"}
+                                checked={adminCardHidePreference}
+                                onChange={checked => setAdminCardHidePreference(Boolean(checked))}
+                                aria-label={"Hide admin card checkbox"}
+                            />
+                            <Label htmlFor="adminCardHidePreference">Ocultar cartel admin</Label>
+                        </div>
                         {checkboxFields.map(({ field, label }) => (
                             <div
                                 className="flex items-center gap-2 cursor-pointer"
@@ -325,12 +355,16 @@ export const ProfileForm = () => {
                                 <Label htmlFor={field}>{label}</Label>
                             </div>
                         ))}
+
                     </div>
                 )
             }
 
             <div className="flex justify-end">
-                <Button type="submit" disabled={!hasChanges}>
+                <Button
+                    type="submit"
+                    disabled={!disableForm}
+                >
                     Guardar Cambios
                 </Button>
             </div>

@@ -13,11 +13,14 @@ import Link from 'next/link';
 import { UserHoverCard } from './UserHoverCard';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
+import { useCallback } from 'react';
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
-    const handleCopyClick = () => {
+    const place = typeof event.place === "string" && JSON.parse(event.place);
+
+    const handleCopyClick = useCallback(() => {
         const copyError = "Error al copiar"
-        const copyText = event.place?.formatted_address || copyError;
+        const copyText = place?.formatted_address || copyError;
 
         navigator?.clipboard.writeText(copyText);
 
@@ -26,7 +29,10 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
         } else {
             toast.success("Dirección copiada al portapapeles")
         }
+    }, [place])
 
+    const onLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        toast.info("Abriendo enlace en una nueva pestaña")
     }
 
     return (
@@ -80,25 +86,28 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                             </div>
 
                             {
-                                event.minAttendees && event.minAttendees !== 0 && (
-                                    <div className="flex items-center gap-2">
-                                        <UsersIcon className="w-5 h-5" />
-                                        <div>
-                                            Mínimo de asistentes: {event.minAttendees}
+                                event.minAttendees && event.minAttendees !== 0
+                                    ? (
+                                        <div className="flex items-center gap-2">
+                                            <UsersIcon className="w-5 h-5" />
+                                            <div>
+                                                Mínimo de asistentes: {event.minAttendees}
+                                            </div>
                                         </div>
-                                    </div>
-                                )
+                                    )
+                                    : null
                             }
 
-                            {event.place &&
+                            {place &&
                                 <>
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
                                             <LandPlotIcon className="w-5 h-5" />
-                                            {event.place.name}
+                                            {place.name}
                                         </p>
                                         <Link
-                                            href={event.place.url || "#"}
+                                            href={place.url || "#"}
+                                            onClick={onLinkClick}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="text-[#aaa] hover:text-white hover:underline"
@@ -112,7 +121,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
                                             <RouteIcon className="w-5 h-5" />
-                                            {event.place.formatted_address}
+                                            {place.formatted_address}
                                         </p>
                                         <span
                                             onClick={handleCopyClick}
