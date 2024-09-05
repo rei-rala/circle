@@ -25,7 +25,7 @@ model SocialEvent {
   description     String
   photo           String?
   place           Json? // Store the google.maps.places.PlaceResult data as JSON
-  minAttendees    Int
+  minAttendees    Int               @default(0)
   attendees       Attendee[]        @relation("EventAttendees")
   publicAttendees Boolean
 

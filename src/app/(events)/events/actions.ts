@@ -70,8 +70,6 @@ export async function updateEvent(values: SocialEventDTO) {
 }
 
 export async function createEvent(values: SocialEventDTO) {
-    console.log(values);
-
     try {
         const session = await auth();
 

@@ -44,30 +44,41 @@ export function generatePlaceholderLink({
 
 
 /**
- * No pregunten por que queria hacerlo asi, pero compara dos objetos y retorna true si son diferentes.
- * Todavia no funciona (?)
- * Debe haber otra manera, pero me gusto como quedo
+ * Compara dos objetos y retorna true si son diferentes.
+ * La función es recursiva y maneja primitivos, arrays y objetos.
  */
-export function compareChangesObject<T extends object>(newObject: T, oldObject: T): boolean {
-  const keys = Object.keys(newObject) as (keyof T)[];
+export function compareChangesObject<T>(newValue: T, oldValue: T): boolean {
+  // Si los tipos son diferentes, los objetos son diferentes
+  if (typeof newValue !== typeof oldValue) return true;
 
-  for (const key of keys) {
-    const newValue = newObject[key];
-    const oldValue = oldObject[key];
-
-    if (typeof newValue !== typeof oldValue) return true;
-
-    if (Array.isArray(newValue) && Array.isArray(oldValue)) {
-      if (newValue.length !== oldValue.length) return true;
-      for (let i = 0; i < newValue.length; i++) {
-        if (compareChangesObject(newValue[i], oldValue[i])) return true;
-      }
-    } else if (typeof newValue === "object" && newValue !== null && typeof oldValue === "object" && oldValue !== null) {
-      if (compareChangesObject(newValue, oldValue)) return true;
-    } else if (newValue !== oldValue) {
-      return true;
-    }
+  // Comparación de primitivos
+  if (typeof newValue !== 'object' || newValue === null) {
+    return newValue !== oldValue;
   }
 
-  return false;
+  // Comparación de arrays
+  if (Array.isArray(newValue) && Array.isArray(oldValue)) {
+    if (newValue.length !== oldValue.length) return true;
+    for (let i = 0; i < newValue.length; i++) {
+      if (compareChangesObject(newValue[i], oldValue[i])) return true;
+    }
+    return false;
+  }
+
+  // Comparación de objetos
+  if (typeof newValue === 'object' && typeof oldValue === 'object') {
+    const newKeys = Object.keys(newValue);
+    const oldKeys = Object.keys(oldValue as object);
+
+    // Si el número de propiedades es diferente, los objetos son diferentes
+    if (newKeys.length !== oldKeys.length) return true;
+
+    for (const key of newKeys) {
+      if (compareChangesObject(newValue[key as keyof T], (oldValue as any)[key])) return true;
+    }
+    return false;
+  }
+
+  // Este punto no debería alcanzarse, pero lo incluimos por seguridad
+  return true;
 }

@@ -4,7 +4,8 @@ import React, { useRef } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
 import { CustomGoogleMaps } from './CustomGoogleMaps';
 
-const defaultMarkerPosition = {
+
+const defaultMarkerPosition: google.maps.LatLngLiteral | google.maps.LatLng = {
   lat: -34.603851,
   lng: -58.381775
 };

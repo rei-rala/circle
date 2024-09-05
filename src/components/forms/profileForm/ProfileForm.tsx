@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import { Input } from "../../ui/input";
@@ -26,9 +26,11 @@ import { useSession } from "next-auth/react";
 import { updateUserProfile } from "@/app/profile/actions";
 import Image from "next/image";
 import { toast } from "sonner";
+import { compareChangesObject } from "@/lib/utils";
 
 const defaultFormUser: User = {
-    role: null,
+    email: "",
+    role: "",
     alias: "",
     bio: "",
     location: "",
@@ -39,52 +41,23 @@ const defaultFormUser: User = {
     hidePhone: false,
 };
 
-const keys: (keyof UserProfileDTO)[] = [
-    "alias",
-    "bio",
-    "location",
-    "phone",
-    "socialMedia",
-    "hideEmail",
-    "hideImage",
-    "hidePhone",
-];
-
 function checkUserProfileChanges(
     newUser: UserProfileDTO,
     user?: User | null
 ): boolean {
     if (!user) return false;
-
-    for (const key of keys) {
-        if (key === "socialMedia") {
-            if (newUser[key].length !== user[key].length) return true;
-
-            for (let i = 0; i < newUser[key].length; i++) {
-                if (newUser[key][i] !== user[key][i]) return true;
-            }
-        } else {
-            if (newUser[key] !== user[key]) return true;
-        }
-    }
-
-    return false;
+    return compareChangesObject<UserProfileDTO>(newUser, user);
 }
-
-// //TODO: usar esta hermosa funcion en lugar de la de arriba
-// function checkUserProfileChanges(
-//   newUser: UserProfileDTO,
-//   user?: User | null
-// ): boolean {
-//   if (!user) return false;
-//   return compareChangesObject<UserProfileDTO>(newUser, user);
-// }
 
 export const ProfileForm = () => {
     const session = useSession();
-    const [formUser, setFormUser] = useState(
-        session.data?.user ?? defaultFormUser
-    );
+    const [formUser, setFormUser] = useState<User>(defaultFormUser);
+
+    useEffect(() => {
+        if (session.data?.user) {
+            setFormUser({ ...defaultFormUser, ...session.data.user });
+        }
+    }, [session.data?.user]);
 
     const [adminCardHidePreference, setAdminCardHidePreference] = useState(localStorage.getItem("adminCardHidePreference") === "true");
 
@@ -143,7 +116,7 @@ export const ProfileForm = () => {
         });
     };
 
-    const addSocialMediaLink = (e: any) => {
+    const addSocialMediaLink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if (formUser.socialMedia.length < 5) {
@@ -154,7 +127,7 @@ export const ProfileForm = () => {
         }
     };
 
-    const removeSocialMediaLink = (e: any, index: number) => {
+    const removeSocialMediaLink = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault();
 
         const updatedLinks = formUser.socialMedia.filter((_, i) => i !== index);
@@ -270,17 +243,18 @@ export const ProfileForm = () => {
                     <Label htmlFor="socialMedia">Redes Sociales</Label>
                 </div>
                 {formUser.socialMedia.map((link, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                    <div key={`socialMedia:${index}`} className="flex items-center gap-2 animate-in fade-in-0 duration-300">
                         <Input
                             id={`socialMedia${index + 1}`}
                             placeholder={`Ingresa el enlace Nro ${index + 1}`}
                             value={link}
                             onChange={(e) => setSocialMediaLinks(e.target.value, index)}
+                            className="animate-in slide-in-from-left-5 duration-300"
                         />
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-white hover:bg-[#333333]"
+                            className="text-white hover:bg-[#333333] animate-in slide-in-from-right-5 duration-300"
                             value={index}
                             onClick={(e) => removeSocialMediaLink(e, index)}
                         >
@@ -334,7 +308,7 @@ export const ProfileForm = () => {
                             <Checkbox
                                 id={"adminCardHidePreference"}
                                 checked={adminCardHidePreference}
-                                onChange={checked => setAdminCardHidePreference(Boolean(checked))}
+                                onCheckedChange={(b) => { setAdminCardHidePreference(Boolean(b)) }}
                                 aria-label={"Hide admin card checkbox"}
                             />
                             <Label htmlFor="adminCardHidePreference">Ocultar cartel admin</Label>

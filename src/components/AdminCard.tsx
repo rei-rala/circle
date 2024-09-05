@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 
 export const AdminCard = () => {
@@ -23,11 +24,13 @@ export const AdminCard = () => {
     const handleNotShowAgainButtonClick = () => {
         localStorage.setItem("adminCardHidePreference", "true");
         setHide(true);
+
+        toast.info(`Cartel de Admin ocultado. Para volver a mostrarlo, modifica las opciones de administrador en tu perfil.`)
     }
 
     return session.data?.user.role === "admin" &&
         (
-            <Card className={cn(hide && "hidden", "text-center p-4 rounded-lg mb-2 border-red-600")}>
+            <Card className={cn(hide && "hidden", "text-center p-4 rounded-lg border-red-600")}>
                 <CardHeader className="p-0">
                     <CardTitle>Eres administrador</CardTitle>
                 </CardHeader>

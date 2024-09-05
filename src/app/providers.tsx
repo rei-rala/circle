@@ -27,7 +27,12 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
                     >
                         {children}
 
-                        <Toaster />
+                        <Toaster
+                            toastOptions={{
+                                // limit time
+                                duration: 3000,
+                            }}
+                        />
                     </LoadScript>
                 </PopoverManagerProvider>
             </SessionProvider>

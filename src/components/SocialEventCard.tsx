@@ -66,8 +66,8 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                     </div>
 
                     <div className="flex gap-2 text-sm text-[#aaa] mt-2">
-                        <span>Organizado por:</span>
-                        <UserHoverCard user={event.owner} />
+                        <span className="my-auto">Organizado por:</span>
+                        <UserHoverCard user={event.owner} hoverCardProps={{ openDelay: 100 }} />
                     </div>
 
                     <Separator />
@@ -75,13 +75,13 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                         <div className="font-medium">Detalles del Evento</div>
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="flex items-center gap-2">
-                                <CalendarIcon className="w-5 h-5" />
+                                <CalendarIcon className="min-w-5 min-h-5" />
                                 <div>
                                     {event.date && getFullDate(event.date)}
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <ClockIcon className="w-5 h-5" />
+                                <ClockIcon className="min-w-5 min-h-5" />
                                 <div>{event.date && getHour(event.date)}</div>
                             </div>
 
@@ -89,7 +89,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 event.minAttendees && event.minAttendees !== 0
                                     ? (
                                         <div className="flex items-center gap-2">
-                                            <UsersIcon className="w-5 h-5" />
+                                            <UsersIcon className="min-w-5 min-h-5" />
                                             <div>
                                                 Mínimo de asistentes: {event.minAttendees}
                                             </div>
@@ -102,7 +102,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 <>
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
-                                            <LandPlotIcon className="w-5 h-5" />
+                                            <LandPlotIcon className="min-w-5 min-h-5" />
                                             {place.name}
                                         </p>
                                         <Link
@@ -120,7 +120,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
-                                            <RouteIcon className="w-5 h-5" />
+                                            <RouteIcon className="min-w-5 min-h-5" />
                                             {place.formatted_address}
                                         </p>
                                         <span
@@ -138,7 +138,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                             session?.user &&
                             !isDateInPast(event.date) &&
                             <div className="flex items-center gap-2">
-                                <CustomGoogleMaps markerPosition={event.place?.geometry?.location} />
+                                <CustomGoogleMaps initialPlace={event.place} />
                             </div>
                         }
                     </div>

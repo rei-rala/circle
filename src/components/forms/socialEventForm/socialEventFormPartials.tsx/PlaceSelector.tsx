@@ -8,8 +8,6 @@ import { Dispatch, SetStateAction } from "react"
 
 
 export const PlaceSelector = ({ mapsPlace, setSocialEvent, disabled }: { mapsPlace?: google.maps.places.PlaceResult | null, setSocialEvent: Dispatch<SetStateAction<any>>, disabled: boolean }) => {
-    console.log("placeSelector", mapsPlace?.geometry)
-    
     const handlePlaceChange = (place: google.maps.places.PlaceResult) => {
         setSocialEvent((prev: SocialEvent) => {
             const { name, url, formatted_address, geometry, place_id } = place;

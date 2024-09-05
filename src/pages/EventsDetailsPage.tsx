@@ -9,10 +9,9 @@ import { prisma } from '@/prisma';
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
     const session = await getServerSession();
-    //const { data: event } = await getSocialEventById(id);
-    
+
     const event = await prisma.socialEvent.findUnique({
-        where: { id: id },
+        where: { id },
         include: {
             owner: {
                 select: {
@@ -30,22 +29,26 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
             }
         }
     }) as SocialEvent;
-        
 
-    if (!event) return notFound();
+
+    if (!event || !event.ownerId) return notFound();
 
     return (
-        <div className="overflow-auto">
+        <div >
             <div className='text-center font-bold p-2'>
                 {
                     isDateInPast(event.date)
                         ? <span>Evento finalizado</span>
-                        : (
-                            session?.user?.role === "admin" ? (
-                                <Link className='hover:underline cursor-pointer' href={`/events/${id}/edit`}>Editar como Administrador</Link>
-                            ) : (session?.user?.id && event.ownerId) ? (
-                                <Link className='hover:underline cursor-pointer' href={`/events/${id}/edit`}>Editar</Link>
-                            ) : null)
+                        : session?.user
+                            ? (session?.user?.role === "admin" || session?.user?.id === event.ownerId) && (
+                                <Link
+                                    className='hover:underline cursor-pointer'
+                                    href={`/events/${id}/edit`}
+                                >
+                                    {session.user.role === "admin" ? "Editar como Administrador" : "Editar"}
+                                </Link>
+                            )
+                            : null
                 }
             </div>
 

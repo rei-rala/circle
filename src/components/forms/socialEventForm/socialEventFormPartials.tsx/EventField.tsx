@@ -36,7 +36,7 @@ export const EventField = ({
       name={name}
       type={type}
       placeholder={placeholder}
-      value={value}
+      value={value || ""}
       onChange={onChange}
       disabled={disabled}
     />

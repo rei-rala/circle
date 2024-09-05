@@ -40,29 +40,18 @@ export const SocialEventForm = ({
     mode?: EditorMode;
 }) => {
     const router = useRouter();
-    const [socialEvent, setSocialEvent] = useState<SocialEventDTO>({
-        ...initialSocialEvent,
-        place: typeof initialSocialEvent?.place === 'string' ? JSON.parse(initialSocialEvent.place) : initialSocialEvent?.place
-    } as SocialEventDTO | null || defaultSocialEvent);
-
-
-    // if (typeof initialSocialEvent?.place === "string") {
-    //     try {
-    //         const place = JSON.parse(initialSocialEvent.place);
-
-    //         setSocialEvent(socialEvent => ({
-    //             ...socialEvent,
-    //             place
-    //         }))
-    //     } catch (err) {
-    //         console.log("Error parseando socialEvent.place")
-    //         console.log(err)
-    //     }
-    // }
+    const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(
+        initialSocialEvent
+            ? {
+                ...initialSocialEvent,
+                place: typeof initialSocialEvent.place === 'string' ? JSON.parse(initialSocialEvent.place) : initialSocialEvent.place
+            }
+            : defaultSocialEvent
+    );
 
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
-    const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent;
+    const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit")
     const minDate = shiftDateByDays();
     const actionText = useMemo(() => {
         switch (mode) {
@@ -78,43 +67,41 @@ export const SocialEventForm = ({
     }, [mode]);
 
     const handleFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!disabled) {
-            const { name, value } = e.target;
+        if (disabled) return;
 
-            // TODO: Fix time resetting when date is changed
-            if (name === "time") {
-                const currentDate = socialEvent.date || new Date();
-                const [hours, minutes] = value.split(":").map(Number);
-                const updatedDate = setMinutes(setHours(currentDate, hours), minutes);
+        const name = e.target.name as keyof SocialEventDTO;
+        const value = e.target.value;
 
-                setSocialEvent(prevEvent => ({
-                    ...prevEvent,
-                    date: updatedDate,
-                    time: value,
-                }));
 
-                return;
-            } else if (name === "date") {
-                const currentDate = socialEvent.date || new Date();
-                const currentTime = socialEvent.time ?? getHour(currentDate);
-                const [hours, minutes] = currentTime.split(":").map(Number);
-
-                const updatedDate = setMinutes(setHours(currentDate, hours), minutes);
-
-                setSocialEvent(prevEvent => ({
-                    ...prevEvent,
-                    date: updatedDate,
-                }));
-
-                return;
-            }
-
+        if (["time", "date"].includes(name) === false) {
             setSocialEvent(prevEvent => ({
                 ...prevEvent,
-                [name]: value,
+                [name]: value
             }));
+            return;
         }
-    }, [socialEvent.time, socialEvent.date, disabled]);
+
+        setSocialEvent(prevEvent => {
+            const updatedEvent: SocialEventDTO = { ...prevEvent };
+
+            if (name === "time") {
+                const currentDate = updatedEvent.date || new Date();
+                const [hours, minutes] = value.split(":").map(Number);
+                const updatedDate = setMinutes(setHours(currentDate, hours), minutes);
+                updatedEvent.date = updatedDate;
+                updatedEvent.time = value;
+            }
+            else if (name === "date") {
+                const currentDate = new Date(value);
+                const currentTime = updatedEvent.time ?? getHour(currentDate);
+                const [hours, minutes] = currentTime.split(":").map(Number);
+                const updatedDate = setMinutes(setHours(currentDate, hours), minutes);
+                updatedEvent.date = updatedDate;
+            }
+
+            return updatedEvent;
+        });
+    }, [disabled]);
 
     const handleCalendarSelect = useCallback((date: Date | undefined) => {
         if (!disabled) {
@@ -128,6 +115,7 @@ export const SocialEventForm = ({
 
     const handleFormSubmit = async (e: any) => {
         e.preventDefault();
+        
         if (disabled) {
             console.log(socialEvent);
             return;
@@ -171,7 +159,9 @@ export const SocialEventForm = ({
             onSubmit={handleFormSubmit}
             className="flex flex-col gap-6"
         >
-            <input type="hidden" name="id" value={socialEvent.id} />
+            {
+                mode !== "create" && <input type="hidden" name="id" value={socialEvent.id} />
+            }
 
             <div className="flex flex-wrap gap-4">
                 <EventField icon={<FilePenIcon className="w-5 h-5" />} label="Título" id="title" name="title" placeholder="Ingresa el título del evento" value={socialEvent.title} onChange={handleFieldChange} disabled={disabled} />
@@ -196,7 +186,7 @@ export const SocialEventForm = ({
                         </PopoverContent>
                     </Popover>
                 </div>
-                <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={socialEvent.date ? getHour(socialEvent.date) : String(socialEvent.time)} onChange={handleFieldChange} disabled={disabled} type="time" />
+                <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={String(socialEvent.time)} onChange={handleFieldChange} disabled={disabled} type="time" />
 
             </div>
 
