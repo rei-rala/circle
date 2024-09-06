@@ -15,6 +15,7 @@ type SocialEventStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED" | "DE
 
 type SocialEvent = {
     id: string
+    public: boolean
     ownerId: string
     owner: User
     title: string
@@ -47,4 +48,4 @@ type Attendee = {
 }
 
 type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
-type SocialEventDTO = Pick<SocialEvent, "id" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
+type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">

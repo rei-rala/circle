@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { SocialEventCard } from '@/components/SocialEventCard';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import getServerSession from '@/lib/getServerSession';
 import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
@@ -30,8 +30,8 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
         }
     }) as SocialEvent;
 
-
     if (!event || !event.ownerId) return notFound();
+    if (!event.public && !session?.user?.id) return redirect(`/api/auth/signin?callbackUrl=/events/${id}`);
 
     return (
         <div >

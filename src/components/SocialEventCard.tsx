@@ -31,7 +31,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
         }
     }, [place])
 
-    const onLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const onLinkClick = (_e: React.MouseEvent<HTMLAnchorElement>) => {
         toast.info("Abriendo enlace en una nueva pestaña")
     }
 
@@ -41,9 +41,11 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                 <CardTitle>
                     <div>{event.title}</div>
                 </CardTitle>
+
                 {event.date && <p className='capitalize'>{getDistanceFromNow(event.date)} </p>}
             </CardHeader>
             <CardContent>
+
                 <div className="grid gap-4">
                     <div className="flex flex-col items-start gap-4">
                         {
@@ -57,18 +59,26 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 style={{ aspectRatio: "300/200", objectFit: "cover" }}
                             />
                         }
-                        <div className="flex-1">
-                            <div className="text-lg font-medium">{event.title}</div>
-                            <div className="text-sm text-[#aaa] mt-2">
-                                {event.description}
-                            </div>
+                        <div className="flex-1 text-sm text-[#aaa] mt-2">
+                            {event.description}
                         </div>
                     </div>
 
-                    <div className="flex gap-2 text-sm text-[#aaa] mt-2">
-                        <span className="my-auto">Organizado por:</span>
-                        <UserHoverCard user={event.owner} hoverCardProps={{ openDelay: 100 }} />
+                    <div className="flex flex-col gap-1 text-sm text-[#aaa] mt-2">
+                        <div className="flex gap-2">
+                            <span className="my-auto">Organizado por:</span>
+                            <UserHoverCard user={event.owner} hoverCardProps={{ openDelay: 100 }} />
+                        </div>
+
+                        {
+                            event.public && (
+                                <span className="italic text-center">
+                                    Este evento es público aún para usuarios no registrados
+                                </span>
+                            )
+                        }
                     </div>
+
 
                     <Separator />
                     <div className="grid gap-2">

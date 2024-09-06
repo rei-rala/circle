@@ -12,7 +12,7 @@ export async function EditEventPageComponent({
     id: string,
     mode: EditorMode
 }) {
-
+    
     const session = await getServerSession();
     const socialEvent = await prisma.socialEvent.findUnique({
         where: {
@@ -59,7 +59,7 @@ export async function EditEventPageComponent({
                     <CardTitle>Editar Evento</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <SocialEventForm socialEvent={socialEvent} mode={mode} />
+                    <SocialEventForm socialEvent={socialEvent} mode={mode} user={session?.user} />
                 </CardContent>
             </Card>
         </>

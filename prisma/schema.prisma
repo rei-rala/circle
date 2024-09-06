@@ -16,6 +16,7 @@ enum SocialEventStatus {
 
 model SocialEvent {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  public          Boolean           @default(false)
   ownerId         String            @db.ObjectId
   owner           User              @relation(name: "EventOwner", fields: [ownerId], references: [id])
   title           String
@@ -27,7 +28,7 @@ model SocialEvent {
   place           Json? // Store the google.maps.places.PlaceResult data as JSON
   minAttendees    Int               @default(0)
   attendees       Attendee[]        @relation("EventAttendees")
-  publicAttendees Boolean
+  publicAttendees Boolean           @default(true)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

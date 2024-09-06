@@ -9,19 +9,23 @@ import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { getFullDate, getHour, isDateInPast, shiftDateByDays } from "@/lib/date-fns";
-import { PlaceInfo } from "./socialEventFormPartials.tsx/PlaceInfo";
-import { EventField } from "./socialEventFormPartials.tsx/EventField";
+import { PlaceInfo } from "./socialEventFormPartials/PlaceInfo";
+import { EventField } from "./socialEventFormPartials/EventField";
 import { setHours, setMinutes } from "date-fns";
-import { PlaceSelector } from "./socialEventFormPartials.tsx/PlaceSelector";
-import { createEvent, updateEvent } from "@/app/(events)/events/actions";
+import { PlaceSelector } from "./socialEventFormPartials/PlaceSelector";
+import { createEvent, updateEvent } from "@/app/events/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { compareChangesObject } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import { User } from "next-auth";
 
-type SocialEventDTO = Pick<SocialEvent, "id" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
+type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
 
 const defaultSocialEvent: SocialEventDTO = {
     id: "",
     title: "",
+    public: false,
     photo: "",
     description: "",
     date: null,
@@ -34,12 +38,15 @@ const defaultSocialEvent: SocialEventDTO = {
 
 export const SocialEventForm = ({
     socialEvent: initialSocialEvent,
-    mode = 'create'
+    mode = 'create',
+    user
 }: {
     socialEvent?: SocialEvent | null;
     mode?: EditorMode;
+    user?: User;
 }) => {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(
         initialSocialEvent
             ? {
@@ -51,7 +58,6 @@ export const SocialEventForm = ({
 
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
-    const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit")
     const minDate = shiftDateByDays();
     const actionText = useMemo(() => {
         switch (mode) {
@@ -65,6 +71,12 @@ export const SocialEventForm = ({
                 return "Ver Evento";
         }
     }, [mode]);
+
+    const hasChanges = useMemo(() => {
+        return compareChangesObject(socialEvent, initialSocialEvent);
+    }, [socialEvent, initialSocialEvent]);
+
+    const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit")
 
     const handleFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (disabled) return;
@@ -103,6 +115,15 @@ export const SocialEventForm = ({
         });
     }, [disabled]);
 
+    const handleCheckboxChange = useCallback((name: keyof SocialEventDTO, value: boolean) => {
+        if (disabled) return;
+
+        setSocialEvent(prevEvent => ({
+            ...prevEvent,
+            [name]: value
+        }));
+    }, [disabled]);
+
     const handleCalendarSelect = useCallback((date: Date | undefined) => {
         if (!disabled) {
             setSocialEvent(prevSocialEvent => ({
@@ -115,43 +136,58 @@ export const SocialEventForm = ({
 
     const handleFormSubmit = async (e: any) => {
         e.preventDefault();
-        
+
         if (disabled) {
             console.log(socialEvent);
             return;
         }
+
+        setLoading(true);
 
         const socialEventToUpdate = {
             ...socialEvent,
             place: JSON.stringify(socialEvent.place) as any,
         }
 
-        switch (mode) {
-            case "create":
-                const created = await createEvent(socialEventToUpdate);
-                if (created) {
-                    toast.success("Evento creado exitosamente");
-                    router.replace(`/events/${created.id}`);
-                } else {
-                    toast.error("No se pudo crear el evento");
-                }
-                break;
-            case "edit":
-                const updated = await updateEvent(socialEventToUpdate);
-                if (updated) {
-                    toast.success("Evento actualizado exitosamente");
-                } else {
-                    toast.error("No se pudo actualizar el evento");
-                }
-                break;
-                //case "delete":
-                //actionFunction = deleteEvent as typeof actionFunction;
-                //actionText = "Eliminación";
-                break;
-            default:
-                toast.error("La acción no está permitida");
-                return;
+        try {
+
+            switch (mode) {
+                case "create":
+                    const { data: created, error: createError } = await createEvent(socialEventToUpdate);
+                    if (createError) {
+                        toast.error(createError);
+                    } else if (created) {
+                        toast.success("Evento creado exitosamente");
+                        router.replace(`/events/${created.id}`);
+                    } else {
+                        toast.error("No se pudo crear el evento");
+                    }
+                    break;
+                case "edit":
+                    const { data: updated, error: updateError } = await updateEvent(socialEventToUpdate);
+                    if (updateError) {
+                        toast.error(updateError);
+                    } else if (updated) {
+                        toast.success("Evento actualizado exitosamente");
+                    } else {
+                        toast.error("No se pudo actualizar el evento");
+                    }
+                    break;
+                    //case "delete":
+                    //actionFunction = deleteEvent as typeof actionFunction;
+                    //actionText = "Eliminación";
+                    break;
+                default:
+                    toast.error("La acción no está permitida");
+                    return;
+            }
         }
+        catch (error) {
+            console.error(error);
+            toast.error("Error al procesar la solicitud");
+        }
+
+        setLoading(false);
     }
 
     return (
@@ -221,13 +257,30 @@ export const SocialEventForm = ({
                 )
             }
 
-            {!disabled && (
-                <div className="flex justify-end">
-                    <Button type="submit">
-                        {actionText}
-                    </Button>
+            {user?.role === "admin" && (
+                <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
+                    <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>
+                    <div
+                        className="flex items-center gap-2 cursor-pointer"
+                    >
+                        <Checkbox
+                            id={"publicEvent"}
+                            checked={socialEvent.public}
+                            onCheckedChange={(b) => handleCheckboxChange('public', Boolean(b))}
+                            aria-label={"Esconder el event para usuarios no registrados"}
+                        />
+                        <Label htmlFor="publicEvent">Hacer evento público</Label>
+                    </div>
                 </div>
             )}
+
+
+
+            <div className="flex justify-end">
+                <Button type="submit" disabled={disabled || !hasChanges}>
+                    {actionText}
+                </Button>
+            </div>
         </form>
     )
 }

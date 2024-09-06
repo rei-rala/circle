@@ -51,27 +51,21 @@ function checkUserProfileChanges(
 
 export const ProfileForm = () => {
     const session = useSession();
+    const [loading, setLoading] = useState(false);
     const [formUser, setFormUser] = useState<User>(defaultFormUser);
-
-    useEffect(() => {
-        if (session.data?.user) {
-            setFormUser({ ...defaultFormUser, ...session.data.user });
-        }
-    }, [session.data?.user]);
-
     const [adminCardHidePreference, setAdminCardHidePreference] = useState(localStorage.getItem("adminCardHidePreference") === "true");
 
     const { profileChanged, adminPreferenceChanged } = useMemo(() => {
         const profileChanged = checkUserProfileChanges(formUser, session?.data?.user);
-        const adminPreferenceChanged = (localStorage.getItem("adminCardHidePreference") === "true") !== adminCardHidePreference;
+        const adminPreferenceChanged = adminCardHidePreference !== (localStorage.getItem("adminCardHidePreference") === "true");
 
         return {
             profileChanged,
             adminPreferenceChanged
         };
-    }, [formUser, session?.data?.user, adminCardHidePreference]);
+    }, [formUser, adminCardHidePreference, session?.data?.user]);
 
-    const disableForm = profileChanged || adminPreferenceChanged;
+    const enableForm = adminPreferenceChanged || profileChanged;
 
     const checkboxFields: { field: keyof User; label: string }[] = [
         {
@@ -140,7 +134,9 @@ export const ProfileForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!disableForm) return;
+        if (!enableForm) return;
+
+        setLoading(true);
 
         if (adminPreferenceChanged) {
             localStorage.setItem("adminCardHidePreference", String(adminCardHidePreference));
@@ -148,13 +144,29 @@ export const ProfileForm = () => {
             toast.success("Preferencia de ocultar cartel admin actualizada correctamente");
         }
 
-        if (profileChanged && await updateUserProfile(formUser)) {
-            toast.success("Perfil actualizado correctamente");
-            session.update();
-        } else if (profileChanged) {
+        try {
+            if (profileChanged) {
+                if (await updateUserProfile(formUser)) {
+                    toast.success("Perfil actualizado correctamente");
+                    session.update();
+                } else {
+                    throw new Error("No se pudo actualizar el perfil");
+                }
+            }
+        } catch (error) {
+            console.error(error);
             toast.error("No se pudo actualizar el perfil");
         }
+
+        setLoading(false);
     };
+
+
+    useEffect(() => {
+        if (session.data?.user) {
+            setFormUser({ ...defaultFormUser, ...session.data.user });
+        }
+    }, [session.data?.user]);
 
     return (
         <form className="grid gap-6" onSubmit={handleSubmit}>
@@ -337,9 +349,13 @@ export const ProfileForm = () => {
             <div className="flex justify-end">
                 <Button
                     type="submit"
-                    disabled={!disableForm}
+                    disabled={loading || !enableForm}
                 >
-                    Guardar Cambios
+
+                    {loading
+                        ? <div className="animate-spin rounded-full w-4 h-4 border-t-4"></div>
+                        : "Guardar Cambios"
+                    }
                 </Button>
             </div>
         </form >

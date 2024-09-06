@@ -20,7 +20,7 @@ export const UserHoverCard = ({ user, hoverCardProps, hoverCardTriggerProps }: {
                     {userButtonText}
                 </Button>
             </HoverCardTrigger>
-            <HoverCardContent className="flex flex-col gap-2 w-fit max-w-[100svw]">
+            <HoverCardContent className="flex flex-col gap-2 w-fit max-w-[99svw]">
                 <div className="text-sm font-semibold m-auto">
                     <Avatar className="m-auto">
                         <AvatarImage src={user.image ?? undefined} />

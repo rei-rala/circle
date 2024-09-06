@@ -1,4 +1,5 @@
 "use server";
+//import "server-only";
 
 import { auth } from "@/auth";
 import { isDateInPast } from "@/lib/date-fns";
@@ -11,24 +12,31 @@ export async function updateEvent(values: SocialEventDTO) {
         const session = await auth();
 
         if (!(session?.user.id)) {
-            return false;
+            return {
+                error: "No user session found"
+            };
         }
+        const isAdmin = session.user.role === "admin";
 
         const event = await prisma.socialEvent.findUnique({
             where: { id: values.id },
         });
 
-        if ((!event || event.ownerId !== session.user.id) && session.user.role !== 'admin') {
-            return false;
+        if ((!event || event.ownerId !== session.user.id) && isAdmin) {
+            return {
+                error: "No tienes permisos para editar este evento"
+            };
         }
 
-        const { id, title, photo, description, date, place } = values;
+        const { id, title, photo, description, date, place, public: isPublic } = values;
         let { time } = values;
         time = time || "00:00";
 
-        const minAttendees = Math.min(values.minAttendees, 0);
+        const minAttendees = Math.max(values.minAttendees, 0);
 
-        if (!title || !description || !date) return false;
+        if (!title || !description || !date) return {
+            error: "Missing required fields"
+        };
 
 
         const dateUpdated = date
@@ -37,19 +45,22 @@ export async function updateEvent(values: SocialEventDTO) {
         dateUpdated.setMinutes(minutes);
 
         if (isDateInPast(dateUpdated)) {
-            return false;
+            return {
+                error: "Date is in the past"
+            };
         }
 
         const updated = await prisma.socialEvent.update({
             where: { id },
             data: {
                 status: "PUBLISHED",
-                title,
+                title: title.trim(),
                 photo,
-                description,
+                description: description.trim(),
                 date: dateUpdated,
                 time,
                 place: place as any,
+                public: isAdmin ? isPublic : false,
                 minAttendees,
             }
         });
@@ -59,14 +70,19 @@ export async function updateEvent(values: SocialEventDTO) {
             revalidatePath(`/events/${id}`, "layout");
             revalidatePath(`/events/${id}/edit`, "layout");
 
-            return updated;
+            return { data: updated };
         }
     }
     catch (error: any) {
         console.error(error);
+        return {
+            error: error.message
+        };
     }
 
-    return false;
+    return {
+        error: "Failed to update event"
+    };
 }
 
 export async function createEvent(values: SocialEventDTO) {
@@ -74,13 +90,19 @@ export async function createEvent(values: SocialEventDTO) {
         const session = await auth();
 
         if (!(session?.user.id)) {
-            return false;
+            return {
+                error: "No user session found"
+            };
         }
 
-        const { title, photo, description, date, time, place } = values;
-        const minAttendees = Math.min(values.minAttendees, 0);
+        const isAdmin = session.user.role === "admin";
 
-        if (!title || !description || !date) return false;
+        const { title, photo, description, date, time, place, public: isPublic } = values;
+        const minAttendees = Math.max(values.minAttendees, 0);
+
+        if (!title || !description || !date) return {
+            error: "Missing required fields"
+        };
 
         // const dateUpdated = new Date(date)
         // dateUpdated.setHours(
@@ -89,16 +111,18 @@ export async function createEvent(values: SocialEventDTO) {
         // );
 
         if (isDateInPast(date)) {
-            return false;
+            return {
+                error: "Date is in the past"
+            };
         }
 
         const created = await prisma.socialEvent.create({
             data: {
-                publicAttendees: true,
+                publicAttendees: isAdmin ? isPublic : false,
                 status: "PUBLISHED",
-                title,
+                title: title.trim(),
                 photo,
-                description,
+                description: description.trim(),
                 date,
                 time,
                 place: place as any,
@@ -108,14 +132,19 @@ export async function createEvent(values: SocialEventDTO) {
         });
 
         if (created) {
-            return created;
+            return { data: created };
         }
     }
     catch (error: any) {
         console.error(error);
+        return {
+            error: error.message
+        };
     }
 
-    return false;
+    return {
+        error: "Failed to create event"
+    };
 }
 
 export async function joinEvent(values: UserProfileDTO) {
