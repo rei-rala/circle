@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import Loading from '@/components/Loading';
-import { EventDetailsPageComponent } from '@/pages/EventsDetailsPage';
+import { EventDetailsPageComponent } from '../EventsDetailsPage';
 
 
 export default function EventDetailsPage({ params: { id } }: { params: { id: string } }) {

@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { getDistanceFromNow, getFullDateAndHourWithSeparator } from "@/lib/date-fns";
-import { Separator } from "./ui/separator";
 
 export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
     return (

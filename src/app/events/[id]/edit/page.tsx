@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { EditEventPageComponent } from "@/pages/EditEventPage";
+import { EditEventPageComponent } from "@/app/events/EditEventPage";
 import { Suspense } from "react";
 
 

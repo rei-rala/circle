@@ -1,4 +1,4 @@
-import { SocialEventCardSmall } from "@/components/SocialEventCardSmall";
+import { SocialEventCardSmall } from "@/components/SocialEvent/SocialEventCardSmall";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 

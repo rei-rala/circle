@@ -12,7 +12,6 @@ export async function EditEventPageComponent({
     id: string,
     mode: EditorMode
 }) {
-    
     const session = await getServerSession();
     const socialEvent = await prisma.socialEvent.findUnique({
         where: {
