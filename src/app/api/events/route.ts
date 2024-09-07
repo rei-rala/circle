@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 
+
 export async function POST(request: Request) {
     try {
         const session = await auth();
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
         }
 
         const isAdmin = session.user.role === "admin";
-        const body = await request.json();
+        const body: SocialEventDTO = await request.json();
         const { title, photo, description, date, time, place, public: isPublic, minAttendees } = body;
 
         if (!title || !description || !date) {
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
         });
 
         if (created) {
-            return NextResponse.json({ data: created }, { status: 201 });
+            return NextResponse.json({ data: created, message: "Event created successfully" }, { status: 201 });
         } else {
             return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
         }
@@ -60,7 +61,7 @@ export async function PUT(request: Request) {
         }
 
         const isAdmin = session.user.role === "admin";
-        const body = await request.json();
+        const body: SocialEventDTO = await request.json();
         const { id, title, photo, description, date, time, place, public: isPublic, minAttendees } = body;
 
         if (!id || !title || !description || !date) {
@@ -92,7 +93,7 @@ export async function PUT(request: Request) {
         });
 
         if (updated) {
-            return NextResponse.json({ data: updated }, { status: 200 });
+            return NextResponse.json({ data: updated, message: "Event updated successfully" }, { status: 200 });
         } else {
             return NextResponse.json({ error: "Failed to update event" }, { status: 500 });
         }
@@ -139,7 +140,7 @@ export async function DELETE(request: Request) {
         });
 
         if (deleted) {
-            return NextResponse.json({ message: "Event deleted successfully" }, { status: 200 });
+            return NextResponse.json({ data: true, message: "Event deleted successfully" }, { status: 200 });
         } else {
             return NextResponse.json({ error: "Failed to delete event" }, { status: 500 });
         }

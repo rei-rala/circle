@@ -1,8 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { generatePlaceholderLink } from '@/lib/utils';
-import { Separator } from '@radix-ui/react-separator';
 import { CopyIcon, LandPlotIcon, RouteIcon, UsersIcon } from 'lucide-react';
 import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
 import Image from 'next/image';
@@ -14,37 +13,39 @@ import { UserHoverCard } from './UserHoverCard';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { useCallback } from 'react';
+import { Separator } from './ui/separator';
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
     const handleCopyClick = useCallback(() => {
-        const copyError = "Error al copiar"
-        const copyText = event.place?.formatted_address || copyError;       
-
-
-        navigator?.clipboard.writeText(copyText);
-
-        if (copyText === copyError) {
-            toast.error(copyError)
-        } else {
-            toast.success("Dirección copiada al portapapeles")
+        if (!event.place?.formatted_address) {
+            toast.error("No hay dirección disponible para copiar");
+            return;
         }
-    }, [event.place])
 
-    const onLinkClick = (_e: React.MouseEvent<HTMLAnchorElement>) => {
+        navigator.clipboard.writeText(event.place.formatted_address)
+            .then(() => {
+                toast.success("Dirección copiada al portapapeles");
+            })
+            .catch((error) => {
+                console.error("Error al copiar la dirección:", error);
+                toast.error("No se pudo copiar la dirección");
+            });
+    }, [event.place]);
+
+    const onLinkClick = useCallback((_e: React.MouseEvent<HTMLAnchorElement>) => {
         toast.info("Abriendo enlace en una nueva pestaña")
-    }
+    }, [])
 
     return (
         <Card className="bg-[#222222] p-4 rounded-lg text-white">
-            <CardHeader>
+            <CardHeader className="flex flex-col gap-4">
                 <CardTitle>
                     <div>{event.title}</div>
+                    {event.date && <p className='text-sm capitalize'>{getDistanceFromNow(event.date)} </p>}
                 </CardTitle>
 
-                {event.date && <p className='capitalize'>{getDistanceFromNow(event.date)} </p>}
             </CardHeader>
             <CardContent>
-
                 <div className="grid gap-4">
                     <div className="flex flex-col items-start gap-4">
                         {
@@ -58,24 +59,16 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 style={{ aspectRatio: "300/200", objectFit: "cover" }}
                             />
                         }
-                        <div className="flex-1 text-sm text-[#aaa] mt-2">
+                        <div className="flex-1 text-sm text-muted-foreground mt-2">
                             {event.description}
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 text-sm text-[#aaa] mt-2">
+                    <div className="flex flex-col gap-1 text-sm text-muted-foreground mt-2">
                         <div className="flex gap-2">
                             <span className="my-auto">Organizado por:</span>
                             <UserHoverCard user={event.owner} hoverCardProps={{ openDelay: 100 }} />
                         </div>
-
-                        {
-                            event.public && (
-                                <span className="italic text-center">
-                                    Este evento es público aún para usuarios no registrados
-                                </span>
-                            )
-                        }
                     </div>
 
 
@@ -153,6 +146,16 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                     </div>
                 </div>
             </CardContent>
+
+            {
+                event.public && (
+                        <CardFooter className='mt-4'>
+                            <p className="italic text-center text-sm">
+                                Este evento es público, aún para usuarios no registrados
+                            </p>
+                        </CardFooter>
+                )
+            }
         </Card >
     )
 }

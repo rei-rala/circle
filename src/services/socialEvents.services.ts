@@ -1,33 +1,6 @@
 const API_BASE_URL = "http://localhost:3000";
 const API_URL = `${API_BASE_URL}/api/events`;
 
-export async function getSocialEvents(): Promise<ApiResponse<SocialEvent[]>> {
-    const res = await fetch(API_URL)
-
-    if (!res.ok) {
-        return {
-            data: null,
-            message: "Failed to fetch social events"
-        }
-    }
-
-    const data: SocialEvent[] = await res.json()
-
-    return {
-        data,
-        message: "Social events fetched successfully"
-    }
-}
-
-export async function getSocialEventById(id: string): Promise<ApiResponse<SocialEvent>> {
-    const { data: socialEvents } = await getSocialEvents();
-    const event = (socialEvents ?? []).find(e => e.id == id) ?? null
-
-    return {
-        data: event,
-        message: event ? "Social event found" : "Social event not found"
-    }
-}
 
 export async function createSocialEvent(event: SocialEventDTO): Promise<ApiResponse<SocialEvent>> {
     try {
@@ -40,15 +13,13 @@ export async function createSocialEvent(event: SocialEventDTO): Promise<ApiRespo
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to create event');
+            throw new Error('Error al crear el evento');
         }
 
-        const { data } = await response.json();
-        return { data, message: "Social event created successfully" };
+        return await response.json();
     } catch (error) {
         console.error('Error creating social event:', error);
-        return { data: null, message: error instanceof Error ? error.message : 'Failed to create event' };
+        return { error: 'Error inesperado al crear el evento' };
     }
 }
 
@@ -63,15 +34,13 @@ export async function updateSocialEvent(event: SocialEventDTO): Promise<ApiRespo
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to update event');
+            throw new Error('Error al actualizar el evento');
         }
 
-        const { data } = await response.json();
-        return { data, message: "Social event updated successfully" };
+        return await response.json();
     } catch (error) {
         console.error('Error updating social event:', error);
-        return { data: null, message: error instanceof Error ? error.message : 'Failed to update event' };
+        return { error: 'Error inesperado al actualizar el evento' };
     }
 }
 
@@ -82,13 +51,12 @@ export async function deleteSocialEvent(event: SocialEvent): Promise<ApiResponse
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to delete event');
+            throw new Error('Error al eliminar el evento');
         }
 
-        return { data: true, message: "Social event deleted successfully" };
+        return await response.json();
     } catch (error) {
         console.error('Error deleting social event:', error);
-        return { data: null, message: error instanceof Error ? error.message : 'Failed to delete event' };
+        return { error: 'Error inesperado al eliminar el evento' };
     }
 }

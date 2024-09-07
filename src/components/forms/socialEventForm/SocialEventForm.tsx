@@ -139,18 +139,15 @@ export const SocialEventForm = ({
         try {
             const handleEvent = async (action: 'create' | 'edit') => {
                 const eventAction = action === 'create' ? createSocialEvent : updateSocialEvent;
-                const result = await eventAction(socialEvent);
+                const { data, error, message } = await eventAction(socialEvent);
 
-                if (result.data) {
-                    toast.success(result.message);
-                    if (action === 'create') {
-                        router.replace(`/events/${result.data.id}`);
-                    }
-                } else if (result) {
-                    let errorMessage = result.error;
-                    errorMessage ??= action === 'create' ? "No se pudo crear el evento" : "No se pudo actualizar el evento";
-                    toast.error(errorMessage);
+                if (error) {
+                    toast.error(error);
+                } else if (data) {
+                    toast.success(message);
+                    if (mode === 'create') router.replace(`/events/${data.id}`);
                 }
+
             };
 
             if (mode === 'create' || mode === 'edit') {
@@ -248,7 +245,11 @@ export const SocialEventForm = ({
 
             <div className="flex justify-end">
                 <Button type="submit" disabled={disabled || !hasChanges || loading}>
-                    {loading ? "Procesando..." : actionText}
+                    {
+                        loading
+                            ? <span className="mr-2 h-4 w-4 animate-spin" />
+                            : actionText
+                    }
                 </Button>
             </div>
         </form>
