@@ -23,10 +23,10 @@ import {
 } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
-import { updateUserProfile } from "@/app/profile/actions";
 import Image from "next/image";
 import { toast } from "sonner";
 import { compareChangesObject } from "@/lib/utils";
+import { updateUserProfile } from "@/services/profile.services";
 
 const defaultFormUser: User = {
     email: "",

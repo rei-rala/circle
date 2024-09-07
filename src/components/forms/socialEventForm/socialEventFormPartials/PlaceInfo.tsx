@@ -29,7 +29,7 @@ export const PlaceInfo = ({
       <div className="flex-1 flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <CaseSensitiveIcon className="w-4 h-4" />
-          <Label htmlFor="place-name">Nombre</Label>
+          <Label htmlFor="place-name">Lugar</Label>
         </div>
         <Input
           id="place-name"

@@ -20,7 +20,7 @@ import { compareChangesObject } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { User } from "next-auth";
 
-type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees">
+type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees" | "publicAttendees">
 
 const defaultSocialEvent: SocialEventDTO = {
     id: "",
@@ -33,6 +33,7 @@ const defaultSocialEvent: SocialEventDTO = {
     time: "",
     place: null,
     minAttendees: 0,
+    publicAttendees: true,
 }
 
 export const SocialEventForm = ({
@@ -240,16 +241,29 @@ export const SocialEventForm = ({
                         />
                         <Label htmlFor="publicEvent">Hacer evento público</Label>
                     </div>
+                    <div className="flex items-center gap-2 cursor-pointer">
+                        <Checkbox
+                            id={"publicAttendees"}
+                            checked={socialEvent.publicAttendees}
+                            onCheckedChange={(b) => handleCheckboxChange('publicAttendees', Boolean(b))}
+                            aria-label={"Esconder los asistentes del evento"}
+                        />
+                        <Label htmlFor="publicAttendees">Mostrar asistentes</Label>
+                    </div>
                 </div>
             )}
 
             <div className="flex justify-end">
-                <Button type="submit" disabled={disabled || !hasChanges || loading}>
-                    {
-                        loading
-                            ? <span className="mr-2 h-4 w-4 animate-spin" />
-                            : actionText
-                    }
+                <Button
+                    type={loading ? "button" : "submit"}
+                    disabled={loading || disabled || !hasChanges}
+                    className="transition-all duration-300 ease-in-out opacity-100 scale-100 translate-y-0"
+                >
+                    {loading ? (
+                        <div className="h-5 w-5 rounded-full border-2 border-t-transparent border-primary-foreground animate-spin"></div>
+                    ) : (
+                        actionText
+                    )}
                 </Button>
             </div>
         </form>

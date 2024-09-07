@@ -9,11 +9,12 @@ import Image from 'next/image';
 import { CustomGoogleMaps } from '@/components/CustomGoogleMaps';
 import { getDistanceFromNow, getFullDate, getHour, isDateInPast } from '@/lib/date-fns';
 import Link from 'next/link';
-import { UserHoverCard } from './UserHoverCard';
+import { UserHoverCard } from '../UserHoverCard';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { useCallback } from 'react';
-import { Separator } from './ui/separator';
+import { Separator } from '../ui/separator';
+
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
     const handleCopyClick = useCallback(() => {
@@ -87,18 +88,15 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 <div>{event.date && getHour(event.date)}</div>
                             </div>
 
-                            {
-                                event.minAttendees && event.minAttendees !== 0
-                                    ? (
-                                        <div className="flex items-center gap-2">
-                                            <UsersIcon className="min-w-5 min-h-5" />
-                                            <div>
-                                                Mínimo de asistentes: {event.minAttendees}
-                                            </div>
-                                        </div>
-                                    )
-                                    : null
-                            }
+                            <div className="flex items-center gap-2 sm:col-span-2">
+                                <UsersIcon className="min-w-5 min-h-5" />
+                                <div>
+                                    {event.minAttendees && event.minAttendees !== 0
+                                        ? `Mínimo de asistentes: ${event.attendees?.length || 0}/${event.minAttendees} ${event.attendees?.length >= event.minAttendees ? '😊' : event.attendees?.length >= event.minAttendees / 2 ? '🙂' : '🥺'}`
+                                        : `Asistentes: ${event.attendees?.length || 0} ${event.attendees?.length > 0 ? '😊' : '🥺'}`
+                                    }
+                                </div>
+                            </div>
 
                             {event.place &&
                                 <>

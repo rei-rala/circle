@@ -1,10 +1,9 @@
 import { SocialEventCardSmall } from "@/components/SocialEventCardSmall";
-import { getSocialEvents } from "@/services/socialEvents.services";
+import { prisma } from "@/prisma";
 import Link from "next/link";
 
 export default async function EventsPageComponent() {
-  let { data: socialEvents } = await getSocialEvents();
-  socialEvents ??= []; // why can't I assign this in the previous line?
+  const socialEvents = await prisma.socialEvent.findMany({}) as SocialEvent[];
 
   return (
     <div className="grid gap-4">
