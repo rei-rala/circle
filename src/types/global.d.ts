@@ -1,9 +1,16 @@
 type EditorMode = 'create' | 'edit' | "delete" | 'read-only';
 
-type ApiResponse<T> = {
-    data: T | null,
-    success?: boolean,
-}
+type ApiResponse<T> =
+    | {
+        data: T;
+        message: string;
+        success: boolean;
+    }
+    | {
+        data: null;
+        error: string;
+        success: false;
+    };
 
 type MarkerPosition = {
     lat: number,

@@ -13,7 +13,7 @@ import { PlaceInfo } from "./socialEventFormPartials/PlaceInfo";
 import { EventField } from "./socialEventFormPartials/EventField";
 import { setHours, setMinutes } from "date-fns";
 import { PlaceSelector } from "./socialEventFormPartials/PlaceSelector";
-import { createEvent, updateEvent } from "@/app/events/actions";
+import { createSocialEvent, updateSocialEvent } from "@/services/socialEvents.services";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { compareChangesObject } from "@/lib/utils";
@@ -35,7 +35,6 @@ const defaultSocialEvent: SocialEventDTO = {
     minAttendees: 0,
 }
 
-
 export const SocialEventForm = ({
     socialEvent: initialSocialEvent,
     mode = 'create',
@@ -48,12 +47,7 @@ export const SocialEventForm = ({
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(
-        initialSocialEvent
-            ? {
-                ...initialSocialEvent,
-                place: typeof initialSocialEvent.place === 'string' ? JSON.parse(initialSocialEvent.place) : initialSocialEvent.place
-            }
-            : defaultSocialEvent
+        initialSocialEvent ?? defaultSocialEvent
     );
 
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
@@ -83,7 +77,6 @@ export const SocialEventForm = ({
 
         const name = e.target.name as keyof SocialEventDTO;
         const value = e.target.value;
-
 
         if (["time", "date"].includes(name) === false) {
             setSocialEvent(prevEvent => ({
@@ -133,8 +126,7 @@ export const SocialEventForm = ({
         }
     }, [disabled]);
 
-
-    const handleFormSubmit = async (e: any) => {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (disabled) {
@@ -144,42 +136,27 @@ export const SocialEventForm = ({
 
         setLoading(true);
 
-        const socialEventToUpdate = {
-            ...socialEvent,
-            place: JSON.stringify(socialEvent.place) as any,
-        }
-
         try {
+            const handleEvent = async (action: 'create' | 'edit') => {
+                const eventAction = action === 'create' ? createSocialEvent : updateSocialEvent;
+                const result = await eventAction(socialEvent);
 
-            switch (mode) {
-                case "create":
-                    const { data: created, error: createError } = await createEvent(socialEventToUpdate);
-                    if (createError) {
-                        toast.error(createError);
-                    } else if (created) {
-                        toast.success("Evento creado exitosamente");
-                        router.replace(`/events/${created.id}`);
-                    } else {
-                        toast.error("No se pudo crear el evento");
+                if (result.data) {
+                    toast.success(result.message);
+                    if (action === 'create') {
+                        router.replace(`/events/${result.data.id}`);
                     }
-                    break;
-                case "edit":
-                    const { data: updated, error: updateError } = await updateEvent(socialEventToUpdate);
-                    if (updateError) {
-                        toast.error(updateError);
-                    } else if (updated) {
-                        toast.success("Evento actualizado exitosamente");
-                    } else {
-                        toast.error("No se pudo actualizar el evento");
-                    }
-                    break;
-                    //case "delete":
-                    //actionFunction = deleteEvent as typeof actionFunction;
-                    //actionText = "Eliminación";
-                    break;
-                default:
-                    toast.error("La acción no está permitida");
-                    return;
+                } else if (result) {
+                    let errorMessage = result.error;
+                    errorMessage ??= action === 'create' ? "No se pudo crear el evento" : "No se pudo actualizar el evento";
+                    toast.error(errorMessage);
+                }
+            };
+
+            if (mode === 'create' || mode === 'edit') {
+                await handleEvent(mode);
+            } else {
+                toast.error("La acción no está permitida");
             }
         }
         catch (error) {
@@ -223,7 +200,6 @@ export const SocialEventForm = ({
                     </Popover>
                 </div>
                 <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={String(socialEvent.time)} onChange={handleFieldChange} disabled={disabled} type="time" />
-
             </div>
 
             <div className="flex flex-col gap-2">
@@ -248,21 +224,17 @@ export const SocialEventForm = ({
                 </>
             )}
 
-            {!disabled &&
-                (
-                    <>
-                        <Separator />
-                        <PlaceSelector mapsPlace={socialEvent.place} setSocialEvent={setSocialEvent} disabled={disabled} />
-                    </>
-                )
-            }
+            {!disabled && (
+                <>
+                    <Separator />
+                    <PlaceSelector mapsPlace={socialEvent.place} setSocialEvent={setSocialEvent} disabled={disabled} />
+                </>
+            )}
 
             {user?.role === "admin" && (
                 <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
                     <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>
-                    <div
-                        className="flex items-center gap-2 cursor-pointer"
-                    >
+                    <div className="flex items-center gap-2 cursor-pointer">
                         <Checkbox
                             id={"publicEvent"}
                             checked={socialEvent.public}
@@ -274,11 +246,9 @@ export const SocialEventForm = ({
                 </div>
             )}
 
-
-
             <div className="flex justify-end">
-                <Button type="submit" disabled={disabled || !hasChanges}>
-                    {actionText}
+                <Button type="submit" disabled={disabled || !hasChanges || loading}>
+                    {loading ? "Procesando..." : actionText}
                 </Button>
             </div>
         </form>

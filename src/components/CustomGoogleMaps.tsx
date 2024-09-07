@@ -19,15 +19,7 @@ const defaultContainerStyle = {
 };
 
 export const CustomGoogleMaps = ({ containerStyle = defaultContainerStyle, markerPosition = defaultMarkerPosition, initialPlace }: CustomGoogleMapsProps) => {
-
-    let center = markerPosition;
-
-    try {
-        if (typeof initialPlace === 'string') center = JSON.parse(initialPlace).geometry.location;
-    } catch (error) {
-        console.error("Error parsing initialPlace")
-        console.error(error)
-    }
+    let center = initialPlace?.geometry?.location || markerPosition;
 
     return (
         <GoogleMap

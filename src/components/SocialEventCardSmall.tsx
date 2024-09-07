@@ -6,8 +6,6 @@ import { getDistanceFromNow, getFullDateAndHourWithSeparator } from "@/lib/date-
 import { Separator } from "./ui/separator";
 
 export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
-    const place: google.maps.places.PlaceResult = typeof event?.place === 'string' ? JSON.parse(event.place) : event.place; 
-
     return (
         <div className="flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444]">
             {
@@ -24,7 +22,7 @@ export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
             <div className="flex-1">
                 <div className="font-medium">{event.title}</div>
                 <Separator />
-                <div className="text-sm text-[#aaa] mt-1">{place?.name || "A definir"}</div>
+                <div className="text-sm text-[#aaa] mt-1">{event.place?.name || "Lugar a definir"}</div>
                 <div className="text-sm text-[#aaa]">
                     {
                         event.date

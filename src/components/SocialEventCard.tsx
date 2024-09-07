@@ -16,11 +16,10 @@ import { toast } from 'sonner';
 import { useCallback } from 'react';
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
-    const place = typeof event.place === "string" && JSON.parse(event.place);
-
     const handleCopyClick = useCallback(() => {
         const copyError = "Error al copiar"
-        const copyText = place?.formatted_address || copyError;
+        const copyText = event.place?.formatted_address || copyError;       
+
 
         navigator?.clipboard.writeText(copyText);
 
@@ -29,7 +28,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
         } else {
             toast.success("Dirección copiada al portapapeles")
         }
-    }, [place])
+    }, [event.place])
 
     const onLinkClick = (_e: React.MouseEvent<HTMLAnchorElement>) => {
         toast.info("Abriendo enlace en una nueva pestaña")
@@ -108,15 +107,15 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                     : null
                             }
 
-                            {place &&
+                            {event.place &&
                                 <>
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
                                             <LandPlotIcon className="min-w-5 min-h-5" />
-                                            {place.name}
+                                            {event.place.name}
                                         </p>
                                         <Link
-                                            href={place.url || "#"}
+                                            href={event.place.url || "#"}
                                             onClick={onLinkClick}
                                             target="_blank"
                                             rel="noreferrer"
@@ -131,7 +130,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
                                             <RouteIcon className="min-w-5 min-h-5" />
-                                            {place.formatted_address}
+                                            {event.place.formatted_address}
                                         </p>
                                         <span
                                             onClick={handleCopyClick}
