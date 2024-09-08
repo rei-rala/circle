@@ -58,7 +58,8 @@ export async function POST(request: Request) {
                 time,
                 place: place as any,
                 minAttendees: Math.max(minAttendees, 0),
-                publicAttendees: isAdmin ? isPublic : true,
+                public: isAdmin ? isPublic : false,
+                publicAttendees: isAdmin ? publicAttendees : true,
                 owner: { connect: { id: session.user.id } }
             }
         });
@@ -128,7 +129,7 @@ export async function PUT(request: Request) {
             revalidatePath(`/events/${id}`);
             revalidatePath('/events');
             revalidatePath('/');
-            
+
             return NextResponse.json({ data: updated, message: "Event updated successfully" }, { status: 200 });
         } else {
             return NextResponse.json({ error: "Failed to update event" }, { status: 500 });

@@ -24,8 +24,8 @@ export async function PUT(request: Request) {
                 phone,
                 socialMedia,
                 hideEmail: isAdmin ? hideEmail : false,
-                hideImage: isAdmin ? hideEmail : false,
-                hidePhone: isAdmin ? hideEmail : false,
+                hideImage: isAdmin ? hideImage : false,
+                hidePhone: isAdmin ? hidePhone : false,
             }
         });
 
