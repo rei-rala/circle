@@ -1,6 +1,6 @@
 import { User } from "next-auth";
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = process.env.NODE_ENV === "production" ? "https://circle-red.vercel.app" : "http://localhost:3000";
 const API_URL = `${API_BASE_URL}/api/profile`;
 
 
