@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { generatePlaceholderLink } from '@/lib/utils';
 import { CopyIcon, LandPlotIcon, RouteIcon, UsersIcon } from 'lucide-react';
 import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
@@ -14,6 +13,7 @@ import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { useCallback } from 'react';
 import { Separator } from '../ui/separator';
+import { LayoutCard } from '../LayoutCard';
 
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
@@ -38,15 +38,15 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
     }, [])
 
     return (
-        <Card className="bg-[#222222] p-4 rounded-lg text-white">
-            <CardHeader className="flex flex-col gap-4">
-                <CardTitle>
+        <LayoutCard
+            title={
+                <>
                     <div>{event.title}</div>
                     {event.date && <p className='text-sm capitalize'>{getDistanceFromNow(event.date)} </p>}
-                </CardTitle>
+                </>
+            }
+            content={
 
-            </CardHeader>
-            <CardContent>
                 <div className="grid gap-4">
                     <div className="flex flex-col items-start gap-4">
                         {
@@ -143,17 +143,14 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                         }
                     </div>
                 </div>
-            </CardContent>
-
-            {
+            }
+            footer={
                 event.public && (
-                        <CardFooter className='mt-4'>
-                            <p className="italic text-center text-sm">
-                                Este evento es público, aún para usuarios no registrados
-                            </p>
-                        </CardFooter>
+                    <p className="italic text-center text-sm">
+                        Este evento es público, aún para usuarios no registrados
+                    </p>
                 )
             }
-        </Card >
+        />
     )
 }

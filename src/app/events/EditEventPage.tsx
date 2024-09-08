@@ -1,7 +1,8 @@
 import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LayoutCard } from "@/components/LayoutCard";
 import { isDateInPast } from "@/lib/date-fns";
 import getServerSession from "@/lib/getServerSession";
+import { cn } from "@/lib/utils";
 import { prisma } from "@/prisma";
 import { notFound } from "next/navigation";
 
@@ -29,9 +30,12 @@ export async function EditEventPageComponent({
         }
     }) as SocialEvent | null
 
+    const isAdmin = session?.user.role === "admin";
+    const isOwner = socialEvent?.ownerId === session?.user.id;
+
     if (
         (session === null || socialEvent === null) &&
-        (session?.user.role !== "admin" || !(socialEvent?.ownerId === session?.user.id))
+        !(isAdmin || isOwner)
     ) {
         return notFound();
     }
@@ -40,27 +44,35 @@ export async function EditEventPageComponent({
         <>
             {
                 socialEvent?.date && isDateInPast(socialEvent.date) && (
-                    <Card className="text-center p-4 rounded-lg mb-2 border-red-600">
-                        <CardHeader className="p-0">
-                            <CardTitle>Este evento ya ha pasado</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-[#aaa]">
-                                No puedes editar eventos que ya han pasado.
-                            </p>
-                        </CardContent>
-                    </Card>
+                    <LayoutCard
+                        className={cn(
+                            "text-center rounded-lg",
+                            isAdmin ? "border-yellow-600" : "border-red-600 pb-6"
+                        )}
+                        title="Este evento ya ha pasado"
+                        content={
+                            isAdmin
+                                ? null
+                                : (
+                                    <p className="text-[#aaa]">
+                                        No puedes editar eventos que ya han pasado.
+                                    </p>
+                                )
+                        }
+                    />
                 )
             }
 
-            <Card className="bg-[#222222] p-4 rounded-lg">
-                <CardHeader>
-                    <CardTitle>Editar Evento</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <SocialEventForm socialEvent={socialEvent} mode={mode} user={session?.user} />
-                </CardContent>
-            </Card>
+            <LayoutCard
+                title="Editar Evento"
+                content={
+                    <SocialEventForm
+                        socialEvent={socialEvent}
+                        mode={mode}
+                        user={session?.user}
+                    />
+                }
+            />
         </>
     );
 }

@@ -1,5 +1,5 @@
+import { LayoutCard } from "@/components/LayoutCard";
 import { SocialEventCardSmall } from "@/components/SocialEvent/SocialEventCardSmall";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 
@@ -31,17 +31,17 @@ export default async function Home() {
       <div className="grid gap-4">
         {
           events.length === 0 && (
-            <Card className="p-4">
-              <CardTitle>No hay eventos próximos</CardTitle>
-              <CardContent>
+            <LayoutCard
+              title="No hay eventos próximos"
+              content={
                 <p>
                   Puedes crear un evento desde el menú o ingresando desde
                   <Link href="/events/new">
                     acá
                   </Link>
                 </p>
-              </CardContent>
-            </Card>
+              }
+            />
           )
         }
         {

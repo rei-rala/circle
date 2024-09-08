@@ -1,18 +1,17 @@
 import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LayoutCard } from "@/components/LayoutCard";
 import getServerSession from "@/lib/getServerSession";
+import { redirect } from "next/navigation";
 
 export default async function NewEventPage() {
     const session = await getServerSession();
 
+    if (!session) redirect("/api/auth/signin?callbackUrl=/events/new");
+
     return (
-        <Card className="bg-[#222222] p-4 rounded-lg">
-            <CardHeader>
-                <CardTitle>Crear Evento</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <SocialEventForm user={session?.user} />
-            </CardContent>
-        </Card>
+        <LayoutCard
+            title="Crear Evento"
+            content={<SocialEventForm user={session?.user} />}
+        />
     );
 }

@@ -1,16 +1,16 @@
 "use client"
 
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useRef } from 'react';
 
 type PopoverManagerContextType = {
-    currentPopoverId: string | null;
-    setCurrentPopoverId: (popoverId: string | null) => void;
+    currentPopoverRef: React.RefObject<HTMLElement> | null;
+    setCurrentPopoverRef: (ref: React.RefObject<HTMLElement> | null) => void;
     closePopover: () => void;
 }
 
 const defaultContextValue: PopoverManagerContextType = {
-    currentPopoverId: null,
-    setCurrentPopoverId: () => { },
+    currentPopoverRef: null,
+    setCurrentPopoverRef: () => { },
     closePopover: () => { },
 };
 
@@ -21,11 +21,11 @@ type PopoverManagerProviderProps = {
 }
 
 export const PopoverManagerProvider: React.FC<PopoverManagerProviderProps> = ({ children }) => {
-    const [currentPopoverId, setCurrentPopoverId] = useState<string | null>(null)
-    const closePopover = () => setCurrentPopoverId(null)
+    const [currentPopoverRef, setCurrentPopoverRef] = useState<React.RefObject<HTMLElement> | null>(null);
+    const closePopover = () => setCurrentPopoverRef(null);
 
     return (
-        <CurrentPopoverContext.Provider value={{ currentPopoverId, setCurrentPopoverId, closePopover }}>
+        <CurrentPopoverContext.Provider value={{ currentPopoverRef, setCurrentPopoverRef, closePopover }}>
             {children}
         </CurrentPopoverContext.Provider>
     );
