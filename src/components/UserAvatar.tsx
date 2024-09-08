@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 
 export function UserAvatar({ user, ...props }: { user?: User } & React.ComponentProps<typeof Avatar>) {
-    const avatarImageSrc = user?.hideImage ? undefined : user?.image ?? undefined;
+    const avatarImageSrc = user?.hideImage ? undefined : user?.image ?? "/placeholder-user.jpg";
     const avatarFallbackName = user ? (user.alias?.[0] || user.name?.[0] || user.email?.[0]) : "?";
     
     return (

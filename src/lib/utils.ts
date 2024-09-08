@@ -82,3 +82,14 @@ export function compareChangesObject<T>(newValue: T, oldValue: T): boolean {
   // Este punto no debería alcanzarse, pero lo incluimos por seguridad
   return true;
 }
+
+export function scrollToId(id: string, options?: ScrollToOptions) {
+  const element = document.getElementById(id);
+  const navbarHeight = document.getElementById("navbar")?.clientHeight || 0;
+
+  element?.scrollIntoView({
+    block: "start",
+    behavior: "smooth",
+    ...options
+  })
+}

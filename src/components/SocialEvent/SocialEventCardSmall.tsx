@@ -4,10 +4,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getDistanceFromNow, getFullDateAndHourWithSeparator } from "@/lib/date-fns";
+import { cn } from "@/lib/utils";
 
 export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
     return (
-        <div className="flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444]">
+        <div
+            className={
+                cn(event.public && "border-green-500", "flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444] border-2")
+            }
+        >
             {
                 event.photo && (
                     <div className="h-full max-w-[30%] aspect-square grid place-items-center">
