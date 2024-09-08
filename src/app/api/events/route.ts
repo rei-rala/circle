@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 import { revalidatePath } from 'next/cache';
+import { isValid } from 'date-fns';
 
 export async function POST(request: Request) {
     try {
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
 
         // Check if user is authenticated
         if (!session?.user.id) {
-            return NextResponse.json({ error: "No user session found" }, { status: 401 });
+            return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
         const isAdmin = session.user.role === "admin";
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
 
             if (existingEvent) {
                 // Redirect the user to their existing event
-                return NextResponse.json({ redirect: `/events/${existingEvent.id}` }, { status: 303 });
+                return NextResponse.json({ redirect: `/events/${existingEvent.id}`, message: "Ya tienes un evento activo. Solo puedes tener un evento activo a la vez." }, { status: 303 });
             }
         }
 
@@ -37,14 +38,14 @@ export async function POST(request: Request) {
         const { title, photo, description, date, time, place, public: isPublic, minAttendees, publicAttendees } = body;
 
         // Validate required fields
-        if (!title || !description || !date) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        if (!title.trim() || !description.trim() || !date || isValid(date)) {
+            return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
         }
 
         const eventDate = new Date(date);
         // Check if the event date is in the past
         if (isDateInPast(eventDate)) {
-            return NextResponse.json({ error: "Date is in the past" }, { status: 400 });
+            return NextResponse.json({ error: "La fecha está en el pasado" }, { status: 400 });
         }
 
         // Create the event in the database
@@ -68,9 +69,9 @@ export async function POST(request: Request) {
             revalidatePath('/events');
             revalidatePath('/');
 
-            return NextResponse.json({ data: created, message: "Event created successfully" }, { status: 201 });
+            return NextResponse.json({ data: created, message: "Evento creado exitosamente" }, { status: 201 });
         } else {
-            return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
+            return NextResponse.json({ error: "Error al crear el evento" }, { status: 500 });
         }
     } catch (error: any) {
         console.error(error);
@@ -85,7 +86,7 @@ export async function PUT(request: Request) {
 
         // Check if user is authenticated
         if (!session?.user.id) {
-            return NextResponse.json({ error: "No user session found" }, { status: 401 });
+            return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
         const isAdmin = session.user.role === "admin";
@@ -94,7 +95,7 @@ export async function PUT(request: Request) {
 
         // Validate required fields
         if (!id || !title || !description || !date) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+            return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
         }
 
         // Parse and set the event date and time
@@ -105,7 +106,7 @@ export async function PUT(request: Request) {
 
         // Check if the updated date is in the past
         if (isDateInPast(dateUpdated)) {
-            return NextResponse.json({ error: "Date is in the past" }, { status: 400 });
+            return NextResponse.json({ error: "La fecha está en el pasado" }, { status: 400 });
         }
 
         // Update the event in the database
@@ -130,9 +131,9 @@ export async function PUT(request: Request) {
             revalidatePath('/events');
             revalidatePath('/');
 
-            return NextResponse.json({ data: updated, message: "Event updated successfully" }, { status: 200 });
+            return NextResponse.json({ data: updated, message: "Evento actualizado exitosamente" }, { status: 200 });
         } else {
-            return NextResponse.json({ error: "Failed to update event" }, { status: 500 });
+            return NextResponse.json({ error: "Error al actualizar el evento" }, { status: 500 });
         }
     } catch (error: any) {
         console.error(error);
@@ -146,7 +147,7 @@ export async function DELETE(request: Request) {
 
         // Check if user is authenticated
         if (!session?.user.id) {
-            return NextResponse.json({ error: "No user session found" }, { status: 401 });
+            return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
         const { searchParams } = new URL(request.url);
@@ -154,7 +155,7 @@ export async function DELETE(request: Request) {
 
         // Validate event ID
         if (!id) {
-            return NextResponse.json({ error: "Missing event ID" }, { status: 400 });
+            return NextResponse.json({ error: "Falta el ID del evento" }, { status: 400 });
         }
 
         // Fetch the event and its owner
@@ -164,12 +165,12 @@ export async function DELETE(request: Request) {
         });
 
         if (!event) {
-            return NextResponse.json({ error: "Event not found" }, { status: 404 });
+            return NextResponse.json({ error: "Evento no encontrado" }, { status: 404 });
         }
 
         // Check if the user is authorized to delete the event
         if (event.owner.id !== session.user.id && session.user.role !== "admin") {
-            return NextResponse.json({ error: "Unauthorized to delete this event" }, { status: 403 });
+            return NextResponse.json({ error: "No autorizado para eliminar este evento" }, { status: 403 });
         }
 
         // Soft delete the event by updating its status and setting deletedAt
@@ -183,9 +184,9 @@ export async function DELETE(request: Request) {
 
         if (deleted) {
             revalidatePath('/events');
-            return NextResponse.json({ data: true, message: "Event deleted successfully" }, { status: 200 });
+            return NextResponse.json({ data: true, message: "Evento eliminado exitosamente" }, { status: 200 });
         } else {
-            return NextResponse.json({ error: "Failed to delete event" }, { status: 500 });
+            return NextResponse.json({ error: "Error al eliminar el evento" }, { status: 500 });
         }
     } catch (error: any) {
         console.error(error);
