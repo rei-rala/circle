@@ -1,16 +1,14 @@
 import Link from 'next/link';
 import { SocialEventCard } from '@/components/SocialEvent/SocialEventCard';
 import { notFound, redirect } from 'next/navigation';
-//import getServerSession from '@/lib/getServerSession';
+import getServerSession from '@/lib/getServerSession';
 import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 import { SocialEventAttendeesCard } from '@/components/SocialEvent/SocialEventAttendeesCard';
-import { auth } from '@/auth';
 
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
-    //const session = await getServerSession();
-    const session = await auth();
+    const session = await getServerSession();
 
     const event = await prisma.socialEvent.findUnique({
         where: { id },
