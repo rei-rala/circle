@@ -65,6 +65,8 @@ export async function POST(request: Request) {
 
         if (created) {
             revalidatePath('/events');
+            revalidatePath('/');
+
             return NextResponse.json({ data: created, message: "Event created successfully" }, { status: 201 });
         } else {
             return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
@@ -124,6 +126,9 @@ export async function PUT(request: Request) {
 
         if (updated) {
             revalidatePath(`/events/${id}`);
+            revalidatePath('/events');
+            revalidatePath('/');
+            
             return NextResponse.json({ data: updated, message: "Event updated successfully" }, { status: 200 });
         } else {
             return NextResponse.json({ error: "Failed to update event" }, { status: 500 });
