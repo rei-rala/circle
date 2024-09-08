@@ -39,11 +39,13 @@ const defaultSocialEvent: SocialEventDTO = {
 export const SocialEventForm = ({
     socialEvent: initialSocialEvent,
     mode = 'create',
-    user
+    user,
+    disabled = false
 }: {
     socialEvent?: SocialEvent | null;
     mode?: EditorMode;
     user?: User;
+    disabled?: boolean;
 }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -71,10 +73,10 @@ export const SocialEventForm = ({
         return compareChangesObject(socialEvent, initialSocialEvent);
     }, [socialEvent, initialSocialEvent]);
 
-    const disabled = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit")
+    const disableForm = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit") || disabled
 
     const handleFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (disabled) return;
+        if (disableForm) return;
 
         const name = e.target.name as keyof SocialEventDTO;
         const value = e.target.value;
@@ -107,30 +109,30 @@ export const SocialEventForm = ({
 
             return updatedEvent;
         });
-    }, [disabled]);
+    }, [disableForm]);
 
     const handleCheckboxChange = useCallback((name: keyof SocialEventDTO, value: boolean) => {
-        if (disabled) return;
+        if (disableForm) return;
 
         setSocialEvent(prevEvent => ({
             ...prevEvent,
             [name]: value
         }));
-    }, [disabled]);
+    }, [disableForm]);
 
     const handleCalendarSelect = useCallback((date: Date | undefined) => {
-        if (!disabled) {
+        if (!disableForm) {
             setSocialEvent(prevSocialEvent => ({
                 ...prevSocialEvent,
                 date: date ?? null,
             }));
         }
-    }, [disabled]);
+    }, [disableForm]);
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (disabled) {
+        if (disableForm) {
             console.log(socialEvent);
             return;
         }
@@ -175,8 +177,8 @@ export const SocialEventForm = ({
             }
 
             <div className="flex flex-wrap gap-4">
-                <EventField icon={<FilePenIcon className="w-5 h-5" />} label="Título" id="title" name="title" placeholder="Ingresa el título del evento" value={socialEvent.title} onChange={handleFieldChange} disabled={disabled} />
-                <EventField icon={<UsersIcon className="w-5 h-5" />} label="Mínimo asistentes requerido" id="minAttendees" name="minAttendees" placeholder="Ingresa el mínimo de asistentes (0 sin mínimo)" value={String(socialEvent.minAttendees ?? 0)} onChange={handleFieldChange} disabled={disabled} type="number" />
+                <EventField icon={<FilePenIcon className="w-5 h-5" />} label="Título" id="title" name="title" placeholder="Ingresa el título del evento" value={socialEvent.title} onChange={handleFieldChange} disabled={disableForm} />
+                <EventField icon={<UsersIcon className="w-5 h-5" />} label="Mínimo asistentes requerido" id="minAttendees" name="minAttendees" placeholder="Ingresa el mínimo de asistentes (0 sin mínimo)" value={String(socialEvent.minAttendees ?? 0)} onChange={handleFieldChange} disabled={disableForm} type="number" />
             </div>
 
             <div className="flex flex-wrap gap-4">
@@ -187,7 +189,7 @@ export const SocialEventForm = ({
                     </div>
                     <Popover>
                         <PopoverTrigger asChild>
-                            <Button id="date" variant="outline" className="w-full justify-start font-normal" disabled={disabled}>
+                            <Button id="date" variant="outline" className="w-full justify-start font-normal" disabled={disableForm}>
                                 {socialEvent.date ? getFullDate(socialEvent.date) : "Seleccionar fecha"}
                                 <div className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
@@ -197,7 +199,7 @@ export const SocialEventForm = ({
                         </PopoverContent>
                     </Popover>
                 </div>
-                <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={String(socialEvent.time)} onChange={handleFieldChange} disabled={disabled} type="time" />
+                <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={String(socialEvent.time)} onChange={handleFieldChange} disabled={disableForm} type="time" />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -211,21 +213,21 @@ export const SocialEventForm = ({
                     placeholder="Describe el evento"
                     value={socialEvent.description}
                     onChange={handleFieldChange}
-                    disabled={disabled}
+                    disabled={disableForm}
                 />
             </div>
 
             {socialEvent.place && (
                 <>
                     <Separator />
-                    <PlaceInfo place={socialEvent.place} disabled={disabled} />
+                    <PlaceInfo place={socialEvent.place} disabled={disableForm} />
                 </>
             )}
 
-            {!disabled && (
+            {!disableForm && (
                 <>
                     <Separator />
-                    <PlaceSelector mapsPlace={socialEvent.place} setSocialEvent={setSocialEvent} disabled={disabled} />
+                    <PlaceSelector mapsPlace={socialEvent.place} setSocialEvent={setSocialEvent} disabled={disableForm} />
                 </>
             )}
 
@@ -256,7 +258,7 @@ export const SocialEventForm = ({
             <div className="flex justify-end">
                 <Button
                     type={loading ? "button" : "submit"}
-                    disabled={loading || disabled || !hasChanges}
+                    disabled={loading || disableForm || !hasChanges}
                     className="transition-all duration-300 ease-in-out opacity-100 scale-100 translate-y-0"
                 >
                     {loading ? (

@@ -1,9 +1,27 @@
 import { SocialEventCardSmall } from "@/components/SocialEvent/SocialEventCardSmall";
+import getServerSession from "@/lib/getServerSession";
 import { prisma } from "@/prisma";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function EventsPageComponent() {
-  const socialEvents = await prisma.socialEvent.findMany({}) as SocialEvent[];
+  const session = await getServerSession();
+
+  if (!session?.user) {
+    return redirect("/api/auth/signin?callbackUrl=/events");
+  }
+
+  const socialEvents = await prisma.socialEvent.findMany({
+    where: {
+      date: {
+        gte: new Date(),
+      },
+      public: session?.user ? undefined : true,
+    },
+    orderBy: {
+      date: "asc"
+    }
+  }) as SocialEvent[];
 
   return (
     <div className="grid gap-4">

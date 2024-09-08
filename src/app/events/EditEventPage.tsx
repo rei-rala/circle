@@ -43,7 +43,7 @@ export async function EditEventPageComponent({
     return (
         <>
             {
-                socialEvent?.date && isDateInPast(socialEvent.date) && (
+                isDateInPast(socialEvent?.date) && (
                     <LayoutCard
                         className={cn(
                             "text-center rounded-lg",
@@ -70,6 +70,7 @@ export async function EditEventPageComponent({
                         socialEvent={socialEvent}
                         mode={mode}
                         user={session?.user}
+                        disabled={isDateInPast(socialEvent?.date)}
                     />
                 }
             />
