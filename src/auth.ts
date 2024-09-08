@@ -6,7 +6,7 @@ import GoogleProvider from "next-auth/providers/google"
 
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  trustHost: process.env.NODE_ENV === "development" || undefined, //fixes a bug for development
+  trustHost: true, //fixes a bug (wtf)
   theme: {
     logo: "/icon.png"
   },
