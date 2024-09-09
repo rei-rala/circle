@@ -8,9 +8,6 @@ import Link from "next/link"
 export const SocialEventsCalendar = ({ className }: { className: string }) => {
     const { features: { socialEventsCalendar } } = useFeatureContext();
 
-    // while being implemented, this won't be used
-    // const { currentPopoverId, setCurrentPopoverId } = usePopoverManagerContext();
-
     if (!socialEventsCalendar) return null;
 
     return (

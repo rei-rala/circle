@@ -5,8 +5,9 @@ import { AboutSection } from "./_aboutSection";
 import { PhotoSection } from "./_photoSection";
 
 
-export async function Landing() {
+export async function Landing({ instagramPosts }: { instagramPosts?: any[] }) {
   let events: SocialEvent[];
+  console.log(instagramPosts)
 
   try {
     // find events that are not in the past and not deleted, if logged, show only public events
@@ -35,7 +36,15 @@ export async function Landing() {
         <NextEvents events={events} />
       </div>
       <AboutSection />
+
       <PhotoSection />
+
+      {
+        instagramPosts?.length &&
+        instagramPosts?.length > 0 && (
+          <PhotoSection photos={instagramPosts} />
+        )
+      }
     </div>
   )
 }
