@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const BRAND = "The Circle ⭕";
 
 export function UpperNavbar({ className }: { className?: ClassValue }) {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
