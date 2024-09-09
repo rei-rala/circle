@@ -2,7 +2,7 @@
 export function AboutSection() {
     return (
         <section id="about" className="grid gap-4 pt-20 -mt-16">
-            <div className="text-2xl font-semibold">Sobre El Círculo</div>
+            <div className="text-2xl font-semibold">Sobre THE CIRCLE</div>
             <div className="grid grid-cols-1 gap-4 text-[#cccccc]">
                 <div>
                     <p className="text-lg">

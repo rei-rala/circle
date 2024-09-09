@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Separator } from "./ui/separator";
 
 type LayoutCardProps = {
     title: React.ReactNode;
@@ -18,7 +19,11 @@ export const LayoutCard = ({ title, content, footer, ...props }: LayoutCardProps
             <CardContent>
                 {content}
             </CardContent>
-            {footer && <CardFooter>{footer}</CardFooter>}
+            {footer && <>
+                <Separator className="my-6 mb-8" />
+                <CardFooter>{footer}</CardFooter>
+            </>
+            }
         </Card>
     );
 }

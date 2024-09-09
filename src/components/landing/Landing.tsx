@@ -36,15 +36,7 @@ export async function Landing({ instagramPosts }: { instagramPosts?: any[] }) {
         <NextEvents events={events} />
       </div>
       <AboutSection />
-
-      <PhotoSection />
-
-      {
-        instagramPosts?.length &&
-        instagramPosts?.length > 0 && (
-          <PhotoSection photos={instagramPosts} />
-        )
-      }
+      <PhotoSection photos={instagramPosts} />
     </div>
   )
 }

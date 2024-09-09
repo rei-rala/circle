@@ -1,11 +1,11 @@
 import getServerSession from "@/lib/getServerSession";
 import { Landing } from "../components/landing/Landing";
 import { redirect } from "next/navigation";
-import getTheCircleInstagramPosts from "@/services/instagram.services";
+//import getTheCircleInstagramPosts from "@/services/instagram.services";
 
 export default async function Home() {
   const session = await getServerSession();
-  let instagramPosts: any[]	 = [];
+  let instagramPosts: any[] | undefined	 = undefined;
   //const instagramPosts = await getTheCircleInstagramPosts();
   let events: SocialEvent[];
 
