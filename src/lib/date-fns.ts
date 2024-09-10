@@ -46,3 +46,7 @@ export function isDateInPast(date?: Date | string | number | null) {
 export function getFullDateAndHourWithSeparator(date: Date | string, separator = "a las") {
     return `${getFullDate(date)} ${separator} ${getHour(date)}`
 }
+
+export function getNamedDateMinimal(date: Date | string) {
+    return `${format(date, "EEEE", { locale: es })} ${format(date, "d 'de' MMMM", { locale: es })}`
+}

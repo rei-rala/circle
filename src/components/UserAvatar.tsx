@@ -12,7 +12,7 @@ export function UserAvatar({ user, ...props }: { user?: User } & React.Component
                 src={avatarImageSrc}
                 alt={`Avatar de ${user ? user.email : "Invitado"}`}
             />
-            <AvatarFallback>{avatarFallbackName}</AvatarFallback>
+            <AvatarFallback className="uppercase">{avatarFallbackName}</AvatarFallback>
         </Avatar>
     )
 }

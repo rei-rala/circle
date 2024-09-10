@@ -2,7 +2,7 @@
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getDistanceFromNow, getFullDateAndHourWithSeparator } from "@/lib/date-fns";
+import { getDistanceFromNow, getNamedDateMinimal } from "@/lib/date-fns";
 import { cn } from "@/lib/utils";
 import { User } from "next-auth";
 import { UserHoverCard } from "../UserHoverCard";
@@ -43,10 +43,10 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
                     }
                 </div>
                 <div className="text-sm text-[#aaa] mt-1">{event.place?.name || "Lugar a definir"}</div>
-                <div className="text-sm text-[#aaa]">
+                <div className="text-sm text-[#aaa] capitalize">
                     {
                         event.date
-                            ? getFullDateAndHourWithSeparator(event.date)
+                            ? getNamedDateMinimal(event.date)
                             : "Sin definir"
                     }
                 </div>

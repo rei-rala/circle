@@ -92,8 +92,8 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 <UsersIcon className="min-w-5 min-h-5" />
                                 <div>
                                     {event.minAttendees && event.minAttendees !== 0
-                                        ? `Mínimo de asistentes: ${event.attendees?.length || 0}/${event.minAttendees} ${event.attendees?.length >= event.minAttendees ? '😊' : event.attendees?.length >= event.minAttendees / 2 ? '🙂' : '🥺'}`
-                                        : `Asistentes: ${event.attendees?.length || 0} ${event.attendees?.length > 0 ? '😊' : '🥺'}`
+                                        ? `Mínimo de asistentes: ${event.attendees?.length || 1}/${event.minAttendees} ${event.attendees?.length >= event.minAttendees ? '😊' : event.attendees?.length >= event.minAttendees / 2 ? '🙂' : '🥺'}`
+                                        : `Asistentes: ${event.attendees?.length || 1} ${event.attendees?.length > 0 ? '😊' : '🥺'}`
                                     }
                                 </div>
                             </div>
