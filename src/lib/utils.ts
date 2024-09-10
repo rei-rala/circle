@@ -68,7 +68,7 @@ export function compareChangesObject<T>(newValue: T, oldValue: T): boolean {
   // Comparación de objetos
   if (typeof newValue === 'object' && typeof oldValue === 'object') {
     if ((newValue && !oldValue) || (!newValue && oldValue)) return true;
-    
+
     const newKeys = Object.keys(newValue);
     const oldKeys = Object.keys(oldValue as object);
 
@@ -94,4 +94,13 @@ export function scrollToId(id: string, options?: ScrollToOptions) {
     behavior: "smooth",
     ...options
   })
+}
+
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
 }

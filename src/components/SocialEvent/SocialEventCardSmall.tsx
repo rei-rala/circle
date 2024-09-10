@@ -6,6 +6,7 @@ import { getDistanceFromNow, getNamedDateMinimal } from "@/lib/date-fns";
 import { cn } from "@/lib/utils";
 import { User } from "next-auth";
 import { UserHoverCard } from "../UserHoverCard";
+import Image from "next/image";
 
 export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user?: User }) {
     const isOwner = event.ownerId === user?.id;
@@ -19,7 +20,7 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
             {
                 event.photo && (
                     <div className="h-full max-w-[30%] aspect-square grid place-items-center">
-                        <img
+                        <Image
                             src={event.photo}
                             alt={`Imagen de evento: ${event.title}`}
                             className="w-full rounded-lg object-cover aspect-square"

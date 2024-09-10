@@ -16,7 +16,7 @@ import { PlaceSelector } from "./socialEventFormPartials/PlaceSelector";
 import { createSocialEvent, updateSocialEvent } from "@/services/socialEvents.services";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { compareChangesObject } from "@/lib/utils";
+import { compareChangesObject, fileToBase64 } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { User } from "next-auth";
 
@@ -52,6 +52,7 @@ export const SocialEventForm = ({
     const [socialEvent, setSocialEvent] = useState<SocialEventDTO>(
         initialSocialEvent ?? defaultSocialEvent
     );
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     const isPastEvent = useMemo(() => socialEvent.date ? isDateInPast(socialEvent.date) : false, [socialEvent.date]);
 
@@ -129,6 +130,26 @@ export const SocialEventForm = ({
         }
     }, [disableForm]);
 
+    
+    const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && !disableForm) {
+            setImageFile(file);
+        }
+    }, [disableForm]);
+
+    const uploadImage = async (file: File): Promise<string> => {
+        const base64 = await fileToBase64(file);
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: base64 }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        return data.url;
+    };
+
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -140,31 +161,46 @@ export const SocialEventForm = ({
         setLoading(true);
 
         try {
+            let photo = "";
+            if (imageFile) {
+                photo = await uploadImage(imageFile);
+            }
+
             const handleEvent = async (action: 'create' | 'edit') => {
                 const eventAction = action === 'create' ? createSocialEvent : updateSocialEvent;
-                const { data, error, message } = await eventAction(socialEvent);
+                const { data, error, message } = await eventAction({ ...socialEvent, photo });
 
                 if (error) {
                     toast.error(error);
+                    return null;
                 } else if (data) {
                     toast.success(message);
                     if (mode === 'create') router.replace(`/events/${data.id}`);
+                    return data;
                 }
-
             };
 
             if (mode === 'create' || mode === 'edit') {
-                await handleEvent(mode);
+                const event = await handleEvent(mode);
+
+                if (event) {
+                    if (mode === 'create') {
+                        router.replace(`/events/${event.id}`);
+                    } else {
+                        router.refresh();
+                    }
+                    setLoading(false);
+                }
             } else {
                 toast.error("La acción no está permitida");
+                setLoading(false);
             }
         }
         catch (error) {
             console.error(error);
             toast.error("Error al procesar la solicitud");
+            setLoading(false);
         }
-
-        setLoading(false);
     }
 
     return (
@@ -215,6 +251,23 @@ export const SocialEventForm = ({
                     onChange={handleFieldChange}
                     disabled={disableForm}
                 />
+            </div>
+
+            <div className="flex flex-col gap-2">
+                <Label htmlFor="photo">Imagen del evento</Label>
+                <input
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    disabled={disableForm}
+                />
+                {socialEvent.photo && (
+                    <div className="flex justify-center">
+                        <img src={socialEvent.photo} alt="Event" className="mt-2 w-full max-w-[600px]" />
+                    </div>
+                )}
             </div>
 
             {socialEvent.place && (
