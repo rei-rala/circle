@@ -5,6 +5,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { CustomPopover } from "@/components/CustomPopover";
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider";
+import { useSession } from "next-auth/react";
 
 const createMenuLinks = [
     { href: "/events/new", text: "Nuevo evento" },
@@ -12,6 +13,10 @@ const createMenuLinks = [
 
 export const CreateMenu = ({ className }: { className: string }) => {
     const { closePopover } = usePopoverManagerContext();
+    const { data: session } = useSession();
+
+    const isAdmin = session?.user?.role?.toUpperCase() === "ADMIN";
+
     const triggerComponent = (
         <button>
             <PlusIcon className="w-6 h-6" />
@@ -35,6 +40,15 @@ export const CreateMenu = ({ className }: { className: string }) => {
                             {text}
                         </Link>
                     ))
+                }
+
+                {
+                    isAdmin &&
+                    (
+                        <Link href={`/admissions`} className="text-sm text-muted-foreground w-full">
+                            Admisiones
+                        </Link>
+                    )
                 }
             </div>
         </div>
