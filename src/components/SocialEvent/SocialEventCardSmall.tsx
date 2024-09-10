@@ -59,7 +59,7 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
                 }
             </div>
             <div className="grid place-items-center">
-                <Link href={`/events/${event.id}`} prefetch={false}>
+                <Link href={`/events/${event.id}`}>
                     <Button variant="ghost" className="p-0 w-12 h-12">
                         <ChevronRightIcon className="w-12 h-12" />
                         <span className="sr-only">Ver Evento</span>

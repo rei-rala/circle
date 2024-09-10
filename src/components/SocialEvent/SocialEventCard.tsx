@@ -6,7 +6,7 @@ import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
 import Image from 'next/image';
 
 import { CustomGoogleMaps } from '@/components/CustomGoogleMaps';
-import { getDistanceFromNow, getFullDate, getHour, isDateInPast } from '@/lib/date-fns';
+import { getDistanceFromNow, getFullDate, getFullDateLocale, getHour, isDateInPast } from '@/lib/date-fns';
 import Link from 'next/link';
 import { UserHoverCard } from '../UserHoverCard';
 import type { Session } from 'next-auth';
@@ -77,10 +77,10 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                     <div className="grid gap-2">
                         <div className="font-medium">Detalles del Evento</div>
                         <div className="grid sm:grid-cols-2 gap-4">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 capitalize">
                                 <CalendarIcon className="min-w-5 min-h-5" />
                                 <div>
-                                    {event.date && getFullDate(event.date)}
+                                    {event.date && getFullDateLocale(event.date)}
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">

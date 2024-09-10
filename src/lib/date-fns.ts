@@ -16,6 +16,10 @@ export function getFullDate(date: Date | string) {
     }
 }
 
+export function getFullDateLocale(date: Date | string) {
+    return format(date, "EEEE, dd 'de' MMMM 'del' yyyy", { locale: es })
+}
+
 export function getHour(date: Date | string) {
     return format(date, "HH:mm", { locale: es });
 }

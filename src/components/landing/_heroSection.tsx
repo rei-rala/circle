@@ -3,10 +3,14 @@
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn, scrollToId } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 export function HeroSection() {
+    const { status } = useSession();
     const [isHovered, setIsHovered] = useState(false);
 
+    const isUnauthenticated = status === "unauthenticated"
+    console.log(status)
     return (
         <section className="w-full h-[50vh] relative"
             onMouseEnter={() => setIsHovered(true)}
@@ -27,7 +31,7 @@ export function HeroSection() {
                     disfrutar de la ciudad. Únete y participa en experiencias únicas.
                 </p>
                 <div className="grid grid-rows-2 w-[50%] gap-4">
-                    <Button className="w-full">Unirse</Button>
+                    {isUnauthenticated && <Button className="w-full">Unirse</Button>}
                     <div className="grid grid-cols-2 gap-4">
                         <Button variant="secondary" onClick={() => scrollToId("about")} className="w-full">Info</Button>
                         <Button variant="secondary" onClick={() => scrollToId("photos")} className="w-full">Fotos</Button>

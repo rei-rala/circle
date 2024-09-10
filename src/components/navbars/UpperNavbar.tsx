@@ -49,7 +49,7 @@ export function UpperNavbar({ className }: { className?: ClassValue }) {
                 <BurgerMenu />
             </div>
             <div className="font-semibold text-lg">
-                <Link href="/" prefetch={false}>
+                <Link href="/home" prefetch={true}>
                     {BRAND}
                 </Link>
             </div>

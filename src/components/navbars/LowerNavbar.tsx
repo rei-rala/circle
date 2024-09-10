@@ -10,7 +10,7 @@ import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
 export function LowerNavbar({ className }: { className?: ClassValue }) {
     return (
         <nav className={cn("bg-[#111111] flex justify-around items-center p-2", className)}>
-            <Link href="/" className="p-2 rounded-full hover:bg-[#333333]" prefetch={false}>
+            <Link href="/" className="p-2 rounded-full hover:bg-[#333333]">
                 <HomeIcon className="w-6 h-6" />
                 <span className="sr-only">Inicio</span>
             </Link>
