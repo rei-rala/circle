@@ -2,15 +2,18 @@
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { getDistanceFromNow, getFullDateAndHourWithSeparator } from "@/lib/date-fns";
 import { cn } from "@/lib/utils";
+import { User } from "next-auth";
+import { UserHoverCard } from "../UserHoverCard";
 
-export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
+export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user?: User }) {
+    const isOwner = event.ownerId === user?.id;
+
     return (
         <div
             className={
-                cn(event.public && "border-green-500", "flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444] border-2")
+                cn(event.public ? "border-red-600" : isOwner && "border-green-500", "flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444] border-2")
             }
         >
             {
@@ -26,7 +29,19 @@ export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
             }
             <div className="flex-1">
                 <div className="font-medium">{event.title}</div>
-                <Separator />
+                <div className="flex items-center gap-1 text-sm">
+                    <UserHoverCard user={event.owner} />
+                    {
+                        isOwner && (
+                            <i className="text-xs text-[#aaa]">(Tú)</i>
+                        )
+                    }
+                    {
+                        event.public && (
+                            <i className="text-xs text-[#aaa]"> Evento Público</i>
+                        )
+                    }
+                </div>
                 <div className="text-sm text-[#aaa] mt-1">{event.place?.name || "Lugar a definir"}</div>
                 <div className="text-sm text-[#aaa]">
                     {
@@ -43,10 +58,10 @@ export function SocialEventCardSmall({ event }: { event: SocialEvent }) {
                     )
                 }
             </div>
-            <div className="flex items-center gap-2">
+            <div className="grid place-items-center">
                 <Link href={`/events/${event.id}`} prefetch={false}>
-                    <Button variant="ghost" size="icon">
-                        <ChevronRightIcon className="w-5 h-5" />
+                    <Button variant="ghost" className="p-0 w-12 h-12">
+                        <ChevronRightIcon className="w-12 h-12" />
                         <span className="sr-only">Ver Evento</span>
                     </Button>
                 </Link>

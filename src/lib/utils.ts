@@ -85,7 +85,7 @@ export function compareChangesObject<T>(newValue: T, oldValue: T): boolean {
 
 export function scrollToId(id: string, options?: ScrollToOptions) {
   const element = document.getElementById(id);
-  const navbarHeight = document.getElementById("navbar")?.clientHeight || 0;
+  //const navbarHeight = document.getElementById("navbar")?.clientHeight || 0;
 
   element?.scrollIntoView({
     block: "start",

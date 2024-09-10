@@ -145,8 +145,9 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                 </div>
             }
             footer={
-                event.public && (
-                    <p className="italic text-center text-sm">
+                event.public &&
+                session?.user && (
+                    <p className="italic mx-auto text-center text-sm">
                         Este evento es público, aún para usuarios no registrados
                     </p>
                 )

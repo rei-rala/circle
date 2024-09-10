@@ -7,7 +7,7 @@ import { CustomPopover } from "@/components/CustomPopover";
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider";
 
 const createMenuLinks = [
-    { href: "/events/new", text: "Evento" },
+    { href: "/events/new", text: "Nuevo evento" },
 ]
 
 export const CreateMenu = ({ className }: { className: string }) => {

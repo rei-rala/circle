@@ -11,6 +11,7 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
 
     return (
         <LayoutCard
+            className="mt-6"
             title="Quienes asistirán"
             content={
                 <div className="flex flex-wrap gap-4">
@@ -20,13 +21,13 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
                                 <UserAvatar user={event.owner} />
                                 <p>
                                     {event.owner.alias || event.owner.name}
-                                    <i className='text-gray-400'> (Organizador)</i>
+                                    <i className='text-gray-400'> Organizador</i>
                                 </p>
                             </Button>
                         </UserHoverCard>
                     </div>
 
-                    {attendees?.length > 0 && <Separator className="my-2" />}
+                    {attendees?.length && attendees.length > 0 && <Separator className="my-2" />}
 
                     {attendees?.map((attendee) => (
                         <div key={attendee.id} className="flex items-center gap-2">

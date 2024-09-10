@@ -11,8 +11,9 @@ type LayoutCardProps = {
 }
 
 export const LayoutCard = ({ title, content, footer, ...props }: LayoutCardProps) => {
+    
     return (
-        <Card className={cn("bg-[#222222] p-4 rounded-lg", props.className)} {...props}>
+        <Card {...props} className={cn("bg-[#222222] p-4 rounded-lg", props.className)} >
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>

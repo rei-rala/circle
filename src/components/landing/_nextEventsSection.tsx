@@ -1,11 +1,33 @@
 import Link from "next/link";
 import { LayoutCard } from "../LayoutCard";
 import { SocialEventCardSmall } from "../SocialEvent/SocialEventCardSmall";
+import { User } from "next-auth";
+
+const dummyEventOwner: User = {
+    id: "dummy",
+    name: "Miembro de THE CIRCLE",
+    email: "",
+    alias: "Miembro de THE CIRCLE",
+    role: "DUMMY",
+    bio: "Para ver esta info, debes iniciar sesión",
+    location: "",
+    phone: "",
+    socialMedia: [],
+    hideEmail: true,
+    hideImage: true,
+    hidePhone: true
+}
 
 export function NextEvents({ events }: { events: SocialEvent[] }) {
+    const populatedEvents = events.map(event => ({
+        ...event,
+        owner: dummyEventOwner
+    }))
+    
     return (
-        <section className="grid gap-4">
-            <h2 className="my-2">Próximos Eventos Públicos</h2>
+        // z-index is 10 because 'about' section overlaps the bottom of this section 😁 // yeah, intentional
+        <section className="grid gap-4 z-10">
+            <h2 className="my-2">Próximos Eventos</h2>
             <div className="grid gap-4">
                 {
                     events.length === 0 && (
@@ -23,9 +45,11 @@ export function NextEvents({ events }: { events: SocialEvent[] }) {
                     )
                 }
                 {
-                    events.map((event, i) => <SocialEventCardSmall key={`event${event.id}`} event={event} />)
+                    populatedEvents.map(event => <SocialEventCardSmall key={`event${event.id}`} event={event} />)
                 }
             </div>
+
+            <Link href="/events" className="m-auto text-center hover:underline cursor-pointer">Ver todos los eventos</Link>
         </section>
     )
 }

@@ -46,31 +46,30 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
         event.publicAttendees = false;
     }
 
+    const isEventFinished = isDateInPast(event.date);
+    const isUserLoggedIn = !!session?.user;
+    const isUserAdmin = session?.user?.role === "admin";
+    const isUserOwner = session?.user?.id === event.ownerId;
+    const canEditEvent = isUserLoggedIn && (isUserAdmin || isUserOwner);
+
     return (
         <div >
-            <div className='text-center font-bold p-2'>
-                {
-                    isDateInPast(event.date)
-                        ? <span>Evento finalizado</span>
-                        : session?.user
-                            ? (session?.user?.role === "admin" || session?.user?.id === event.ownerId) && (
-                                <Link
-                                    className='hover:underline cursor-pointer'
-                                    href={`/events/${id}/edit`}
-                                >
-                                    {session.user.role === "admin" ? "Editar como Administrador" : "Editar"}
-                                </Link>
-                            )
-                            : null
-                }
+            <div className='flex flex-col gap-2 text-center font-bold'>
+                {isEventFinished && <span>Evento finalizado</span>}
+                {!isEventFinished && canEditEvent && (
+                    <Link
+                        className='hover:underline cursor-pointer mb-4'
+                        href={`/events/${id}/edit`}
+                    >
+                        {isUserAdmin ? "Editar como Administrador" : "Editar tu evento"}
+                    </Link>
+                )}
             </div>
 
             <SocialEventCard event={event} session={session} />
-            {
-                event.publicAttendees && (
-                    <SocialEventAttendeesCard event={event} />
-                )
-            }
+            {event.publicAttendees && (
+                <SocialEventAttendeesCard event={event} />
+            )}
         </div>
     );
 };
