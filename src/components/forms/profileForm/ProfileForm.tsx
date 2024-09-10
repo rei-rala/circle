@@ -27,19 +27,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { compareChangesObject } from "@/lib/utils";
 import { updateUserProfile } from "@/services/profile.services";
-
-const defaultFormUser: User = {
-    email: "",
-    role: "",
-    alias: "",
-    bio: "",
-    location: "",
-    phone: "",
-    socialMedia: [],
-    hideEmail: false,
-    hideImage: false,
-    hidePhone: false,
-};
+import { defaultUser } from "@/constants";
 
 function checkUserProfileChanges(
     newUser: UserProfileDTO,
@@ -52,7 +40,7 @@ function checkUserProfileChanges(
 export const ProfileForm = () => {
     const session = useSession();
     const [loading, setLoading] = useState(false);
-    const [formUser, setFormUser] = useState<User>(defaultFormUser);
+    const [formUser, setFormUser] = useState<User>(defaultUser);
     const [adminCardHidePreference, setAdminCardHidePreference] = useState(localStorage.getItem("adminCardHidePreference") === "true");
 
     const { profileChanged, adminPreferenceChanged } = useMemo(() => {
@@ -87,7 +75,7 @@ export const ProfileForm = () => {
     ) => {
         const { name, value } = e.target;
 
-        if (Object.keys(defaultFormUser).includes(name))
+        if (Object.keys(defaultUser).includes(name))
             setFormUser({
                 ...formUser,
                 [name]: value,
@@ -164,7 +152,7 @@ export const ProfileForm = () => {
 
     useEffect(() => {
         if (session.data?.user) {
-            setFormUser({ ...defaultFormUser, ...session.data.user });
+            setFormUser({ ...defaultUser, ...session.data.user });
         }
     }, [session.data?.user]);
 

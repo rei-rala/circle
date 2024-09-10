@@ -16,3 +16,19 @@ export const dummyUser: User = {
     hideImage: true,
     hidePhone: true
 }
+
+
+export const defaultUser: User = {
+    email: "",
+    role: "",
+    alias: "",
+    bio: "",
+    location: "",
+    phone: "",
+    socialMedia: [],
+    hideEmail: false,
+    hideImage: false,
+    hidePhone: false,
+    admitted: false,
+    banned: false
+};
