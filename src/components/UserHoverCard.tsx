@@ -2,7 +2,7 @@
 
 import { HoverCardProps, HoverCardTrigger, HoverCardTriggerProps } from "@radix-ui/react-hover-card"
 import { HoverCard, HoverCardContent } from "./ui/hover-card"
-import { Session, User } from "next-auth"
+import { User } from "next-auth"
 import { LocateIcon, MailIcon, MessageCircleCodeIcon, PhoneIcon, ScanFaceIcon } from "lucide-react"
 import { getUrlDomain, truncateString } from "@/lib/utils"
 import { Button } from "./ui/button"
@@ -15,65 +15,47 @@ type UserHoverCardProps = {
     children?: React.ReactNode,
 }
 
+const InfoItem = ({ icon: Icon, content, href }: { icon: React.ElementType, content: string, href?: string }) => (
+    <div className="flex items-center gap-2 text-sm">
+        <Icon className="h-4 w-4 opacity-70" />
+        {href ? (
+            <a href={href} target="_blank" rel="noopener noreferrer">{content}</a>
+        ) : (
+            <span className="flex-1 text-muted-foreground">{content}</span>
+        )}
+    </div>
+)
 
 export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTriggerProps }: UserHoverCardProps) => {
-    const userButtonText = user.alias || user.name || user.email
+    const isAdmin = user.role?.toUpperCase() === "ADMIN"
+    const displayedUserText = isAdmin ? user.alias || "Administrador" : (user.alias || user.name || user.email)
 
     return (
         <HoverCard {...hoverCardProps}>
             <HoverCardTrigger {...hoverCardTriggerProps}>
                 {children || (
                     <Button variant="link" className="font-bold hover:underline p-0">
-                        {userButtonText}
+                        {displayedUserText}
                     </Button>
                 )}
             </HoverCardTrigger>
             <HoverCardContent className="flex flex-col gap-2 w-fit max-w-[99svw]">
                 <div className="flex flex-col justify-center items-center text-sm font-semibold">
                     <UserAvatar user={user} />
-                    <h4 className="text-sm font-semibold">{user.name}</h4>
+                    <h4 className="text-sm font-semibold">{displayedUserText}</h4>
                 </div>
 
-                {!user.hideEmail && (
-                    <div className="flex items-center gap-2">
-                        <MailIcon className="h-4 w-4 opacity-70" />
-                        <a href={`mailto:${user.email}`} className="text-sm" target="_blank">{user.email}</a>
-                    </div>
-                )}
-
-                {
-                    user.bio && (
-                        <div className="flex items-center gap-2">
-                            <ScanFaceIcon className="h-4 w-4 opacity-70" />
-                            <span className="flex-1">
-                                {user.bio}
-                            </span>
-                        </div>
-                    )
-                }
-
-                {!user.hidePhone && user.phone && (
-                    <div className="flex items-center gap-2">
-                        <PhoneIcon className="h-4 w-4 opacity-70" />
-                        <a className="flex-1 text-muted-foreground" href={`https://wa.me/${user.phone}`} target="_blank">Whatsapp: {user.phone}</a>
-                    </div>
-                )}
-
-                {user.location && (
-                    <div className="flex items-center gap-2">
-                        <LocateIcon className="h-4 w-4 opacity-70" />
-                        <span className="flex-1 text-muted-foreground">
-                            {user.location}
-                        </span>
-                    </div>
-                )}
+                {!user.hideEmail && user.email && <InfoItem icon={MailIcon} content={user.email} href={`mailto:${user.email}`} />}
+                {user.bio && <InfoItem icon={ScanFaceIcon} content={user.bio} />}
+                {!user.hidePhone && user.phone && <InfoItem icon={PhoneIcon} content={`Whatsapp: ${user.phone}`} href={`https://wa.me/${user.phone}`} />}
+                {user.location && <InfoItem icon={LocateIcon} content={user.location} />}
 
                 {user.socialMedia?.length > 0 && (
-                    <div className="flex items-center gap-2 pt-2 text-xs ">
+                    <div className="flex items-center gap-2 pt-2 text-xs">
                         <MessageCircleCodeIcon className="h-4 w-4 opacity-70" />
                         <div className="flex-1 flex flex-col gap-1">
                             {user.socialMedia.map((socialMedia, index) => (
-                                <a key={`${user.id}-socialMedia:${index}`} href={socialMedia} className="mr-2" target="_blank">
+                                <a key={`${user.id}-socialMedia:${index}`} href={socialMedia} className="mr-2" target="_blank" rel="noopener noreferrer">
                                     {truncateString(getUrlDomain(socialMedia), 50)}
                                 </a>
                             ))}

@@ -78,6 +78,10 @@ model Attendee {
   user     User        @relation("UserAttendees", fields: [userId], references: [id])
   joinedAt DateTime    @default(now()) // Date when the user joined the event
   leftAt   DateTime? // Optional date when the user left the event
+
+  bannedFromEvent Boolean   @default(false)
+  banReason       String?
+  bannedById      String?   @db.ObjectId
 }
 
 model Account {

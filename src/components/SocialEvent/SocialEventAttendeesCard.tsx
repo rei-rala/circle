@@ -7,7 +7,7 @@ import { UserAvatar } from '../UserAvatar';
 import { LayoutCard } from '../LayoutCard';
 
 export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
-    const { attendees } = event;
+    if (!event.publicAttendees) return null;
 
     return (
         <LayoutCard
@@ -15,9 +15,9 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
             title="Quienes asistirán"
             content={
                 <div className="flex flex-wrap gap-4">
-                    <div className="flex items-center gap-2">
-                        <UserHoverCard user={event.owner}>
-                            <Button variant="link" className="flex gap-2 p-0">
+                    <div className="w-full">
+                        <UserHoverCard user={event.owner} >
+                            <Button variant="link" className="m-auto flex gap-2 p-0">
                                 <UserAvatar user={event.owner} />
                                 <p>
                                     {event.owner.alias || event.owner.name}
@@ -27,14 +27,18 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
                         </UserHoverCard>
                     </div>
 
-                    {attendees?.length && attendees.length > 0 && <Separator className="my-2" />}
+                    {
+                        event.attendees?.length && event.attendees.length > 0
+                            ? <Separator className="my-2" />
+                            : null
+                    }
 
-                    {attendees?.map((attendee) => (
-                        <div key={attendee.id} className="flex items-center gap-2">
-                            <UserAvatar key={attendee.id} user={attendee.user} />
-                            <span>{attendee.user.name}</span>
-                        </div>
-                    ))}
+                    <div className="flex flex-wrap justify-around gap-3">
+                        {(event.attendees.concat(event.attendees, event.attendees, event.attendees, event.attendees, event.attendees, event.attendees))?.map((attendee) => (
+                            <UserHoverCard user={attendee.user} key={attendee.id}/>
+                            
+                        ))}
+                    </div>
                 </div>
             }
         />

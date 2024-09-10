@@ -6,12 +6,12 @@ import { ExternalLinkIcon, CalendarIcon, ClockIcon } from 'lucide-react'
 import Image from 'next/image';
 
 import { CustomGoogleMaps } from '@/components/CustomGoogleMaps';
-import { getDistanceFromNow, getFullDate, getFullDateLocale, getHour, isDateInPast } from '@/lib/date-fns';
+import { getDistanceFromNow, getFullDateLocale, getHour, isDateInPast } from '@/lib/date-fns';
 import Link from 'next/link';
 import { UserHoverCard } from '../UserHoverCard';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Separator } from '../ui/separator';
 import { LayoutCard } from '../LayoutCard';
 
@@ -36,6 +36,23 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
     const onLinkClick = useCallback((_e: React.MouseEvent<HTMLAnchorElement>) => {
         toast.info("Abriendo enlace en una nueva pestaña")
     }, [])
+
+    const eventDate = useMemo(() => event.date && getFullDateLocale(event.date), [event.date]);
+    const eventTime = useMemo(() => event.date && getHour(event.date), [event.date]);
+    const isEventInPast = useMemo(() => event.date && isDateInPast(event.date), [event.date]);
+    const attendeesCount = useMemo(() => (event.attendees?.length || 0) + 1, [event.attendees]);
+
+    const attendeesInfo = useMemo(() => {
+        const hasMinAttendees = event.minAttendees && event.minAttendees !== 0;
+        const getEmoji = (count: number, min?: number) => {
+            if (min) return count >= min ? "😊" : count >= min / 2 ? "🙂" : "🥺";
+            return count === 0 ? "🥺" : count <= 5 ? "🙂" : "😊";
+        };
+
+        return hasMinAttendees
+            ? `Mínimo de asistentes: ${attendeesCount}/${event.minAttendees} ${getEmoji(attendeesCount, event.minAttendees)}`
+            : `Asistentes: ${attendeesCount} ${getEmoji(attendeesCount)}`;
+    }, [attendeesCount, event.minAttendees]);
 
     return (
         <LayoutCard
@@ -79,23 +96,16 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="flex items-center gap-2 capitalize">
                                 <CalendarIcon className="min-w-5 min-h-5" />
-                                <div>
-                                    {event.date && getFullDateLocale(event.date)}
-                                </div>
+                                <div>{eventDate}</div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <ClockIcon className="min-w-5 min-h-5" />
-                                <div>{event.date && getHour(event.date)}</div>
+                                <div>{eventTime}</div>
                             </div>
 
                             <div className="flex items-center gap-2 sm:col-span-2">
                                 <UsersIcon className="min-w-5 min-h-5" />
-                                <div>
-                                    {event.minAttendees && event.minAttendees !== 0
-                                        ? `Mínimo de asistentes: ${event.attendees?.length || 1}/${event.minAttendees} ${event.attendees?.length >= event.minAttendees ? '😊' : event.attendees?.length >= event.minAttendees / 2 ? '🙂' : '🥺'}`
-                                        : `Asistentes: ${event.attendees?.length || 1} ${event.attendees?.length > 0 ? '😊' : '🥺'}`
-                                    }
-                                </div>
+                                <div>{attendeesInfo}</div>
                             </div>
 
                             {event.place &&
@@ -136,7 +146,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                         </div>
                         {
                             session?.user &&
-                            !isDateInPast(event.date) &&
+                            !isEventInPast &&
                             <div className="flex items-center gap-2">
                                 <CustomGoogleMaps initialPlace={event.place} />
                             </div>

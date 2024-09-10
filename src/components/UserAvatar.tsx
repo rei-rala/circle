@@ -3,16 +3,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 
 export function UserAvatar({ user, ...props }: { user?: User } & React.ComponentProps<typeof Avatar>) {
+    const isAdmin = user?.role?.toUpperCase() === "ADMIN"
+    const displayedUserText = isAdmin ? user?.alias || "Administrador" : (user?.alias || user?.name || user?.email || "Usuario")
+
     const avatarImageSrc = user?.hideImage ? undefined : user?.image ?? "/placeholder-user.jpg";
-    const avatarFallbackName = user ? (user.alias?.[0] || user.name?.[0] || user.email?.[0]) : "?";
-    
+
     return (
         <Avatar {...props}>
             <AvatarImage
                 src={avatarImageSrc}
                 alt={`Avatar de ${user ? user.email : "Invitado"}`}
             />
-            <AvatarFallback className="uppercase">{avatarFallbackName}</AvatarFallback>
+            <AvatarFallback className="uppercase">{displayedUserText[0]}</AvatarFallback>
         </Avatar>
     )
 }

@@ -6,6 +6,8 @@ import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 import { SocialEventAttendeesCard } from '@/components/SocialEvent/SocialEventAttendeesCard';
 import { dummyUser } from '@/constants';
+import { SocialEventJoin } from '@/components/SocialEvent/SocialEventJoin';
+import { SocialEventBannedFrom } from '@/components/SocialEvent/SocialEventBannedFrom';
 
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
@@ -16,7 +18,22 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
         if (session?.user) {
             event = await prisma.socialEvent.findUnique({
                 where: { id },
-                include: {
+                select: {
+                    id: true,
+                    public: true,
+                    ownerId: true,
+                    title: true,
+                    status: true,
+                    date: true,
+                    time: true,
+                    description: true,
+                    photo: true,
+                    place: true,
+                    minAttendees: true,
+                    publicAttendees: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    deletedAt: true,
                     owner: {
                         select: {
                             id: true,
@@ -33,9 +50,14 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
                             hideImage: true,
                             hidePhone: true,
                         }
+                    },
+                    attendees: {
+                        select: {
+                            user: true,
+                        },
                     }
                 }
-            }) as SocialEvent;
+            }) as unknown as SocialEvent;
         } else {
             event = await prisma.socialEvent.findUnique({
                 where: { id },
@@ -66,15 +88,20 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
     const isUserLoggedIn = !!session?.user;
     const isUserAdmin = session?.user?.role === "admin";
     const isUserOwner = session?.user?.id === event.ownerId;
-    const canEditEvent = isUserLoggedIn && (isUserAdmin || isUserOwner);
+    const canEditEvent = !isEventFinished && isUserLoggedIn && (isUserAdmin || isUserOwner);
+
+    const eventUserAttendee = event.attendees?.filter(attendee => attendee.user.id === session?.user?.id);
+    const isUserAttending = eventUserAttendee?.length > 0;
+    const attendeeBanCheck = eventUserAttendee?.find(attendee => attendee.user.id === session?.user?.id && attendee.bannedFromEvent);
+    const canAttendEvent = !isEventFinished && isUserLoggedIn && !isUserOwner && !attendeeBanCheck;
 
     return (
-        <div >
+        <div className="flex flex-col gap-4 pt-2">
             <div className='flex flex-col gap-2 text-center font-bold'>
                 {isEventFinished && <span>Evento finalizado</span>}
-                {!isEventFinished && canEditEvent && (
+                {canEditEvent && (
                     <Link
-                        className='hover:underline cursor-pointer mb-4'
+                        className='hover:underline cursor-pointer'
                         href={`/events/${id}/edit`}
                     >
                         {isUserAdmin ? "Editar como Administrador" : "Editar tu evento"}
@@ -83,9 +110,16 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
             </div>
 
             <SocialEventCard event={event} session={session} />
+
             {event.publicAttendees && (
                 <SocialEventAttendeesCard event={event} />
             )}
+
+            {
+                canAttendEvent && !isUserAttending && <SocialEventJoin event={event} />
+            }
+
+            <SocialEventBannedFrom attendee={attendeeBanCheck} />
         </div>
     );
 };

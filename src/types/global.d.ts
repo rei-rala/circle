@@ -49,6 +49,10 @@ declare global {
         user: User;
         joinedAt: Date;
         leftAt: Date | null;
+
+        bannedFromEvent: Date | null;
+        banReason: string | null;
+        bannedById: string | null;
     }
 
     type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
