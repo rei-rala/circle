@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { CalendarIcon, ClockIcon, FilePenIcon, UsersIcon } from "lucide-react";
@@ -130,7 +131,7 @@ export const SocialEventForm = ({
         }
     }, [disableForm]);
 
-    
+
     const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && !disableForm) {
@@ -263,9 +264,15 @@ export const SocialEventForm = ({
                     onChange={handleImageChange}
                     disabled={disableForm}
                 />
-                {socialEvent.photo && (
+                {(imageFile || socialEvent.photo) && (
                     <div className="flex justify-center">
-                        <img src={socialEvent.photo} alt="Event" className="mt-2 w-full max-w-[600px]" />
+                        <img
+                            src={imageFile ? URL.createObjectURL(imageFile) : socialEvent.photo || ''}
+                            alt="Event"
+                            width={600}
+                            height={400}
+                            className="mt-2 w-full max-w-[600px] object-cover"
+                        />
                     </div>
                 )}
             </div>
