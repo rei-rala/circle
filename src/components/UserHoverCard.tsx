@@ -11,8 +11,7 @@ import { UserAvatar } from "./UserAvatar"
 
 export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTriggerProps }: { user: User, children?: React.ReactNode, hoverCardProps?: HoverCardProps, hoverCardTriggerProps?: HoverCardTriggerProps }) => {
     const userButtonText = user.alias || user.name || user.email;
-    const avatarFallbackName = user.alias && user.alias[0] || user.name && user.name[0] || user.email && user.email[0] || "U";
-    console.log(user)
+
     return (
         <HoverCard {...hoverCardProps}>
             <HoverCardTrigger {...hoverCardTriggerProps}>
