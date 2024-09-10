@@ -1,22 +1,8 @@
 import Link from "next/link";
 import { LayoutCard } from "../LayoutCard";
 import { SocialEventCardSmall } from "../SocialEvent/SocialEventCardSmall";
-import { User } from "next-auth";
+import { dummyUser } from "@/constants";
 
-const dummyEventOwner: User = {
-    id: "dummy",
-    name: "Miembro de THE CIRCLE",
-    email: "",
-    alias: "Miembro de THE CIRCLE",
-    role: "DUMMY",
-    bio: "Para ver esta info, debes iniciar sesión",
-    location: "",
-    phone: "",
-    socialMedia: [],
-    hideEmail: true,
-    hideImage: true,
-    hidePhone: true
-}
 
 export function NextEvents({ events }: { events: SocialEvent[] }) {
     let populatedEvents = events;
@@ -24,7 +10,7 @@ export function NextEvents({ events }: { events: SocialEvent[] }) {
     if (populatedEvents.find(e => !e.owner)) {
         populatedEvents = events.map(event => ({
             ...event,
-            owner: dummyEventOwner
+            owner: dummyUser
         }))
     }
 
@@ -39,8 +25,8 @@ export function NextEvents({ events }: { events: SocialEvent[] }) {
                             title="No hay eventos próximos"
                             content={
                                 <p>
-                                    Puedes crear un evento desde el menú o ingresando desde
-                                    <Link href="/events/new">
+                                    Puedes crear un evento desde el menú o ingresando desde{" "}
+                                    <Link href="/events/new" className="underline">
                                         acá
                                     </Link>
                                 </p>

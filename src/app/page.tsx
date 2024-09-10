@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await getServerSession();
   let instagramPosts: any[] | undefined = undefined; // = await getTheCircleInstagramPosts();
   let events: SocialEvent[] = [];
-  
+
   if (session?.user) redirect("/events")
 
   try {
@@ -23,6 +23,7 @@ export default async function Home() {
           gt: new Date(),
         },
         public: true,
+        deletedAt: undefined,
       },
       orderBy: {
         date: "asc",

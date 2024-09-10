@@ -16,10 +16,11 @@ export default async function AlternativeHome() {
         events = await prisma.socialEvent.findMany({
             take: 5,
             where: {
-                date: {
-                    gt: new Date(),
-                },
                 public: true,
+                date: {
+                    gte: new Date() // Only fetch events that are not in the past
+                },
+                deletedAt: undefined // Only fetch events that are not deleted
             },
             orderBy: {
                 date: "asc",
@@ -29,8 +30,7 @@ export default async function AlternativeHome() {
             }
         }) as unknown as SocialEvent[] || []
     } catch (err) {
-        console.log("Error fetching events")
-        console.log(err)
+        console.error("Error fetching events:", err)
         events = [];
     }
 

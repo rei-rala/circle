@@ -5,33 +5,49 @@ import getServerSession from '@/lib/getServerSession';
 import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 import { SocialEventAttendeesCard } from '@/components/SocialEvent/SocialEventAttendeesCard';
+import { dummyUser } from '@/constants';
 
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
     const session = await getServerSession();
+    let event: SocialEvent | null = null;
 
-    const event = await prisma.socialEvent.findUnique({
-        where: { id },
-        include: {
-            owner: {
-                select: {
-                    id: true,
-                    alias: true,
-                    name: true,
-                    bio: true,
-                    email: true,
-                    role: true,
-                    image: true,
-                    location: true,
-                    phone: true,
-                    socialMedia: true,
-                    hideEmail: true,
-                    hideImage: true,
-                    hidePhone: true,
+    try {
+        if (session?.user) {
+            event = await prisma.socialEvent.findUnique({
+                where: { id },
+                include: {
+                    owner: {
+                        select: {
+                            id: true,
+                            alias: true,
+                            name: true,
+                            bio: true,
+                            email: true,
+                            role: true,
+                            image: true,
+                            location: true,
+                            phone: true,
+                            socialMedia: true,
+                            hideEmail: true,
+                            hideImage: true,
+                            hidePhone: true,
+                        }
+                    }
                 }
-            }
+            }) as SocialEvent;
+        } else {
+            event = await prisma.socialEvent.findUnique({
+                where: { id },
+            }) as SocialEvent;
+
+            event.owner = dummyUser;
         }
-    }) as SocialEvent;
+
+    } catch (er) {
+        console.error("Error fetching event:", er)
+        event = null;
+    }
 
 
     if (!event || !event.owner.id) return notFound();
