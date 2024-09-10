@@ -10,7 +10,7 @@ export function HeroSection() {
     const [isHovered, setIsHovered] = useState(false);
 
     const isUnauthenticated = status === "unauthenticated"
-    console.log(status)
+
     return (
         <section className="w-full h-[50vh] relative"
             onMouseEnter={() => setIsHovered(true)}
@@ -30,9 +30,9 @@ export function HeroSection() {
                     THE CIRCLE es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
                     disfrutar de la ciudad. Únete y participa en experiencias únicas.
                 </p>
-                <div className="grid grid-rows-2 w-[50%] gap-4">
+                <div className="grid w-[50%] gap-4 place-items-center">
                     {isUnauthenticated && <Button className="w-full">Unirse</Button>}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 w-full">
                         <Button variant="secondary" onClick={() => scrollToId("about")} className="w-full">Info</Button>
                         <Button variant="secondary" onClick={() => scrollToId("photos")} className="w-full">Fotos</Button>
                     </div>

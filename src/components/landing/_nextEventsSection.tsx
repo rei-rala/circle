@@ -19,11 +19,15 @@ const dummyEventOwner: User = {
 }
 
 export function NextEvents({ events }: { events: SocialEvent[] }) {
-    const populatedEvents = events.map(event => ({
-        ...event,
-        owner: dummyEventOwner
-    }))
-    
+    let populatedEvents = events;
+
+    if (populatedEvents.find(e => !e.owner)) {
+        populatedEvents = events.map(event => ({
+            ...event,
+            owner: dummyEventOwner
+        }))
+    }
+
     return (
         // z-index is 10 because 'about' section overlaps the bottom of this section 😁 // yeah, intentional
         <section className="grid gap-4 z-10">
