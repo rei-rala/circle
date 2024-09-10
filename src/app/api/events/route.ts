@@ -67,7 +67,11 @@ export async function POST(request: Request) {
 
         if (created) {
             revalidatePath('/events');
-            revalidatePath('/');
+
+            if (created.public) {
+                revalidatePath('/');
+                revalidatePath('/home');
+            }
 
             return NextResponse.json({ data: created, message: "Evento creado exitosamente" }, { status: 201 });
         } else {
@@ -129,7 +133,11 @@ export async function PUT(request: Request) {
         if (updated) {
             revalidatePath(`/events/${id}`);
             revalidatePath('/events');
-            revalidatePath('/');
+
+            if (updated.public) {
+                revalidatePath('/');
+                revalidatePath('/home');
+            }
 
             return NextResponse.json({ data: updated, message: "Evento actualizado exitosamente" }, { status: 200 });
         } else {
@@ -184,6 +192,13 @@ export async function DELETE(request: Request) {
 
         if (deleted) {
             revalidatePath('/events');
+            revalidatePath(`/events/${id}`);
+
+            if (deleted.public) {
+                revalidatePath('/');
+                revalidatePath('/home');
+            }
+
             return NextResponse.json({ data: true, message: "Evento eliminado exitosamente" }, { status: 200 });
         } else {
             return NextResponse.json({ error: "Error al eliminar el evento" }, { status: 500 });
