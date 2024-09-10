@@ -20,6 +20,8 @@ declare module 'next-auth' {
         hideEmail: boolean;
         hideImage: boolean;
         hidePhone: boolean;
+
+        createdAt: Date;
     }
     
 }

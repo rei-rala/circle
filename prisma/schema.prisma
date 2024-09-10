@@ -57,8 +57,8 @@ model User {
   hideImage Boolean @default(false)
   hidePhone Boolean @default(false)
 
-  admitted Boolean @default(false)
-  banned   Boolean @default(false)
+  admitted DateTime?
+  banned   DateTime?
 
   createdEvents  SocialEvent[] @relation("EventOwner")
   attendedEvents Attendee[]    @relation("UserAttendees")
@@ -79,9 +79,9 @@ model Attendee {
   joinedAt DateTime    @default(now()) // Date when the user joined the event
   leftAt   DateTime? // Optional date when the user left the event
 
-  bannedFromEvent Boolean   @default(false)
+  bannedFromEvent Boolean @default(false)
   banReason       String?
-  bannedById      String?   @db.ObjectId
+  bannedById      String? @db.ObjectId
 }
 
 model Account {

@@ -45,7 +45,11 @@ export const CreateMenu = ({ className }: { className: string }) => {
                 {
                     isAdmin &&
                     (
-                        <Link href={`/admissions`} className="text-sm text-muted-foreground w-full">
+                        <Link
+                            href={`/admissions`}
+                            className="text-sm text-muted-foreground w-full"
+                            onClick={closePopover}
+                        >
                             Admisiones
                         </Link>
                     )
