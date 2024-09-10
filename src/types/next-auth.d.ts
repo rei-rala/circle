@@ -13,6 +13,9 @@ declare module 'next-auth' {
         location: string;
         phone: string;
         socialMedia: string[];
+
+        admitted: boolean;
+        banned: boolean;
         
         hideEmail: boolean;
         hideImage: boolean;

@@ -57,6 +57,9 @@ model User {
   hideImage Boolean @default(false)
   hidePhone Boolean @default(false)
 
+  admitted Boolean @default(false)
+  banned   Boolean @default(false)
+
   createdEvents  SocialEvent[] @relation("EventOwner")
   attendedEvents Attendee[]    @relation("UserAttendees")
 
