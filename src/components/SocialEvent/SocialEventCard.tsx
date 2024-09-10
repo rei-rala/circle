@@ -46,7 +46,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
         const hasMinAttendees = event.minAttendees && event.minAttendees !== 0;
         const getEmoji = (count: number, min?: number) => {
             if (min) return count >= min ? "😊" : count >= min / 2 ? "🙂" : "🥺";
-            return count === 0 ? "🥺" : count <= 5 ? "🙂" : "😊";
+            return count <= 1 ? "🥺" : count <= 5 ? "🙂" : "😊";
         };
 
         return hasMinAttendees
@@ -108,8 +108,8 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 <div>{attendeesInfo}</div>
                             </div>
 
-                            {event.place &&
-                                <>
+                            {event.place
+                                ? <>
                                     <div className="flex items-center gap-2">
                                         <p className='flex flex-1 gap-2 items-center'>
                                             <LandPlotIcon className="min-w-5 min-h-5" />
@@ -142,11 +142,18 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                         </span>
                                     </div>
                                 </>
+                                : <div className="flex items-center gap-2 sm:col-span-2">
+                                    <p className='flex flex-1 gap-2 items-center'>
+                                        <LandPlotIcon className="min-w-5 min-h-5" />
+                                        A definir
+                                    </p>
+                                </div>
                             }
                         </div>
                         {
                             session?.user &&
                             !isEventInPast &&
+                            event.place &&
                             <div className="flex items-center gap-2">
                                 <CustomGoogleMaps initialPlace={event.place} />
                             </div>

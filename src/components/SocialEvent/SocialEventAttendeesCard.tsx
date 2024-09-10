@@ -9,6 +9,8 @@ import { LayoutCard } from '../LayoutCard';
 export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
     if (!event.publicAttendees) return null;
 
+    const ownerDisplayText = event.owner.role?.toUpperCase() === "ADMIN" ? event.owner.alias || "Administrador" : (event.owner.alias || event.owner.name || event.owner.email)
+
     return (
         <LayoutCard
             className="mt-6"
@@ -20,7 +22,7 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
                             <Button variant="link" className="m-auto flex gap-2 p-0">
                                 <UserAvatar user={event.owner} />
                                 <p>
-                                    {event.owner.alias || event.owner.name}
+                                    {ownerDisplayText}
                                     <i className='text-gray-400'> Organizador</i>
                                 </p>
                             </Button>
@@ -28,17 +30,21 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
                     </div>
 
                     {
-                        event.attendees?.length && event.attendees.length > 0
-                            ? <Separator className="my-2" />
+                        event.attendees?.length > 0
+                            ? (
+                                <>
+                                    <Separator className="my-2" />
+                                    <h3 className='text-lg font-semibold w-full'>Otros asistentes ({event.attendees.length})</h3>
+                                    <div className="flex flex-wrap justify-around gap-3 w-full">
+                                        {event.attendees?.map((attendee) => (
+                                            <UserHoverCard user={attendee.user} key={attendee.id} />
+                                        ))}
+                                    </div>
+                                </>
+                            )
                             : null
                     }
 
-                    <div className="flex flex-wrap justify-around gap-3">
-                        {(event.attendees.concat(event.attendees, event.attendees, event.attendees, event.attendees, event.attendees, event.attendees))?.map((attendee) => (
-                            <UserHoverCard user={attendee.user} key={attendee.id}/>
-                            
-                        ))}
-                    </div>
                 </div>
             }
         />

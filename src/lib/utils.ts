@@ -67,6 +67,8 @@ export function compareChangesObject<T>(newValue: T, oldValue: T): boolean {
 
   // Comparación de objetos
   if (typeof newValue === 'object' && typeof oldValue === 'object') {
+    if ((newValue && !oldValue) || (!newValue && oldValue)) return true;
+    
     const newKeys = Object.keys(newValue);
     const oldKeys = Object.keys(oldValue as object);
 

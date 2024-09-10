@@ -1,5 +1,5 @@
 import { joinEvent } from "@/app/events/[id]/actions";
-import { Button } from "../ui/button";
+import { FormButton } from "../FormButton";
 
 
 export function SocialEventJoin({ event }: { event: SocialEvent }) {
@@ -8,9 +8,15 @@ export function SocialEventJoin({ event }: { event: SocialEvent }) {
             <span>¿Quieres asistir a este evento?</span>
             <input type="hidden" name="eventId" value={event.id} />
 
-            <Button type="submit" className="m-auto max-w-10 w-full">
-                Asistir
-            </Button>
+            <div>
+                <FormButton
+                    loadingIndicator
+                    type="submit"
+                    className="m-auto w-32 max-w-full"
+                >
+                    Asistir
+                </FormButton>
+            </div>
         </form>
     )
 }
