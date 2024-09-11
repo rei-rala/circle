@@ -45,8 +45,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 if (session.user.banned && !bannedUserAllowedRoutes.includes(pathname)) {
                     router.push('/profile/banned');
                 } else if (!session.user.admitted) {
-                    console.log("redirecting to admission")
-                    console.log(pathname)
                     if (!pendingAdmissionRoutes.includes(pathname)) {
                         router.push('/profile/admission');
                     }
