@@ -1,3 +1,5 @@
+"use server";
+
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadImage } from '@/lib/uploadImage';
 import { auth } from '@/auth';
