@@ -9,7 +9,7 @@ import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 
 
 import "./globals.css";
-import { BRAND } from "@/constants";
+import { BRAND, NEXTAUTH_URL } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -86,9 +86,9 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   robots: "index, follow",
   alternates: {
-    canonical: "https://thecircle.com.ar",
+    canonical: NEXTAUTH_URL,
     languages: {
-      "es-AR": "https://thecircle.com.ar",
+      "es-AR": NEXTAUTH_URL,
     },
   },
 };

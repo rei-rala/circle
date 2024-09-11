@@ -4,11 +4,11 @@ import { User } from "next-auth";
 export const GOOGLE_MAPS_LIBRARIES: Libraries = ["places", "geometry"]
 
 export const API_BASE_URL = process.env.NEXTAUTH_URL as string;
-export const BRAND = process.env.BRAND as string;
+export const BRAND = process.env.NEXT_PUBLIC_BRAND as string;
 export const NEXTAUTH_URL = process.env.NEXTAUTH_URL as string;
 export const NODE_ENV = process.env.NODE_ENV as string;
-export const GOOGLE_ANALYTICS_ID = process.env.GOOGLE_ANALYTICS_ID as string
-export const NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
+export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID as string
+export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
 
 
 export const dummyUser: User = {

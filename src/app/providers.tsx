@@ -7,7 +7,7 @@ import { LoadScript } from "@react-google-maps/api"
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { GOOGLE_ANALYTICS_ID, GOOGLE_MAPS_LIBRARIES, NEXT_PUBLIC_GOOGLE_MAPS_API_KEY } from "@/constants"
+import { GOOGLE_ANALYTICS_ID, GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_API_KEY } from "@/constants"
 
 
 export const AppWithProviders = ({ children }: { children: ReactNode }) => {
@@ -24,7 +24,7 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
             <SessionProvider>
                 <PopoverManagerProvider>
                     <LoadScript
-                        googleMapsApiKey={NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+                        googleMapsApiKey={GOOGLE_MAPS_API_KEY}
                         libraries={GOOGLE_MAPS_LIBRARIES}
                     >
                         {children}
