@@ -6,6 +6,7 @@ type FeatureFlags = {
     socialEventsGroups?: boolean;
     userSettings?: boolean;
     burgerMenu?: boolean;
+    instagramCarousel?: boolean;
 }
 
 type FeatureContextType = {
@@ -20,6 +21,7 @@ const defaultContextValue: FeatureContextType = {
         socialEventsGroups: false,
         userSettings: false,
         burgerMenu: false,
+        instagramCarousel: false,
     },
     lowerNavbarFeaturesCount: 0,
 };

@@ -49,6 +49,42 @@ export const metadata: Metadata = {
   ],
   applicationName: "The Circle BA",
   creator: "The Circle BA Team",
+  icons: [
+    { rel: "icon", url: "/icon.png" },
+    { rel: "apple-touch-icon", url: "/icon.png" },
+    { rel: "icon", url: "/icon.webp", type: "image/webp" },
+    { rel: "android-chrome-192x192", url: "/android-chrome-192x192.png" },
+    { rel: "android-chrome-512x512", url: "/android-chrome-512x512.png" },
+  ],
+  openGraph: {
+    title: "⭕ The Circle",
+    description: "⭕THE CIRCLE 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
+    url: "https://thecircle.com.ar",
+    siteName: "The Circle",
+    images: [
+      {
+        url: "/icon.png",
+        width: 350,
+        height: 350,
+      },
+    ],
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "⭕ The Circle",
+    description: "⭕THE CIRCLE 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
+    images: ["/icon.png"],
+  },
+  manifest: "/manifest.json",
+  robots: "index, follow",
+  alternates: {
+    canonical: "https://thecircle.com.ar",
+    languages: {
+      "es-AR": "https://thecircle.com.ar",
+    },
+  },
 };
 
 export const viewport = {
@@ -69,7 +105,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AppWithProviders>
           <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
-            <UpperNavbar className="w-full flex-shrink-0"  />
+            <UpperNavbar className="w-full flex-shrink-0" />
             <div className="flex flex-col flex-grow gap-4 overflow-x-hidden overflow-y-auto bg-[#1a1a1a] p-5 py-20">
               <Suspense fallback={<Loading />}>
                 {children}

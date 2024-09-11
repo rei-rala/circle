@@ -4,14 +4,15 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn, scrollToId } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useFeatureContext } from "@/contexts/FeatureProvider";
 
 export function HeroSection() {
     const { status } = useSession();
+    const { features: { instagramCarousel } } = useFeatureContext();
     const [isHovered, setIsHovered] = useState(false);
 
     const isUnauthenticated = status === "unauthenticated"
 
-    const availableIconFileFormat = ["avif", "webp", "png", "jpg"];
 
     return (
         <section className="w-full h-[50vh] relative"
@@ -38,9 +39,12 @@ export function HeroSection() {
                 </p>
                 <div className="grid w-[50%] gap-4 place-items-center">
                     {isUnauthenticated && <Button className="w-full">Unirse</Button>}
-                    <div className="grid grid-cols-2 gap-4 w-full">
+                    <div className={cn(
+                        "grid grid-cols-2 gap-4 w-full",
+                        instagramCarousel ? "grid-cols-2" : "grid-cols-1"
+                    )}>
                         <Button variant="secondary" onClick={() => scrollToId("about")} className="w-full">Info</Button>
-                        <Button variant="secondary" onClick={() => scrollToId("photos")} className="w-full">Fotos</Button>
+                        {instagramCarousel && <Button variant="secondary" onClick={() => scrollToId("photos")} className="w-full">Fotos</Button>}
                     </div>
                 </div>
             </div>
