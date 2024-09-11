@@ -19,7 +19,7 @@ export const UserMenu = ({ className }: { className?: string }) => {
 
     const userMenuLinks = [
         { children: "Mi perfil", href: "/profile", hidden: !session },
-        { children: session ? "Cerrar Sesión" : "Iniciar Sesión", href: session ? `/api/auth/signout?callbackUrl=/` : `/api/auth/signin?callbackUrl=${pathName}` },
+        { children: session ? "Cerrar Sesión" : "Iniciar Sesión", href: session ? `/logout?callbackUrl=${pathName}` : `/login?callbackUrl=${pathName}` },
     ]
 
     const triggerComponent = (

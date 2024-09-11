@@ -6,6 +6,10 @@ import GoogleProvider from "next-auth/providers/google"
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
+  pages: {
+    signIn: "/login",
+    signOut: "/logout",
+  },
   trustHost: true, //fixes a bug (wtf)
   theme: {
     logo: "/icon.png"

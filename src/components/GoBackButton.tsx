@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils"
 import { ChevronLeftIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 
-export const GoBackButton = ({ className }: {
+export const GoBackButton = ({ children, className }: {
+    children?: React.ReactNode
     className?: string
 }) => {
     const router = useRouter()
@@ -20,11 +21,20 @@ export const GoBackButton = ({ className }: {
     }
 
     return (
-        <button className={cn(className, "z-50 flex items-center bg-[#333333] text-white p-2 rounded-md hover:bg-[#444444] w-fit")} onClick={() => router.back()}>
-            <ChevronLeftIcon className="relative left-[-5%] w-5 h-5" />
-            <span>
-                Volver
-            </span>
+        <button className={cn( "z-50 flex items-center bg-[#333333] text-white p-2 rounded-md hover:bg-[#444444] w-fit", className)} onClick={() => router.back()}>
+
+            {
+                children
+                    ? children
+                    : (
+                        <>
+                            <ChevronLeftIcon className="relative left-[-5%] w-5 h-5" />
+                            <span>
+                                Volver
+                            </span>
+                        </>
+                    )
+            }
         </button>
     )
 }
