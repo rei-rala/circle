@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/admin/'],
+      disallow: ['/api/', '/admin/', "/admissions/"],
     },
     sitemap: 'https://thecircle.com.ar/sitemap.xml',
     host: 'https://thecircle.com.ar',
