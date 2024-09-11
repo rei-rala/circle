@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { GOOGLE_ANALYTICS_ID, GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_API_KEY } from "@/constants"
+import { AuthProvider } from "@/contexts/AuthProvider"
 
 
 export const AppWithProviders = ({ children }: { children: ReactNode }) => {
@@ -22,21 +23,23 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
         }}>
             <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
             <SessionProvider>
-                <PopoverManagerProvider>
-                    <LoadScript
-                        googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-                        libraries={GOOGLE_MAPS_LIBRARIES}
-                    >
-                        {children}
+                <AuthProvider>
+                    <PopoverManagerProvider>
+                        <LoadScript
+                            googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+                            libraries={GOOGLE_MAPS_LIBRARIES}
+                        >
+                            {children}
 
-                        <Toaster
-                            toastOptions={{
-                                // limit time
-                                duration: 3000,
-                            }}
-                        />
-                    </LoadScript>
-                </PopoverManagerProvider>
+                            <Toaster
+                                toastOptions={{
+                                    // limit time
+                                    duration: 3000,
+                                }}
+                            />
+                        </LoadScript>
+                    </PopoverManagerProvider>
+                </AuthProvider>
             </SessionProvider>
 
         </FeatureProvider >

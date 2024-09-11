@@ -22,12 +22,12 @@ import {
     XIcon,
 } from "lucide-react";
 import { User } from "next-auth";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { compareChangesObject } from "@/lib/utils";
 import { updateUserProfile } from "@/services/profile.services";
 import { defaultUser } from "@/constants";
+import { useAuth } from "@/contexts/AuthProvider";
 
 function checkUserProfileChanges(
     newUser: UserProfileDTO,
@@ -38,20 +38,20 @@ function checkUserProfileChanges(
 }
 
 export const ProfileForm = () => {
-    const session = useSession();
+    const { user, update: updateSession } = useAuth();
     const [loading, setLoading] = useState(false);
     const [formUser, setFormUser] = useState<User>(defaultUser);
     const [adminCardHidePreference, setAdminCardHidePreference] = useState(localStorage.getItem("adminCardHidePreference") === "true");
 
     const { profileChanged, adminPreferenceChanged } = useMemo(() => {
-        const profileChanged = checkUserProfileChanges(formUser, session?.data?.user);
+        const profileChanged = checkUserProfileChanges(formUser, user);
         const adminPreferenceChanged = adminCardHidePreference !== (localStorage.getItem("adminCardHidePreference") === "true");
 
         return {
             profileChanged,
             adminPreferenceChanged
         };
-    }, [formUser, adminCardHidePreference, session?.data?.user]);
+    }, [formUser, adminCardHidePreference, user]);
 
     const enableForm = adminPreferenceChanged || profileChanged;
 
@@ -134,9 +134,13 @@ export const ProfileForm = () => {
 
         try {
             if (profileChanged) {
-                if (await updateUserProfile(formUser)) {
-                    toast.success("Perfil actualizado correctamente");
-                    session.update();
+                const { error, data, message } = await updateUserProfile(formUser);
+
+                if (data) {
+                    toast.success(message);
+                    updateSession();
+                } else if (error) {
+                    toast.error(error);
                 } else {
                     throw new Error("No se pudo actualizar el perfil");
                 }
@@ -151,10 +155,10 @@ export const ProfileForm = () => {
 
 
     useEffect(() => {
-        if (session.data?.user) {
-            setFormUser({ ...defaultUser, ...session.data.user });
+        if (user) {
+            setFormUser({ ...defaultUser, ...user });
         }
-    }, [session.data?.user]);
+    }, [user]);
 
     return (
         <form className="grid gap-6" onSubmit={handleSubmit}>
@@ -288,7 +292,7 @@ export const ProfileForm = () => {
                 </div>
 
                 <Image
-                    src={session.data?.user.image || "/placeholder-user.jpg"}
+                    src={user?.image || "/placeholder-user.jpg"}
                     alt="Imagen del usuario"
                     width={200}
                     height={200}
@@ -298,7 +302,7 @@ export const ProfileForm = () => {
             </div>
 
             {
-                session.data?.user.role === "admin" &&
+                user?.role === "admin" &&
                 (
                     <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
                         <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>

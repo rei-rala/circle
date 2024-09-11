@@ -5,7 +5,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { CustomPopover } from "@/components/CustomPopover";
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const createMenuLinks = [
     { href: "/events/new", text: "Nuevo evento" },
@@ -13,9 +13,9 @@ const createMenuLinks = [
 
 export const CreateMenu = ({ className }: { className: string }) => {
     const { closePopover } = usePopoverManagerContext();
-    const { data: session } = useSession();
+    const { user } = useAuth();
 
-    const isAdmin = session?.user?.role?.toUpperCase() === "ADMIN";
+    const isAdmin = user?.role?.toUpperCase() === "ADMIN";
 
     const triggerComponent = (
         <button>

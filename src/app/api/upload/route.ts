@@ -12,6 +12,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
+        if (session.user.admitted) {
+            return NextResponse.json({ error: 'No puedes subir imágenes. Tu cuenta no está admitida.' }, { status: 403 });
+        } else if (session.user.banned) {
+            return NextResponse.json({ error: 'Estás bloqueado. No puedes subir imágenes.' }, { status: 403 });
+        }
+
         const data = await request.json();
         const { image } = data;
 

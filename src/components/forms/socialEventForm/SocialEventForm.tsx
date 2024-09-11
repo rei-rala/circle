@@ -75,7 +75,7 @@ export const SocialEventForm = ({
         return compareChangesObject(socialEvent, initialSocialEvent);
     }, [socialEvent, initialSocialEvent]);
 
-    const disableForm = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit") || disabled
+    const disableForm = !user || mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit") || disabled
 
     const handleFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (disableForm) return;

@@ -17,6 +17,11 @@ export async function POST(request: Request) {
         }
 
         const isAdmin = session.user.role === "admin";
+        const isUserBanned = Boolean(session.user.banned);
+
+        if (isUserBanned) {
+            return NextResponse.json({ error: "No tienes permisos para crear eventos. Tu usuario está bloqueado." }, { status: 403 });
+        }
 
         if (!isAdmin) {
             // Check if the user already has an active SocialEvent
@@ -96,6 +101,12 @@ export async function PUT(request: Request) {
         }
 
         const isAdmin = session.user.role === "admin";
+        const isUserBanned = Boolean(session.user.banned);
+
+        if (isUserBanned) {
+            return NextResponse.json({ error: "No tienes permisos para crear eventos. Tu usuario está bloqueado." }, { status: 403 });
+        }
+
         const body: SocialEventDTO = await request.json();
         const { id, title, photo, description, date, time, place, public: isPublic, minAttendees, publicAttendees } = body;
 
@@ -160,6 +171,13 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
+        const isAdmin = session.user.role === "admin";
+        const isUserBanned = Boolean(session.user.banned);
+
+        if (isUserBanned) {
+            return NextResponse.json({ error: "No tienes permisos para eliminar eventos. Tu usuario está bloqueado." }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
@@ -168,19 +186,27 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: "Falta el ID del evento" }, { status: 400 });
         }
 
-        // Fetch the event and its owner
-        const event = await prisma.socialEvent.findUnique({
-            where: { id },
-            include: { owner: true }
-        });
+        let event: SocialEvent | null = null;
+
+        if (isAdmin) {
+            event = await prisma.socialEvent.findUnique({
+                where: { id },
+                include: { owner: true }
+            }) as SocialEvent | null;
+        } else {
+            event = await prisma.socialEvent.findUnique({
+                where: { id, ownerId: session.user.id },
+                include: { owner: true }
+            }) as SocialEvent | null;
+        }
 
         if (!event) {
             return NextResponse.json({ error: "Evento no encontrado" }, { status: 404 });
         }
 
-        // Check if the user is authorized to delete the event
-        if (event.owner.id !== session.user.id && session.user.role !== "admin") {
-            return NextResponse.json({ error: "No autorizado para eliminar este evento" }, { status: 403 });
+        // Check if the user has permission to delete the event
+        if (!isAdmin && event.ownerId !== session.user.id) {
+            return NextResponse.json({ error: "No tienes permiso para eliminar este evento" }, { status: 403 });
         }
 
         // Soft delete the event by updating its status and setting deletedAt

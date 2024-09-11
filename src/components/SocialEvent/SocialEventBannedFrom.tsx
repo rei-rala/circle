@@ -8,7 +8,7 @@ export function SocialEventBannedFrom({ attendee }: { attendee?: Attendee }) {
     return (
         bannedFromEvent && (
             <div>
-                <span>Has sido baneado del evento el {getFullDate(bannedFromEvent || new Date())}</span>
+                <span>Has sido bloqueado del evento el {getFullDate(bannedFromEvent || new Date())}</span>
                 <span>Razón: {banReason}</span>
             </div >
         )

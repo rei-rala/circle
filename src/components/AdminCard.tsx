@@ -1,15 +1,15 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthProvider";
 
 
 export const AdminCard = () => {
-    const session = useSession();
+    const { user } = useAuth();
     const [hide, setHide] = useState(false);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export const AdminCard = () => {
         toast.info(`Cartel de Admin ocultado. Para volver a mostrarlo, modifica las opciones de administrador en tu perfil.`)
     }
 
-    return session.data?.user.role === "admin" &&
+    return user?.role === "admin" &&
         (
             <Card className={cn(hide && "hidden", "text-center p-4 rounded-lg border-red-600")}>
                 <CardHeader className="p-0">

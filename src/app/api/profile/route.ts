@@ -6,8 +6,13 @@ import { prisma } from "@/prisma";
 
 export async function PUT(request: Request) {
     const session = await auth();
+    
     if (!session?.user.id) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json({ error: "No se ha iniciado sesión" }, { status: 401 });
+    }
+
+    if (session.user.banned) {
+        return NextResponse.json({ error: 'Estás bloqueado. No puedes editar tu perfil.' }, { status: 403 });
     }
 
     const isAdmin = session.user.role?.toUpperCase() === 'ADMIN';
@@ -31,7 +36,11 @@ export async function PUT(request: Request) {
             }
         });
 
-        return NextResponse.json({ success: true, user: updated, message: 'Perfil actualizado correctamente' });
+        if (updated) {
+            return NextResponse.json({ success: true, user: updated, message: 'Perfil actualizado correctamente' });
+        }
+        return NextResponse.json({ success: false, message: 'No se ha podido actualizar el perfil' }, { status: 500 });
+
     } catch (error) {
         console.error('Error updating user profile:', error);
         return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });

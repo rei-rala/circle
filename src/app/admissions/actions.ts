@@ -11,9 +11,13 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
 
         const session = await auth();
 
-        if (session?.user.role?.toUpperCase() !== "ADMIN") {
-            return { error: "No tienes permisos para admitir usuarios" }
+        const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
+        const isUserBanned = Boolean(session?.user.banned);
+
+        if (!isAdmin || isUserBanned) {
+            return { error: "No tienes permisos para admitir usuarios." + (isUserBanned ? " Tu usuario está bloqueado." : "") }
         }
+
 
         const user = await prisma.user.update({
             where: {
@@ -45,10 +49,11 @@ export async function banUser(formData: FormData) {
         const banReason = formData.get("banReason") as string;
         const session = await auth()
 
-        if (session?.user.role?.toUpperCase() !== "ADMIN") {
-            return {
-                error: "No tienes permisos para banear usuarios"
-            }
+        const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
+        const isUserBanned = Boolean(session?.user.banned);
+
+        if (!isAdmin || isUserBanned) {
+            return { error: "No tienes permisos para admitir usuarios." + (isUserBanned ? " Tu usuario está bloqueado." : "") }
         }
 
         const user = await prisma.user.update({

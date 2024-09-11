@@ -1,25 +1,25 @@
 "use client"
 
 import Link from "next/link"
-import { useSession } from "next-auth/react"
 import { Separator } from "@/components/ui/separator"
 import { cn, getEmailUserName } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { CustomPopover } from "@/components/CustomPopover"
 import { UserAvatar } from "@/components/UserAvatar"
 import { usePopoverManagerContext } from "@/contexts/PopoverManagerProvider"
+import { useAuth } from "@/contexts/AuthProvider"
 
 // this is a upper navbar component, but we use it at the bottom while features are being implemented
 export const UserMenu = ({ className }: { className?: string }) => {
     const pathName = usePathname();
-    const { data: session, status } = useSession();
+    const { user, status } = useAuth();
     const { closePopover } = usePopoverManagerContext();
 
     const isSessionLoading = status === "loading";
 
     const userMenuLinks = [
-        { children: "Mi perfil", href: "/profile", hidden: !session },
-        { children: session ? "Cerrar Sesión" : "Iniciar Sesión", href: session ? `/logout?callbackUrl=${pathName}` : `/login?callbackUrl=${pathName}` },
+        { children: "Mi perfil", href: "/profile", hidden: !user },
+        { children: user ? "Cerrar Sesión" : "Iniciar Sesión", href: user ? `/logout?callbackUrl=/` : `/login?callbackUrl=${pathName}` },
     ]
 
     const triggerComponent = (
@@ -29,10 +29,10 @@ export const UserMenu = ({ className }: { className?: string }) => {
                     ? <div className="animate-pulse bg-slate-400 w-10 h-10 rounded-full" />
                     : (
                         <UserAvatar
-                            user={session?.user}
+                            user={user}
                             className={cn(
                                 "border-2 border-solid cursor-pointer",
-                                session?.user.role === "admin"
+                                user?.role === "admin"
                                     ? "border-red-700 hover:border-red-400"
                                     : "border-slate-400 hover:border-white"
                             )}
@@ -46,8 +46,8 @@ export const UserMenu = ({ className }: { className?: string }) => {
         <div className="flex flex-col gap-4 w-auto">
             <h3 className="flex gap-2 leading-none m-auto">
                 {
-                    session?.user?.email
-                        ? getEmailUserName(session.user.email)
+                    user?.email
+                        ? getEmailUserName(user.email)
                         : "Usuario"
                 }
             </h3>

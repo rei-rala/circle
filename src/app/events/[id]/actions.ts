@@ -16,6 +16,12 @@ export async function joinEvent(formData: FormData): Promise<ApiResponse<boolean
         return { error: "Verifique los datos ingresados" };
     }
 
+    if (!session.user.admitted) {
+        return { error: 'No puedes unirte a eventos. Tu cuenta no está admitida.' };
+    } else if (session.user.banned) {
+        return { error: 'Estás bloqueado. No puedes unirte a eventos.' };
+    }
+
     try {
         const event = await prisma.socialEvent.findFirst({
             where: {

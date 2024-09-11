@@ -2,7 +2,7 @@ import { User } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 
-export function UserAvatar({ user, ...props }: { user?: User } & React.ComponentProps<typeof Avatar>) {
+export function UserAvatar({ user, ...props }: { user?: User | null } & React.ComponentProps<typeof Avatar>) {
     const isAdmin = user?.role?.toUpperCase() === "ADMIN"
     const displayedUserText = isAdmin ? user?.alias || "Administrador" : (user?.alias || user?.name || user?.email || "Usuario")
 

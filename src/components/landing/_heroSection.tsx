@@ -3,13 +3,17 @@
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn, scrollToId } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { useFeatureContext } from "@/contexts/FeatureProvider";
 import { BRAND } from "@/constants";
+import { useAuth, useUserBannedOrInAdmission } from "@/contexts/AuthProvider";
 
 export function HeroSection() {
-    const { status } = useSession();
+    useUserBannedOrInAdmission();
+    
+    const { status } = useAuth();
+
     const { features: { instagramCarousel } } = useFeatureContext();
+
     const [isHovered, setIsHovered] = useState(false);
 
     const isUnauthenticated = status === "unauthenticated"

@@ -12,8 +12,14 @@ export async function updateUserProfile(user: UserProfileDTO): Promise<ApiRespon
         body: JSON.stringify(user),
     });
 
-    if (!response.ok) {
-        throw new Error('Error al actualizar el perfil');
+    try {
+        if (!response.ok) {
+            return await response.json();
+        }
+    } catch (error) {
+        return {
+            error: error as string,
+        }
     }
 
     return await response.json();

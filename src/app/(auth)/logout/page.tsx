@@ -6,8 +6,8 @@ import { ChevronLeft, LogOutIcon } from "lucide-react";
 
 import { signOut } from "next-auth/react";
 
-export default function Logout({ searchParams }: { searchParams: { callbackUrl: string } }) {
-    const callbackUrl = searchParams.callbackUrl || "/";
+export default function Logout({ searchParams: _searchParams }: { searchParams: { callbackUrl: string } }) {
+    const callbackUrl = "/" 
 
     const handleLogout = () => {
         signOut({ callbackUrl });

@@ -1,11 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthProvider";
 import { ChromeIcon } from "lucide-react";
 
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Login({ searchParams }: { searchParams: { callbackUrl: string } }) {
+    const { user } = useAuth();
     const callbackUrl = searchParams.callbackUrl || "/";
 
     const providers = [
@@ -15,6 +18,10 @@ export default function Login({ searchParams }: { searchParams: { callbackUrl: s
             name: "google",
         },
     ]
+
+    if (user) {
+        redirect("/");
+    }
 
 
     return (
