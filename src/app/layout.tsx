@@ -6,6 +6,8 @@ import { Suspense } from "react";
 import Loading from "@/components/Loading";
 import { UpperNavbar } from "@/components/navbars/UpperNavbar";
 import { LowerNavbar } from "@/components/navbars/LowerNavbar";
+import { GoogleAnalytics } from '@next/third-parties/google'
+
 
 import "./globals.css";
 
@@ -104,6 +106,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <AppWithProviders>
+          <GoogleAnalytics gaId="G-PQF2MKGBKW" />
           <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
             <UpperNavbar className="w-full flex-shrink-0" />
             <div className="flex flex-col flex-grow gap-4 overflow-x-hidden overflow-y-auto bg-[#1a1a1a] p-5 py-20">
