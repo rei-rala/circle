@@ -36,23 +36,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         if (isLoadingSession) return; // Still loading session, no redirect yet
 
-        if (!session) {
-            if (!publicRoutes.includes(pathname)) {
-                router.push('/login');
-            }
-        } else {
-            if (session.user.banned && !bannedUserAllowedRoutes.includes(pathname)) {
-                router.push('/profile/banned');
-            } else if (!session.user.admitted) {
-                console.log("redirecting to admission")
-                console.log(pathname)
-                if (!pendingAdmissionRoutes.includes(pathname)) {
-                    router.push('/profile/admission');
+        const timeoutId = setTimeout(() => {
+            if (!session) {
+                if (!publicRoutes.includes(pathname)) {
+                    router.push('/login');
                 }
             } else {
-                setUser(session.user);
+                if (session.user.banned && !bannedUserAllowedRoutes.includes(pathname)) {
+                    router.push('/profile/banned');
+                } else if (!session.user.admitted) {
+                    console.log("redirecting to admission")
+                    console.log(pathname)
+                    if (!pendingAdmissionRoutes.includes(pathname)) {
+                        router.push('/profile/admission');
+                    }
+                } else {
+                    setUser(session.user);
+                }
             }
-        }
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
     }, [session, isLoadingSession, pathname, router]);
 
     useEffect(() => {
@@ -90,9 +94,13 @@ export const useUserBanned = () => {
     const pathname = usePathname();
 
     useEffect(() => {
-        if (isUserBanned && !bannedUserAllowedRoutes.includes(pathname)) {
-            router.push('/profile/banned');
-        }
+        const timeoutId = setTimeout(() => {
+            if (isUserBanned && !bannedUserAllowedRoutes.includes(pathname)) {
+                router.push('/profile/banned');
+            }
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
     }, [isUserBanned, pathname, router]);
 
     return isUserBanned;
@@ -104,31 +112,25 @@ export const useUserInAdmission = () => {
     const pathname = usePathname();
 
     useEffect(() => {
-        if (!isUserAdmitted && 
-            !pendingAdmissionRoutes.includes(pathname) && 
-            (pathname === '/events' || 
-             (pathname.startsWith('/events/') && 
-              (pathname.endsWith('/edit') || pathname.includes('/edit/'))))) {
-            router.push('/profile/admission');
-        }
+        const timeoutId = setTimeout(() => {
+            if (!isUserAdmitted && 
+                !pendingAdmissionRoutes.includes(pathname) && 
+                (pathname === '/events' || 
+                 (pathname.startsWith('/events/') && 
+                  (pathname.endsWith('/edit') || pathname.includes('/edit/'))))) {
+                router.push('/profile/admission');
+            }
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
     }, [isUserAdmitted, pathname, router]);
 
     return !isUserAdmitted;
 };
 
 export const useUserBannedOrInAdmission = () => {
-    const { user, isUserBanned, isUserAdmitted } = useAuth();
-    const router = useRouter();
-    const pathname = usePathname();
+    const isBanned = useUserBanned();
+    const isInAdmission = useUserInAdmission();
 
-    useEffect(() => {
-        if (!user) return;
-        if (isUserBanned && !bannedUserAllowedRoutes.includes(pathname)) {
-            router.push('/profile/banned');
-        } else if (!isUserAdmitted && !pendingAdmissionRoutes.includes(pathname)) {
-            router.push('/profile/admission');
-        }
-    }, [user, isUserBanned, isUserAdmitted, pathname, router]);
-
-    return isUserBanned || !isUserAdmitted;
+    return isBanned || isInAdmission;
 };
