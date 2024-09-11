@@ -73,7 +73,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
 
 
     if (!event || !event.owner.id) return notFound();
-    if (!event.public && !session?.user?.id) return redirect(`/api/auth/signin?callbackUrl=/events/${id}`);
+    if (!event.public && !session?.user?.id) return redirect(`/login?callbackUrl=/events/${id}`);
 
     if (event.owner) {
         if (event.owner.hideEmail) event.owner.email = "";

@@ -5,10 +5,9 @@ import getServerSession from "@/lib/getServerSession";
 import { redirect } from "next/navigation";
 import React from "react";
 
-// using auth.js session
 export default async function ProfilePage() {
     const session = await getServerSession();
-    if (!session) redirect("/api/auth/signin?callbackUrl=/profile");
+    if (!session) redirect("/login?callbackUrl=/profile");
 
     return (
         <>

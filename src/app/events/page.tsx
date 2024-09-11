@@ -8,7 +8,7 @@ export default async function EventsPageComponent() {
   const session = await getServerSession();
 
   if (!session?.user) {
-    return redirect("/api/auth/signin?callbackUrl=/events");
+    return redirect("/login?callbackUrl=/events");
   }
 
   if (!session.user.admitted) {

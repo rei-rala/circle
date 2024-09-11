@@ -2,7 +2,6 @@ import getServerSession from "@/lib/getServerSession";
 import { Landing } from "../components/landing/Landing";
 import { redirect } from "next/navigation";
 import { prisma } from "@/prisma";
-import { Metadata } from "next";
 //import getTheCircleInstagramPosts from "@/services/instagram.services";
 
 export default async function Home() {

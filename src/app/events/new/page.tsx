@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default async function CreateEventPage() {
     const userSession = await getServerSession();
 
-    if (!userSession) redirect("/api/auth/signin?callbackUrl=/events/new");
+    if (!userSession) redirect("/login?callbackUrl=/events/new");
     const isUserAdmin = userSession.user.role?.toUpperCase() === "ADMIN";
 
     if (!isUserAdmin) {

@@ -10,7 +10,7 @@ export default async function AdmissionsPage() {
     const session = await getServerSession();
 
     if (!session) {
-        redirect("/api/auth/signin?callbackUrl=/admissions");
+        redirect("/login?callbackUrl=/admissions");
     }
 
     if (session.user.role?.toUpperCase() !== "ADMIN") {
