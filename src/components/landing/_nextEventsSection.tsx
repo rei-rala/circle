@@ -16,9 +16,9 @@ export function NextEvents({ events }: { events: SocialEvent[] }) {
 
     return (
         // z-index is 10 because 'about' section overlaps the bottom of this section 😁 // yeah, intentional
-        <section className="grid gap-4 z-10">
+        <section className="flex flex-col gap-4 z-10">
             <h2 className="my-2">Próximos Eventos</h2>
-            <div className="grid gap-4">
+            <div className="flex flex-col gap-4">
                 {
                     events.length === 0 && (
                         <LayoutCard

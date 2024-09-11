@@ -27,7 +27,7 @@ export default async function EventsPageComponent() {
   }) as unknown as SocialEvent[];
 
   return (
-    <div className="grid gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-2xl font-semibold">Próximos Eventos</div>
         <Link href="/events/new" className="bg-[#333333] text-white px-4 py-2 rounded-md hover:bg-[#444444]">

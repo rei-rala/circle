@@ -32,7 +32,7 @@ export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTrigger
 
     return (
         <HoverCard {...hoverCardProps}>
-            <HoverCardTrigger {...hoverCardTriggerProps}>
+            <HoverCardTrigger {...hoverCardTriggerProps} href={`#${user.id}`}>
                 {children || (
                     <Button variant="link" className="font-bold hover:underline p-0">
                         {displayedUserText}

@@ -49,7 +49,7 @@ export default async function AdmissionsPage() {
         <LayoutCard
             title="Usuarios Pendientes de Admisión"
             content={
-                <div className="grid gap-4">
+                <div className="flex flex-col gap-4">
                     {
                         users.length === 0
                             ? (

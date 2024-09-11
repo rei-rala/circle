@@ -14,7 +14,7 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
     return (
         <div
             className={
-                cn(event.public ? "border-red-600" : isOwner && "border-green-500", "flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444] border-2")
+                cn(event.public ? "border-red-600" : isOwner && "border-green-500", "flex items-center gap-4 p-3 rounded-lg bg-[#333333] hover:bg-[#444444] border-2 max-w-full")
             }
         >
             {
@@ -32,16 +32,11 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
             }
             <div className="flex-1">
                 <div className="font-medium">{event.title}</div>
-                <div className="flex items-center gap-1 text-sm">
+                <div className="flex flex-wrap items-center mb-2 text-sm">
                     <UserHoverCard user={event.owner} />
                     {
                         isOwner && (
                             <i className="text-xs text-[#aaa]">(Tú)</i>
-                        )
-                    }
-                    {
-                        event.public && (
-                            <i className="text-xs text-[#aaa]"> Evento Público</i>
                         )
                     }
                 </div>
@@ -62,8 +57,8 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
                 }
             </div>
             <div className="grid place-items-center">
-                <Link href={`/events/${event.id}`}>
-                    <Button variant="ghost" className="p-0 w-12 h-12">
+                <Link href={`/events/${event.id}`} className="block">
+                    <Button variant="ghost" className="p-2 w-20 h-20 aspect-square">
                         <ChevronRightIcon className="w-12 h-12" />
                         <span className="sr-only">Ver Evento</span>
                     </Button>

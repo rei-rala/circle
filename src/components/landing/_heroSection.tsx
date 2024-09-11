@@ -11,20 +11,26 @@ export function HeroSection() {
 
     const isUnauthenticated = status === "unauthenticated"
 
+    const availableIconFileFormat = ["avif", "webp", "png", "jpg"];
+
     return (
         <section className="w-full h-[50vh] relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div
-                className={cn(
-                    "absolute inset-0 bg-[url('/icon.png')] h-full bg-contain bg-center bg-no-repeat transition-transform duration-300 ease-in-out",
-                    isHovered ? "scale-105" : "scale-100"
-                )}
-            />
-            <div
-                className="relative z-10 h-full flex flex-col gap-4 justify-center items-center"
-            >
+            <picture>
+                <source srcSet="/icon.webp" type="image/webp" />
+                <source srcSet="/icon.png" type="image/png" />
+                <img
+                    src="/icon.avif"
+                    alt="The Circle Icon"
+                    className={cn(
+                        "absolute inset-0 h-full w-full object-contain object-center transition-all duration-300 ease-in-out",
+                        isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75"
+                    )}
+                />
+            </picture>
+            <div className={"relative z-10 h-full flex flex-col gap-4 justify-center items-center"}>
                 <h1 className="text-4xl font-bold mb-4" id="main-title">⭕The CIRCLE 🇦🇷</h1>
                 <p className="text-lg max-w-[600px] text-center mb-8">
                     THE CIRCLE es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
