@@ -22,7 +22,7 @@ export function Footer() {
                     </p>
                     <Separator />
 
-                    <h5 className="text-white/50">Redes sociales</h5>
+                    <h5 className="text-white/50">Unite en nuestras Redes sociales</h5>
                     <div className="flex">
                         {siteSocialMedia.map((social) => (
                             <Button
