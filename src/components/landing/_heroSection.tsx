@@ -38,7 +38,7 @@ export function HeroSection() {
                     disfrutar de la ciudad. Únete y participa en experiencias únicas.
                 </p>
                 <div className="grid w-[50%] gap-4 place-items-center">
-                    {isUnauthenticated && <Button className="w-full">Unirse</Button>}
+                    {isUnauthenticated && <Button className="w-full" onClick={() => scrollToId("footer")}>Unirse</Button>}
                     <div className={cn(
                         "grid grid-cols-2 gap-4 w-full",
                         instagramCarousel ? "grid-cols-2" : "grid-cols-1"

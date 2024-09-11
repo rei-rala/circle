@@ -240,7 +240,7 @@ export const ProfileForm = () => {
             <div className="grid gap-2">
                 <div className="flex items-center gap-2">
                     <MessageCircleMoreIcon className="w-5 h-5" />
-                    <Label htmlFor="socialMedia">Redes Sociales</Label>
+                    <Label htmlFor="socialMedia">Unite en nuestras redes sociales</Label>
                 </div>
                 {formUser.socialMedia.map((link, index) => (
                     <div key={`socialMedia:${index}`} className="flex items-center gap-2 animate-in fade-in-0 duration-300">

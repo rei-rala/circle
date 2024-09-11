@@ -10,6 +10,7 @@ import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 
 import "./globals.css";
 import { BRAND, NEXTAUTH_URL } from "@/constants";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -116,6 +117,7 @@ export default function RootLayout({
               <Suspense fallback={<Loading />}>
                 {children}
               </Suspense>
+              <Footer />
             </div>
             <LowerNavbar className="w-full flex-shrink-0" />
           </div>
