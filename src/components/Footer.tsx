@@ -22,8 +22,8 @@ export function Footer() {
                     </p>
                     <Separator />
 
-                    <h5 className="text-white/50">Unite en nuestras Redes sociales</h5>
-                    <div className="flex">
+                    <span className="text-md text-white/50">Unite en nuestras Redes sociales</span>
+                    <div className="flex text-muted-foreground">
                         {siteSocialMedia.map((social) => (
                             <Button
                                 key={social.name}
@@ -35,7 +35,7 @@ export function Footer() {
                                     href={social.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                    className="hover:text-foreground transition-colors"
                                 >
                                     <social.icon className="h-5 w-5" />
                                     <span>
