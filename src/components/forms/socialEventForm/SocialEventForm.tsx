@@ -163,7 +163,7 @@ export const SocialEventForm = ({
 
         try {
             let photo = socialEvent.photo;
-            
+
             if (imageFile) {
                 photo = await uploadImage(imageFile);
             }
@@ -177,7 +177,6 @@ export const SocialEventForm = ({
                     return null;
                 } else if (data) {
                     toast.success(message);
-                    if (mode === 'create') router.replace(`/events/${data.id}`);
                     return data;
                 }
             };
