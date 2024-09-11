@@ -59,6 +59,7 @@ model User {
 
   admitted DateTime?
   banned   DateTime?
+  banReason String?
 
   createdEvents  SocialEvent[] @relation("EventOwner")
   attendedEvents Attendee[]    @relation("UserAttendees")

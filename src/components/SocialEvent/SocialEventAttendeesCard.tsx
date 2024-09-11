@@ -37,7 +37,7 @@ export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
                                     <h3 className='text-lg font-semibold w-full'>Otros asistentes ({event.attendees.length})</h3>
                                     <div className="flex flex-wrap justify-around gap-3 w-full">
                                         {event.attendees?.map((attendee) => (
-                                            <UserHoverCard user={attendee.user} key={attendee.id} />
+                                            <UserHoverCard user={attendee.user} key={`attendee:${attendee.id}-${attendee.user.id}`} />
                                         ))}
                                     </div>
                                 </>

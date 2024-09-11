@@ -23,6 +23,8 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
                         <Image
                             src={event.photo}
                             alt={`Imagen de evento: ${event.title}`}
+                            width={300}
+                            height={200}
                             className="w-full rounded-lg object-cover aspect-square"
                         />
                     </div>
