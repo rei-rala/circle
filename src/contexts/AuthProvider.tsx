@@ -111,17 +111,18 @@ export const useUserInAdmission = () => {
 };
 
 export const useUserBannedOrInAdmission = () => {
-    const { isUserBanned, isUserAdmitted } = useAuth();
+    const { user, isUserBanned, isUserAdmitted } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
+        if (!user) return;
         if (isUserBanned && !bannedUserAllowedRoutes.includes(pathname)) {
             router.push('/profile/banned');
         } else if (!isUserAdmitted && !pendingAdmissionRoutes.includes(pathname)) {
             router.push('/profile/admission');
         }
-    }, [isUserBanned, isUserAdmitted, pathname, router]);
+    }, [user, isUserBanned, isUserAdmitted, pathname, router]);
 
     return isUserBanned || !isUserAdmitted;
 };
