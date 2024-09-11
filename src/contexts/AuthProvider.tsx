@@ -104,7 +104,11 @@ export const useUserInAdmission = () => {
     const pathname = usePathname();
 
     useEffect(() => {
-        if (!isUserAdmitted && !pendingAdmissionRoutes.includes(pathname)) {
+        if (!isUserAdmitted && 
+            !pendingAdmissionRoutes.includes(pathname) && 
+            (pathname === '/events' || 
+             (pathname.startsWith('/events/') && 
+              (pathname.endsWith('/edit') || pathname.includes('/edit/'))))) {
             router.push('/profile/admission');
         }
     }, [isUserAdmitted, pathname, router]);
