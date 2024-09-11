@@ -162,7 +162,8 @@ export const SocialEventForm = ({
         setLoading(true);
 
         try {
-            let photo = "";
+            let photo = socialEvent.photo;
+            
             if (imageFile) {
                 photo = await uploadImage(imageFile);
             }
