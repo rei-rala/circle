@@ -9,6 +9,7 @@ import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 
 
 import "./globals.css";
+import { BRAND } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,10 @@ export const metadata: Metadata = {
   ],
   applicationName: "The Circle BA",
   creator: "The Circle BA Team",
+  authors: [
+    { name: "The Circle BA Team" },
+    { name: "Ramon Irala", url: "https://github.com/rei-rala" }
+  ],
   icons: [
     { rel: "icon", url: "/icon.png" },
     { rel: "apple-touch-icon", url: "/icon.png" },
@@ -58,10 +63,10 @@ export const metadata: Metadata = {
     { rel: "android-chrome-512x512", url: "/android-chrome-512x512.png" },
   ],
   openGraph: {
-    title: "⭕ The Circle",
-    description: "⭕THE CIRCLE 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
+    title: BRAND,
+    description: BRAND + " es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
     url: "https://thecircle.com.ar",
-    siteName: "The Circle",
+    siteName: BRAND,
     images: [
       {
         url: "/icon.png",
@@ -74,8 +79,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "⭕ The Circle",
-    description: "⭕THE CIRCLE 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
+    title: BRAND,
+    description: BRAND + " es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
     images: ["/icon.png"],
   },
   manifest: "/manifest.json",

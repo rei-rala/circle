@@ -1,12 +1,13 @@
+import { BRAND } from "@/constants";
 
 export function AboutSection() {
     return (
         <section id="about" className="grid gap-4 pt-20 -mt-16">
-            <div className="text-2xl font-semibold">Sobre THE CIRCLE</div>
+            <div className="text-2xl font-semibold">Sobre {BRAND}</div>
             <div className="grid grid-cols-1 gap-4 text-[#cccccc]">
                 <div>
                     <p className="text-lg">
-                        ⭕THE CIRCLE 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
+                        {BRAND} es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
                         disfrutar de la ciudad. Únete y participa en experiencias únicas.
                     </p>
                     <p className="mt-4">

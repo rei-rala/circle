@@ -3,6 +3,7 @@ import Loading from '@/components/Loading';
 import { EventDetailsPageComponent } from '../EventsDetailsPage';
 import { Metadata, ResolvingMetadata } from 'next';
 import { prisma } from "@/prisma"
+import { BRAND } from '@/constants';
 
 type Props = {
     params: { id: string }
@@ -42,11 +43,11 @@ export async function generateMetadata(
                     alt: event.title,
                 }
             ] : [],
-            siteName: 'The Circle',
+            siteName: BRAND,
             locale: 'es_AR',
             publishedTime: event.createdAt.toISOString(),
             modifiedTime: event.updatedAt.toISOString(),
-            authors: ['The Circle'],
+            authors: [BRAND],
             section: 'Events',
             tags: ['social', 'event', 'Buenos Aires'],
         },

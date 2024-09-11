@@ -1,10 +1,21 @@
+import { Libraries } from "@react-google-maps/api";
 import { User } from "next-auth";
+
+export const GOOGLE_MAPS_LIBRARIES: Libraries = ["places", "geometry"]
+
+export const API_BASE_URL = process.env.NEXTAUTH_URL as string;
+export const BRAND = process.env.BRAND as string;
+export const NEXTAUTH_URL = process.env.NEXTAUTH_URL as string;
+export const NODE_ENV = process.env.NODE_ENV as string;
+export const GOOGLE_ANALYTICS_ID = process.env.GOOGLE_ANALYTICS_ID as string
+export const NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
+
 
 export const dummyUser: User = {
     id: "dummy",
-    name: "Miembro de THE CIRCLE",
+    name: "Miembro de " + BRAND,
     email: "",
-    alias: "Miembro de THE CIRCLE",
+    alias: "Miembro de " + BRAND,
     createdAt: new Date(),
     role: "DUMMY",
     bio: "Para ver esta info, debes iniciar sesión",

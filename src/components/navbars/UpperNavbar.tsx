@@ -7,8 +7,7 @@ import { SocialEventsSearch } from "./features/upper/SocialEventsSearch";
 import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
 import { BurgerMenu } from "./features/upper/BurgerMenu";
 import { useEffect, useState } from "react";
-
-const BRAND = "The Circle ⭕";
+import { BRAND } from "@/constants";
 
 export function UpperNavbar({ className }: { className?: ClassValue }) {
     const [isVisible, setIsVisible] = useState(true);

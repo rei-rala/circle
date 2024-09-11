@@ -1,6 +1,6 @@
-const API_BASE_URL = process.env.NODE_ENV === "production" ? "https://circle-red.vercel.app" : "http://localhost:3000";
-const API_URL = `${API_BASE_URL}/api/events`;
+import { API_BASE_URL } from "@/constants";
 
+const API_URL = `${API_BASE_URL}/api/events`;
 
 export async function createSocialEvent(event: SocialEventDTO): Promise<ApiResponse<SocialEvent>> {
     try {

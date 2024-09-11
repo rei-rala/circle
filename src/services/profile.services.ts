@@ -1,11 +1,10 @@
+import { API_BASE_URL } from "@/constants";
 import { User } from "next-auth";
 
-const API_BASE_URL = process.env.NODE_ENV === "production" ? "https://circle-red.vercel.app" : "http://localhost:3000";
-const API_URL = `${API_BASE_URL}/api/profile`;
-
+const PROFILE_API_URL = `${API_BASE_URL}/api/profile`;
 
 export async function updateUserProfile(user: UserProfileDTO): Promise<ApiResponse<User>> {
-    const response = await fetch(API_URL, {
+    const response = await fetch(PROFILE_API_URL, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
