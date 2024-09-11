@@ -6,6 +6,7 @@ import { PopoverManagerProvider } from "@/contexts/PopoverManagerProvider"
 import { Libraries, LoadScript } from "@react-google-maps/api"
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 const GOOGLE_MAPS_LIBRARIES: Libraries = ["places", "geometry"]
@@ -18,7 +19,9 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
             socialEventsGroups: false,
             userSettings: false,
             burgerMenu: false,
+            instagramCarousel: false,
         }}>
+            <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID as string} />
             <SessionProvider>
                 <PopoverManagerProvider>
                     <LoadScript
