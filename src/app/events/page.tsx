@@ -11,20 +11,28 @@ export default async function EventsPageComponent() {
     return redirect("/api/auth/signin?callbackUrl=/events");
   }
 
-  const socialEvents = await prisma.socialEvent.findMany({
-    where: {
-      date: {
-        gte: new Date(),
+  if (!session.user.admitted) {
+    return redirect("/home");
+  }
+
+  let socialEvents: SocialEvent[] = [];
+
+  if (session.user.admitted && !session.user.banned) {
+    socialEvents = await prisma.socialEvent.findMany({
+      where: {
+        date: {
+          gte: new Date(),
+        },
+        public: session?.user ? undefined : true,
       },
-      public: session?.user ? undefined : true,
-    },
-    orderBy: {
-      date: "asc"
-    },
-    include: {
-      owner: true,
-    }
-  }) as unknown as SocialEvent[];
+      orderBy: {
+        date: "asc"
+      },
+      include: {
+        owner: true,
+      }
+    }) as unknown as SocialEvent[];
+  }
 
   return (
     <div className="flex flex-col gap-4">

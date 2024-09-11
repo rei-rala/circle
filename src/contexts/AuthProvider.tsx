@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from 'next-auth';
 import { usePathname, useRouter } from 'next/navigation';
 
-const publicRoutes = ["/", "home", "/login", "/logout"]
+const publicRoutes = ["", "/", "/home", "/login", "/logout"]
 const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
 const bannedUserAllowedRoutes = publicRoutes.concat(["/profile/banned", "/profile"])
 
