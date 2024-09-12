@@ -22,15 +22,20 @@ export const dummyUser: User = {
     location: "",
     phone: "",
     socialMedia: [],
-    admitted: true,
-    banned: true,
     hideEmail: true,
     hideImage: true,
-    hidePhone: true
+    hidePhone: true,
+    admittedAt: new Date(),
+    bannedAt: new Date(),
+    banReason: "Dummy user",
+    admitted: true,
+    banned: false,
 }
 
 
 export const defaultUser: User = {
+    id: "",
+    name: "",
     email: "",
     role: "",
     alias: "",
@@ -43,5 +48,8 @@ export const defaultUser: User = {
     hideImage: false,
     hidePhone: false,
     admitted: false,
-    banned: false
+    banned: false,
+    admittedAt: null,
+    bannedAt: null,
+    banReason: null
 };

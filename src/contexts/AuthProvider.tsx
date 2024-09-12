@@ -2,9 +2,9 @@ import { useSession } from 'next-auth/react';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Session, User } from 'next-auth';
 
-const publicRoutes = ["", "/", "/home", "/login", "/logout"]
-const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
-const bannedUserAllowedRoutes = publicRoutes.concat(["/profile/banned", "/profile"])
+// const publicRoutes = ["", "/", "/home", "/login", "/logout"]
+// const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
+// const bannedUserAllowedRoutes = publicRoutes.concat(["/profile/banned", "/profile"])
 
 export const AuthContext = createContext<{
     user: User | null;
@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
 
     const isLoadingSession = status === 'loading';
-    const isUserBanned = session?.user.banned;
-    const isUserAdmitted = session?.user.admitted;
+    const isUserBanned = session?.user.banned || false;
+    const isUserAdmitted = session?.user.admitted || false;
 
     useEffect(() => {
         if (session?.user) {

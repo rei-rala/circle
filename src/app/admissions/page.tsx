@@ -5,7 +5,7 @@ import { User } from "next-auth"
 import { admitUser } from "./actions"
 import getServerSession from "@/lib/getServerSession"
 import { redirect } from "next/navigation"
-import { UserStatusAlert } from "@/components/UserAlert"
+import { UserStatusAlert } from "@/components/UserStatusAlert"
 
 export default async function AdmissionsPage() {
     const session = await getServerSession();
@@ -15,7 +15,7 @@ export default async function AdmissionsPage() {
     }
     const admitted = session.user?.admitted;
     const banned = session.user?.banned;
-    const invalidStatus = !(admitted) || banned;
+    const invalidStatus = !admitted || banned;
 
     if (session.user.role?.toUpperCase() !== "ADMIN") {
         redirect("/");

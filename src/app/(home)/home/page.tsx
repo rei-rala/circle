@@ -45,12 +45,14 @@ export default async function AlternativeHome() {
   if (!session?.user) redirect("/")
 
   const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
-  
+
   if (!(session.user)) {
     redirect("/");
   }
-  
+
   const events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
 
   return <Landing events={events} />
 }
+
+AlternativeHome.revalidate = 86400; // Cache for 1 day
