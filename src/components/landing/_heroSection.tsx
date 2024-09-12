@@ -25,7 +25,7 @@ export function HeroSection() {
             onMouseLeave={() => setIsHovered(false)}
         >
             <Image
-                priority={false}
+                priority={true}
                 fill
                 src="/icon.png"
                 alt={BRAND + " Icon"}
