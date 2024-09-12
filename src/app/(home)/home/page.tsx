@@ -1,11 +1,12 @@
 import getServerSession from "@/lib/getServerSession";
-import { Landing } from "../../components/landing/Landing";
 import { redirect } from "next/navigation";
 import { prisma } from "@/prisma";
 import { Metadata } from "next";
 
 
 import { BRAND } from "@/constants"
+import { Landing } from "@/components/landing/Landing";
+import { socialEventFetch } from "../socialEventFetch";
 
 export const metadata: Metadata = {
   openGraph: {
@@ -42,34 +43,14 @@ export const metadata: Metadata = {
 export default async function AlternativeHome() {
   const session = await getServerSession();
   if (!session?.user) redirect("/")
-  let events: SocialEvent[];
 
-  try {
-    if (!session?.user) {
-      throw new Error("User not logged in")
-    }
-    // find events that are not in the past and not deleted, if logged, show only public events
-    events = await prisma.socialEvent.findMany({
-      take: 5,
-      where: {
-        public: true,
-        date: {
-          gte: new Date()
-        },
-        deleted: false
-      },
-      orderBy: {
-        date: "asc",
-      },
-      include: {
-        owner: true
-      }
-    }) as unknown as SocialEvent[] || []
-  } catch (err) {
-    console.error("Error fetching events:", err)
-    events = [];
+  const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
+  
+  if (session?.user) {
+    redirect("/events");
   }
-
+  
+  const events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
 
   return <Landing events={events} />
 }

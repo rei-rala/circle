@@ -256,14 +256,25 @@ export const SocialEventForm = ({
 
             <div className="flex flex-col gap-2">
                 <Label htmlFor="photo">Imagen del evento</Label>
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    accept="image/*"
-                    onChange={handleImageChange}
+                <Button
+                    variant="outline"
+                    className="w-full"
                     disabled={disableForm}
-                />
+                    asChild
+                >
+                    <Label htmlFor="photo">
+                        <input
+                            type="file"
+                            id="photo"
+                            name="photo"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            disabled={disableForm}
+                            className="hidden"
+                        />
+                        Subir imagen
+                    </Label>
+                </Button>
                 {(imageFile || socialEvent.photo) && (
                     <div className="flex justify-center">
                         <img

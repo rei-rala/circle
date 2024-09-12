@@ -1,36 +1,21 @@
+import { Landing } from "@/components/landing/Landing";
 import getServerSession from "@/lib/getServerSession";
-import { Landing } from "../components/landing/Landing";
 import { redirect } from "next/navigation";
-import { prisma } from "@/prisma";
+import { socialEventFetch } from "./socialEventFetch";
 //import getTheCircleInstagramPosts from "@/services/instagram.services";
 
 export default async function Home() {
   const session = await getServerSession();
   let instagramPosts: any[] | undefined = undefined; // = await getTheCircleInstagramPosts();
-  let events: SocialEvent[] = [];
-
+  
+  const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
+  
   if (session?.user) {
     redirect("/events");
   }
-
-  try {
-    events = await prisma.socialEvent.findMany({
-      take: 5,
-      where: {
-        date: {
-          gt: new Date(),
-        },
-        public: true,
-        deleted: false,
-      },
-      orderBy: {
-        date: "asc",
-      },
-    }) as unknown as SocialEvent[];
-  } catch (err) {
-    console.error("Error fetching events:", err);
-    events = [];
-  }
+  
+  const events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
+  
 
   return <Landing events={events} instagramPosts={instagramPosts} />;
 }
