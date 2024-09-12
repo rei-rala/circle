@@ -9,13 +9,13 @@ import Image from "next/image";
 
 import placeholderHeroImage from "./placeholder-hero.png";
 import { useAuth } from "@/contexts/AuthProvider";
-
 export function HeroSection() {
     const { status } = useAuth();
 
     const { features: { instagramCarousel } } = useFeatureContext();
 
     const [isHovered, setIsHovered] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const isUnauthenticated = status === "unauthenticated"
 
@@ -24,6 +24,9 @@ export function HeroSection() {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
+            {!imageLoaded && (
+                <div className="absolute inset-0 bg-gray-300/10 animate-pulse aspect-square h-full" />
+            )}
             <Image
                 priority={true}
                 fill
@@ -31,9 +34,11 @@ export function HeroSection() {
                 alt={BRAND + " Icon"}
                 placeholder="blur"
                 blurDataURL={placeholderHeroImage.blurDataURL}
+                onLoad={() => setImageLoaded(true)}
                 className={cn(
                     "absolute inset-0 h-full w-full object-contain object-center transition-all duration-300 ease-in-out",
-                    isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75"
+                    isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75",
+                    !imageLoaded && "opacity-0"
                 )}
             />
             {/* 
