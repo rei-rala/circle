@@ -1,6 +1,7 @@
 import { Landing } from "@/components/landing/Landing";
 import { BRAND } from "@/constants";
 import getServerSession from "@/lib/getServerSession";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 //import getTheCircleInstagramPosts from "@/services/instagram.services";
 
