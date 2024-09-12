@@ -1,6 +1,7 @@
 import { AdminCard } from "@/components/AdminCard";
 import { ProfileForm } from "@/components/forms/profileForm/ProfileForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserStatusAlert } from "@/components/UserStatusAlert";
 import getServerSession from "@/lib/getServerSession";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -11,7 +12,7 @@ export default async function ProfilePage() {
 
     return (
         <>
-            <AdminCard />
+            <UserStatusAlert />
             <div className="flex items-center justify-between">
                 <div className="text-2xl font-semibold">Mi perfil</div>
             </div>

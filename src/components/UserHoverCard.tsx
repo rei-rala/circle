@@ -27,8 +27,8 @@ const InfoItem = ({ icon: Icon, content, href }: { icon: React.ElementType, cont
 )
 
 export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTriggerProps }: UserHoverCardProps) => {
-    const isAdmin = user.role?.toUpperCase() === "ADMIN"
-    const displayedUserText = isAdmin ? user.alias || "Administrador" : (user.alias || user.name || user.email)
+    const isAdmin = user?.role?.toUpperCase() === "ADMIN"
+    const displayedUserText = isAdmin ? user?.alias || "Administrador" : user?.alias || user?.name || user?.email || "Usuario"
 
     return (
         <HoverCard {...hoverCardProps}>

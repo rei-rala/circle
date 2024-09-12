@@ -17,25 +17,7 @@ import { LayoutCard } from '../LayoutCard';
 
 
 export const SocialEventCard = ({ event, session }: { event: SocialEvent, session: Session | null }) => {
-    const handleCopyClick = useCallback(() => {
-        if (!event.place?.formatted_address) {
-            toast.error("No hay dirección disponible para copiar");
-            return;
-        }
-
-        navigator.clipboard.writeText(event.place.formatted_address)
-            .then(() => {
-                toast.success("Dirección copiada al portapapeles");
-            })
-            .catch((error) => {
-                console.error("Error al copiar la dirección:", error);
-                toast.error("No se pudo copiar la dirección");
-            });
-    }, [event.place]);
-
-    const onLinkClick = useCallback((_e: React.MouseEvent<HTMLAnchorElement>) => {
-        toast.info("Abriendo enlace en una nueva pestaña")
-    }, [])
+    const isUserAdmittedAndNotBanned = session?.user?.admitted && !session?.user?.banned;
 
     const eventDate = useMemo(() => event.date && getFullDateLocale(event.date), [event.date]);
     const eventTime = useMemo(() => event.date && getHour(event.date), [event.date]);
@@ -53,6 +35,22 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
             ? `Mínimo de asistentes: ${attendeesCount}/${event.minAttendees} ${getEmoji(attendeesCount, event.minAttendees)}`
             : `Asistentes: ${attendeesCount} ${getEmoji(attendeesCount)}`;
     }, [attendeesCount, event.minAttendees]);
+
+    const handleCopyClick = useCallback(() => {
+        if (!event.place?.formatted_address) {
+            toast.error("No hay dirección disponible para copiar");
+            return;
+        }
+
+        navigator.clipboard.writeText(event.place.formatted_address)
+            .then(() => {
+                toast.success("Dirección copiada al portapapeles");
+            })
+            .catch((error) => {
+                console.error("Error al copiar la dirección:", error);
+                toast.error("No se pudo copiar la dirección");
+            });
+    }, [event.place]);
 
     return (
         <LayoutCard
@@ -117,7 +115,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                         </p>
                                         <Link
                                             href={event.place.url || "#"}
-                                            onClick={onLinkClick}
+                                            onClick={() => toast.info("Abriendo enlace en una nueva pestaña")}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="text-[#aaa] hover:text-white hover:underline"
@@ -153,6 +151,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                         {
                             session?.user &&
                             !isEventInPast &&
+                            isUserAdmittedAndNotBanned &&
                             event.place &&
                             <div className="flex items-center gap-2">
                                 <CustomGoogleMaps initialPlace={event.place} />

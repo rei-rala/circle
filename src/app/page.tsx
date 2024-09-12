@@ -9,13 +9,11 @@ export default async function Home() {
   let instagramPosts: any[] | undefined = undefined; // = await getTheCircleInstagramPosts();
   let events: SocialEvent[] = [];
 
-  if (session?.user) redirect("/events")
+  if (session?.user) {
+    redirect("/events");
+  }
 
   try {
-    if (session?.user) {
-      throw new Error("User logged in, redirecting to events")
-    }
-    // find events that are not in the past and not deleted, if logged, show only public events
     events = await prisma.socialEvent.findMany({
       take: 5,
       where: {
@@ -28,12 +26,13 @@ export default async function Home() {
       orderBy: {
         date: "asc",
       },
-    }) as unknown as SocialEvent[] || []
+    }) as unknown as SocialEvent[];
   } catch (err) {
-    console.log("Error fetching events")
-    console.log(err)
+    console.error("Error fetching events:", err);
     events = [];
   }
 
-  return <Landing events={events} instagramPosts={instagramPosts} />
+  return <Landing events={events} instagramPosts={instagramPosts} />;
 }
+
+Home.revalidate = 86400; // Cache for 1 day

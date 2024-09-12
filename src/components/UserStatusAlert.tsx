@@ -1,12 +1,18 @@
-import getServerSession from "@/lib/getServerSession";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { AdminCard } from "./AdminCard";
+import getServerSession from "@/lib/getServerSession";
 
 export const UserStatusAlert = async () => {
     const session = await getServerSession();
 
     const isUserBanned = session?.user?.banned;
     const isUserAdmitted = session?.user?.admitted;
+
+    console.log({
+        ban: isUserBanned,
+        admitted: isUserAdmitted,
+        adm: session?.user.role === "admin"
+    })
 
     if (isUserBanned || !isUserAdmitted) {
         return (
@@ -16,9 +22,11 @@ export const UserStatusAlert = async () => {
                 </CardHeader>
                 <CardContent>
                     <p className="text-[#aaa]">
-                        {isUserBanned
-                            ? "Tu cuenta ha sido bloqueada. Contacta al administrador para más información."
-                            : "Tu acceso a la plataforma es limitado. Espera la aprobación del administrador."}
+                        {
+                            isUserBanned
+                                ? "Tu cuenta ha sido bloqueada. Contacta al administrador para más información."
+                                : "Tu acceso a la plataforma es limitado. Espera la aprobación del administrador."
+                        }
                     </p>
                 </CardContent>
             </Card>

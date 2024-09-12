@@ -12,10 +12,13 @@ import { SocialEventBannedFrom } from '@/components/SocialEvent/SocialEventBanne
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
     const session = await getServerSession();
+
+    const isUserBannedOrNotAdmitted = session?.user?.banned || !session?.user?.admitted;
+
     let event: SocialEvent | null = null;
 
     try {
-        if (session?.user) {
+        if (session?.user && !isUserBannedOrNotAdmitted) {
             event = await prisma.socialEvent.findUnique({
                 where: {
                     id,
@@ -102,7 +105,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
 
 
     return (
-        <div className="flex flex-col gap-4 pt-2">
+        <div className="flex flex-col gap-4">
             <div className='flex flex-col gap-2 text-center font-bold'>
                 {isEventFinished && <span>Evento finalizado</span>}
                 {canEditEvent && (

@@ -1,5 +1,6 @@
 import { LayoutCard } from "@/components/LayoutCard";
 import { SocialEventCardSmall } from "@/components/SocialEvent/SocialEventCardSmall";
+import { dummyUser } from "@/constants";
 import getServerSession from "@/lib/getServerSession";
 import { prisma } from "@/prisma";
 import { User } from "next-auth";
@@ -59,15 +60,22 @@ const fetchEvents = async (isAdmitted: boolean): Promise<SocialEvent[]> => {
       }
     }) as unknown as SocialEvent[];
   } else {
-    return await prisma.socialEvent.findMany({
+    const events = await prisma.socialEvent.findMany({
       ...baseQuery,
       where: {
         ...baseQuery.where,
         public: true,
       },
     }) as SocialEvent[];
+    return events.map((event) => {
+      return {
+        ...event,
+        owner: dummyUser,
+      }
+    });
   }
 };
+
 
 export default async function EventsPageComponent() {
   const session = await getServerSession();
