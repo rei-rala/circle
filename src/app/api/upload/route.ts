@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { uploadImage } from '@/lib/uploadImage';
 import { auth } from '@/auth';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextApiResponse<{ url: string }>> {
     try {
         const session = await auth();
 

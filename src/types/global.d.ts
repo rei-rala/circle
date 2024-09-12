@@ -9,6 +9,19 @@ declare global {
         error?: string;
     };
 
+    type NextApiResponse<T> =
+        | NextResponse<{
+            error: string;
+        }>
+        | NextResponse<{
+            redirect: string;
+            message: string;
+        }>
+        | NextResponse<{
+            data: T;
+            message: string;
+        }>
+
     type MarkerPosition = {
         lat: number,
         lng: number

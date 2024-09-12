@@ -7,7 +7,7 @@ import { prisma } from '@/prisma';
 import { revalidatePath } from 'next/cache';
 import { isValid } from 'date-fns';
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextApiResponse<SocialEvent>> {
     try {
         const session = await auth();
 
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
 }
 
 
-export async function PUT(request: Request) {
+export async function PUT(request: Request): Promise<NextApiResponse<SocialEvent>> {
     try {
         const session = await auth();
 
@@ -162,7 +162,7 @@ export async function PUT(request: Request) {
     }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: Request): Promise<NextApiResponse<boolean>> {
     try {
         const session = await auth();
 

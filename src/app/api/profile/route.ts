@@ -3,10 +3,11 @@
 import { NextResponse } from 'next/server';
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
+import { User } from 'next-auth';
 
-export async function PUT(request: Request) {
+export async function PUT(request: Request): Promise<NextApiResponse<User>> {
     const session = await auth();
-    
+
     if (!session?.user.id) {
         return NextResponse.json({ error: "No se ha iniciado sesión" }, { status: 401 });
     }
@@ -37,9 +38,10 @@ export async function PUT(request: Request) {
         });
 
         if (updated) {
-            return NextResponse.json({ success: true, user: updated, message: 'Perfil actualizado correctamente' });
+            return NextResponse.json({ data: updated, message: 'Perfil actualizado correctamente' });
         }
-        return NextResponse.json({ success: false, message: 'No se ha podido actualizar el perfil' }, { status: 500 });
+        return NextResponse.json({ error: 'No se ha podido actualizar el perfil' }, { status: 500 });
+
 
     } catch (error) {
         console.error('Error updating user profile:', error);
