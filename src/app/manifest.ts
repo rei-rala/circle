@@ -30,7 +30,7 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: 'es-AR',
     dir: 'ltr',
     categories: ['social', 'events', 'community', 'networking', 'lifestyle'],
-    orientation: 'any',
+    orientation: 'portrait',
     scope: '/',
     prefer_related_applications: false,
     related_applications: [],

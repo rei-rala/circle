@@ -13,9 +13,9 @@ export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY a
 
 export const dummyUser: User = {
     id: "dummy",
-    name: "Miembro de " + BRAND,
+    name: "Miembro de" + BRAND,
     email: "",
-    alias: "Miembro de " + BRAND,
+    alias: "Miembro⭕",
     createdAt: new Date(),
     role: "DUMMY",
     bio: "Para ver esta info, debes iniciar sesión",
