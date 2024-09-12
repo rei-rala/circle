@@ -5,14 +5,12 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerSession();
-  let instagramPosts: any[] | undefined = undefined; // = await getTheCircleInstagramPosts();
-
 
   if (session?.user) {
     redirect("/events");
   }
 
-  return <Landing instagramPosts={instagramPosts} />;
+  return <Landing />;
 }
 
 Home.revalidate = 86400; // Cache for 1 day

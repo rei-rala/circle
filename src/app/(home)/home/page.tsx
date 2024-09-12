@@ -1,6 +1,5 @@
 import getServerSession from "@/lib/getServerSession";
 import { redirect } from "next/navigation";
-import { prisma } from "@/prisma";
 import { Metadata } from "next";
 
 
@@ -44,15 +43,7 @@ export default async function AlternativeHome() {
   const session = await getServerSession();
   if (!session?.user) redirect("/")
 
-  const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
-
-  if (!(session.user)) {
-    redirect("/");
-  }
-
-  const events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
-
-  return <Landing events={events} />
+  return <Landing />
 }
 
 AlternativeHome.revalidate = 86400; // Cache for 1 day

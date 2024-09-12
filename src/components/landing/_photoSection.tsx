@@ -14,17 +14,19 @@ const defaultPhotos = new Array(5).fill(null).map((_, i) => ({
     alt: `Foto ${i + 1} de la comunidad`
 }))
 
-export function PhotoSection({ photos = defaultPhotos }: { photos?: { src: string, alt: string }[] }) {
+export function PhotoSection() {
     const { features: { instagramCarousel } } = useFeatureContext();
+    let instagramPosts: { src: string, alt: string }[] = defaultPhotos; // = await getTheCircleInstagramPosts();
+
 
     const plugin = useRef(
         AutoPlay({ delay: 4000, stopOnInteraction: true })
     )
 
     if (!instagramCarousel) return null;
+    if (!instagramPosts) return null;
 
     return (
-
         <section id="photos" className="grid gap-4">
             <div className="text-2xl font-semibold">Fotos de la Comunidad</div>
             <Carousel
@@ -35,7 +37,7 @@ export function PhotoSection({ photos = defaultPhotos }: { photos?: { src: strin
             >
                 <CarouselContent>
                     {
-                        photos.map((photo, i) => (
+                        instagramPosts.map((photo, i) => (
                             <CarouselItem key={`community-photo:${i}`}>
                                 <img
                                     src={photo.src}
