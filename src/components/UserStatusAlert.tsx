@@ -8,12 +8,6 @@ export const UserStatusAlert = async () => {
     const isUserBanned = session?.user?.banned;
     const isUserAdmitted = session?.user?.admitted;
 
-    console.log({
-        ban: isUserBanned,
-        admitted: isUserAdmitted,
-        adm: session?.user.role === "admin"
-    })
-
     if (isUserBanned || !isUserAdmitted) {
         return (
             <Card className="text-center p-4 rounded-lg border-yellow-600">

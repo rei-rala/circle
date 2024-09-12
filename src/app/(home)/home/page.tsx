@@ -46,8 +46,8 @@ export default async function AlternativeHome() {
 
   const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
   
-  if (session?.user) {
-    redirect("/events");
+  if (!(session.user)) {
+    redirect("/");
   }
   
   const events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
