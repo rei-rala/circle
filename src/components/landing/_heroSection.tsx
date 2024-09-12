@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn, scrollToId } from "@/lib/utils";
 import { useFeatureContext } from "@/contexts/FeatureProvider";
-import { BRAND } from "@/constants";
+import { BRAND, SHORT_BRAND } from "@/constants";
 import Image from "next/image";
 
 import placeholderHeroImage from "./placeholder-hero.png";
@@ -55,7 +55,7 @@ export function HeroSection() {
             <div className={"relative z-10 h-full flex flex-col gap-4 justify-center items-center"}>
                 <h1 className="text-4xl font-bold mb-4" id="main-title">{BRAND}</h1>
                 <p className="text-lg max-w-[600px] text-center mb-8">
-                    {BRAND} es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
+                    {SHORT_BRAND} es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
                     disfrutar de la ciudad. Únete y participa en experiencias únicas.
                 </p>
                 <div className="grid w-[50%] gap-4 place-items-center">

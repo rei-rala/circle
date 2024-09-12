@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { SHORT_BRAND } from "@/constants";
 
 const siteSocialMedia = [
     {
@@ -41,7 +42,7 @@ export function Footer() {
 
                 <Separator />
                 <p className="text-white/50 text-sm md:mb-0">
-                    &copy; {new Date().getFullYear()} The Circle. All rights reserved.
+                    &copy; {new Date().getFullYear()} {SHORT_BRAND}. All rights reserved.
                 </p>
                 <Separator />
             </div>

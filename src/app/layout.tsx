@@ -15,8 +15,8 @@ import { Footer } from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "⭕ The Circle BA",
-  description: "⭕THE CIRCLE BA 🇦🇷 es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
+  title: BRAND,
+  description: BRAND + " es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
   keywords: [
     "The Circle BA",
     "The Circle Buenos Aires",

@@ -1,4 +1,4 @@
-import { BRAND } from "@/constants";
+import { BRAND, SHORT_BRAND } from "@/constants";
 
 export function AboutSection() {
     return (
@@ -7,7 +7,7 @@ export function AboutSection() {
             <div className="grid grid-cols-1 gap-4 text-[#cccccc]">
                 <div>
                     <p className="text-lg">
-                        {BRAND} es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
+                        {SHORT_BRAND} es una comunidad social en Buenos Aires que organiza eventos para conectar personas y
                         disfrutar de la ciudad. Únete y participa en experiencias únicas.
                     </p>
                     <p className="mt-4">
