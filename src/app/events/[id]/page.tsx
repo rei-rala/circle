@@ -17,7 +17,7 @@ export async function generateMetadata(
         where: {
             id: id,
             public: true,
-            deletedAt: null,
+            deleted: false
         }
     })
 

@@ -2,7 +2,7 @@ import getServerSession from "@/lib/getServerSession"
 import { ForceBack } from "@/components/ForceBack";
 
 
-export default async function BannedProfile() {
+export default async function BannedProfilePage() {
     const session = await getServerSession();
 
     if (!session || !(session.user.banned)) {

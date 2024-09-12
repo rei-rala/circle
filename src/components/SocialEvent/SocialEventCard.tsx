@@ -64,7 +64,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
             }
             content={
 
-                <div className="grid gap-4">
+                <div className="grid gap-4 overflow-x-hidden">
                     <div className="flex flex-col items-start gap-4">
                         {
                             event.photo &&
@@ -77,9 +77,9 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                                 style={{ aspectRatio: "300/200", objectFit: "cover" }}
                             />
                         }
-                        <div className="flex-1 text-sm text-muted-foreground mt-2">
+                        <p className="max-w-full text-sm text-muted-foreground mt-2 text-ellipsis break-all overflow-hidden">
                             {event.description}
-                        </div>
+                        </p>
                     </div>
 
                     <div className="flex flex-col gap-1 text-sm text-muted-foreground mt-2">
@@ -165,7 +165,7 @@ export const SocialEventCard = ({ event, session }: { event: SocialEvent, sessio
                 event.public &&
                 session?.user && (
                     <p className="italic mx-auto text-center text-sm">
-                        Este evento es público, aún para usuarios no registrados
+                        Este evento es público y puede ser visto por usuarios no registrados
                     </p>
                 )
             }

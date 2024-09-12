@@ -12,7 +12,7 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
         const session = await auth();
 
         const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
-        const isUserBanned = Boolean(session?.user.banned);
+        const isUserBanned = session?.user.banned;
 
         if (!isAdmin || isUserBanned) {
             return { error: "No tienes permisos para admitir usuarios." + (isUserBanned ? " Tu usuario está bloqueado." : "") }
@@ -24,11 +24,12 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
                 id: userId
             },
             data: {
-                admitted: new Date()
+                admitted: true,
+                admittedAt: new Date()
             }
         })
 
-        if (Boolean(user.admitted)) {
+        if (user.admitted) {
             revalidatePath("/admissions")
             return { message: "Usuario admitido correctamente" }
         } else {
@@ -50,7 +51,7 @@ export async function banUser(formData: FormData) {
         const session = await auth()
 
         const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
-        const isUserBanned = Boolean(session?.user.banned);
+        const isUserBanned = session?.user.banned;
 
         if (!isAdmin || isUserBanned) {
             return { error: "No tienes permisos para admitir usuarios." + (isUserBanned ? " Tu usuario está bloqueado." : "") }
@@ -61,12 +62,13 @@ export async function banUser(formData: FormData) {
                 id: userId
             },
             data: {
-                banned: new Date(),
-                banReason
+                banned: true,
+                banReason,
+                bannedAt: new Date()
             }
         })
 
-        if (Boolean(user.banned)) {
+        if (user.banned) {
             revalidatePath("/admissions")
             return { message: "Usuario baneado correctamente" }
         } else {

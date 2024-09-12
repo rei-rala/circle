@@ -29,7 +29,6 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
                             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
                             libraries={GOOGLE_MAPS_LIBRARIES}
                         >
-                            {children}
 
                             <Toaster
                                 toastOptions={{
@@ -37,6 +36,7 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
                                     duration: 3000,
                                 }}
                             />
+                            {children}
                         </LoadScript>
                     </PopoverManagerProvider>
                 </AuthProvider>

@@ -5,6 +5,7 @@ import { User } from "next-auth"
 import { admitUser } from "./actions"
 import getServerSession from "@/lib/getServerSession"
 import { redirect } from "next/navigation"
+import { UserStatusAlert } from "@/components/UserAlert"
 
 export default async function AdmissionsPage() {
     const session = await getServerSession();
@@ -12,66 +13,69 @@ export default async function AdmissionsPage() {
     if (!session) {
         redirect("/login?callbackUrl=/admissions");
     }
+    const admitted = session.user?.admitted;
+    const banned = session.user?.banned;
+    const invalidStatus = !(admitted) || banned;
 
     if (session.user.role?.toUpperCase() !== "ADMIN") {
         redirect("/");
+    }
+    if (banned) {
+        redirect("/profile/banned");
+    }
+    if (!admitted) {
+        redirect("/profile/pending");
     }
 
     let users: User[] = [];
 
     try {
-        if (!session) return null;
+        if (invalidStatus) {
+            throw new Error("No tienes permisos para acceder a esta página");
+        };
+
         users = await prisma.user.findMany({
             where: {
-                AND: [
-                    {
-                        admitted: {
-                            equals: null
-                        }
-                    },
-                    {
-                        banned: {
-                            equals: null
-                        }
-                    }
-                ]
+                admitted: false,
+                banned: false,
             },
-        }) as unknown as User[]
+        }) as User[]
 
-        // why?
-        users = users.filter((user) => user.admitted === null && user.banned === null);
     } catch (error) {
         console.log(error);
         users = [];
     }
 
     return (
-        <LayoutCard
-            title="Usuarios Pendientes de Admisión"
-            content={
-                <div className="flex flex-col gap-4">
-                    {
-                        users.length === 0
-                            ? (
-                                <div className="flex items-center justify-center">
-                                    <span className="text-sm text-gray-500">No hay usuarios pendientes de admisión</span>
-                                </div>
-                            )
-                            : users.map((user) => (
-                                !user.id
-                                    ? null
-                                    : (
-                                        <UserAdmissionCard
-                                            key={user.id}
-                                            user={user}
-                                            admitUserAction={admitUser}
-                                        />
-                                    )
-                            ))
-                    }
+        <>
+            <UserStatusAlert />
+            <LayoutCard
+                title="Usuarios Pendientes de Admisión"
+                content={
+                    <div className="flex flex-col gap-4">
+                        {
+                            users.length === 0
+                                ? (
+                                    <div className="flex items-center justify-center">
+                                        <span className="text-sm text-gray-500">No hay usuarios pendientes de admisión</span>
+                                    </div>
+                                )
+                                : users.map((user) => (
+                                    !user.id
+                                        ? null
+                                        : (
+                                            <UserAdmissionCard
+                                                key={user.id}
+                                                user={user}
+                                                admitUserAction={admitUser}
+                                            />
+                                        )
+                                ))
+                        }
 
-                </div>
-            }
-        />
+                    </div>
+                }
+            />
+        </>
     )
 }

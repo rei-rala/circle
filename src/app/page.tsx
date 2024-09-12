@@ -23,12 +23,12 @@ export default async function Home() {
           gt: new Date(),
         },
         public: true,
-        deletedAt: undefined,
+        deleted: false,
       },
       orderBy: {
         date: "asc",
       },
-    }) as SocialEvent[] || []
+    }) as unknown as SocialEvent[] || []
   } catch (err) {
     console.log("Error fetching events")
     console.log(err)

@@ -4,37 +4,37 @@ import getServerSession from "@/lib/getServerSession";
 import { prisma } from "@/prisma";
 import { redirect } from "next/navigation";
 
-export default async function CreateEventPage() {
-    const userSession = await getServerSession();
+export default async function NewEventPage() {
+    const session = await getServerSession();
+    const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
 
-    if (!userSession) redirect("/login?callbackUrl=/events/new");
-    const isUserAdmin = userSession.user.role?.toUpperCase() === "ADMIN";
+    if (!session) redirect("/login?callbackUrl=/events/new");
 
-    if (!isUserAdmin) {
-        // por que no me busca por deletedAt === null XD
-        const userUpcomingEvent = await prisma.socialEvent.findMany({
+    if (session.user.banned) {
+        redirect("/profile/banned");
+    } else if (!session.user.admitted) {
+        redirect("/profile/pending");
+    }
+
+    if (!isAdmin) {
+        const upcomingEvents = await prisma.socialEvent.findFirst({
             where: {
-                ownerId: userSession.user.id,
-                date: {
-                    gte: new Date()
-                },
+                ownerId: session.user.id,
+                date: { gte: new Date() },
+                deleted: false
             },
-            orderBy: {
-                date: 'asc'
-            }
+            orderBy: { date: 'asc' }
         });
 
-        const firstNotDeletedEvent = userUpcomingEvent.find(event => event.deletedAt === null);
-
-        if (firstNotDeletedEvent) {
-            redirect(`/events/${firstNotDeletedEvent.id}`);
+        if (upcomingEvents) {
+            redirect(`/events/${upcomingEvents.id}`);
         }
     }
 
     return (
         <LayoutCard
             title="Crear Evento"
-            content={<SocialEventForm user={userSession?.user} />}
+            content={<SocialEventForm adminOptions={isAdmin} />}
         />
     );
 }

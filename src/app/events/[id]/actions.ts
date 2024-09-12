@@ -26,7 +26,7 @@ export async function joinEvent(formData: FormData): Promise<ApiResponse<boolean
         const event = await prisma.socialEvent.findFirst({
             where: {
                 id: String(eventId),
-                deletedAt: undefined,
+                deleted: false,
                 date: {
                     gt: new Date(),
                 },

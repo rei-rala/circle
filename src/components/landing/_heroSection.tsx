@@ -5,12 +5,12 @@ import { useState } from "react";
 import { cn, scrollToId } from "@/lib/utils";
 import { useFeatureContext } from "@/contexts/FeatureProvider";
 import { BRAND } from "@/constants";
-import { useAuth, useUserBannedOrInAdmission } from "@/contexts/AuthProvider";
 import Image from "next/image";
 
-export function HeroSection() {
-    useUserBannedOrInAdmission();
+import placeholderHeroImage from "./placeholder-hero.png";
+import { useAuth } from "@/contexts/AuthProvider";
 
+export function HeroSection() {
     const { status } = useAuth();
 
     const { features: { instagramCarousel } } = useFeatureContext();
@@ -25,15 +25,19 @@ export function HeroSection() {
             onMouseLeave={() => setIsHovered(false)}
         >
             <Image
+                priority={false}
                 fill
                 src="/icon.png"
                 alt={BRAND + " Icon"}
+                placeholder="blur"
+                blurDataURL={placeholderHeroImage.blurDataURL}
                 className={cn(
                     "absolute inset-0 h-full w-full object-contain object-center transition-all duration-300 ease-in-out",
                     isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75"
                 )}
             />
-            {/* <picture>
+            {/* 
+            <picture>
                 <source srcSet="/icon.webp" type="image/webp" />
                 <source srcSet="/icon.png" type="image/png" />
                 <img
@@ -46,7 +50,8 @@ export function HeroSection() {
                         isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75"
                     )}
                 />
-            </picture> */}
+            </picture>
+            */}
             <div className={"relative z-10 h-full flex flex-col gap-4 justify-center items-center"}>
                 <h1 className="text-4xl font-bold mb-4" id="main-title">{BRAND}</h1>
                 <p className="text-lg max-w-[600px] text-center mb-8">

@@ -17,7 +17,10 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
     try {
         if (session?.user) {
             event = await prisma.socialEvent.findUnique({
-                where: { id },
+                where: {
+                    id,
+                    deleted: false
+                },
                 select: {
                     id: true,
                     public: true,
@@ -33,7 +36,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
                     publicAttendees: true,
                     createdAt: true,
                     updatedAt: true,
-                    deletedAt: true,
+                    deleted: true,
                     owner: {
                         select: {
                             id: true,
@@ -60,7 +63,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
             }) as unknown as SocialEvent;
         } else {
             event = await prisma.socialEvent.findUnique({
-                where: { id },
+                where: { id, deleted: false },
             }) as SocialEvent;
 
             event.owner = dummyUser;
@@ -87,13 +90,16 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
     const isEventFinished = isDateInPast(event.date);
     const isUserLoggedIn = !!session?.user;
     const isUserAdmin = session?.user?.role === "admin";
+
+    const bannedOrNotAdmitted = session?.user?.banned || !session?.user?.admitted;
     const isUserOwner = session?.user?.id === event.ownerId;
-    const canEditEvent = !isEventFinished && isUserLoggedIn && (isUserAdmin || isUserOwner);
+    const canEditEvent = !bannedOrNotAdmitted && !isEventFinished && isUserLoggedIn && (isUserAdmin || isUserOwner);
 
     const eventUserAttendee = event.attendees?.filter(attendee => attendee.user.id === session?.user?.id);
     const isUserAttending = eventUserAttendee?.length > 0;
     const attendeeBanCheck = eventUserAttendee?.find(attendee => attendee.user.id === session?.user?.id && attendee.bannedFromEvent);
-    const canAttendEvent = !isEventFinished && isUserLoggedIn && !isUserOwner && !attendeeBanCheck;
+    const canAttendEvent = !bannedOrNotAdmitted && !isEventFinished && isUserLoggedIn && !isUserOwner && !attendeeBanCheck;
+
 
     return (
         <div className="flex flex-col gap-4 pt-2">

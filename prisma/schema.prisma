@@ -32,7 +32,10 @@ model SocialEvent {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  
+  deleted Boolean @default(false)
   deletedAt DateTime?
+
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
@@ -57,9 +60,11 @@ model User {
   hideImage Boolean @default(false)
   hidePhone Boolean @default(false)
 
-  admitted DateTime?
-  banned   DateTime?
-  banReason String?
+  admitted   Boolean   @default(false)
+  admittedAt DateTime?
+  banned     Boolean   @default(false)
+  bannedAt   DateTime?
+  banReason  String?
 
   createdEvents  SocialEvent[] @relation("EventOwner")
   attendedEvents Attendee[]    @relation("UserAttendees")

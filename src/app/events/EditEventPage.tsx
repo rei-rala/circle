@@ -17,6 +17,7 @@ export async function EditEventPageComponent({
     const socialEvent = await prisma.socialEvent.findUnique({
         where: {
             id,
+            deleted: false,
         },
         include: {
             owner: {
@@ -69,7 +70,7 @@ export async function EditEventPageComponent({
                     <SocialEventForm
                         socialEvent={socialEvent}
                         mode={mode}
-                        user={session?.user}
+                        adminOptions={isAdmin}
                         disabled={isDateInPast(socialEvent?.date)}
                     />
                 }

@@ -15,7 +15,10 @@ declare module 'next-auth' {
         socialMedia: string[];
 
         admitted: boolean;
+        admittedAt: Date | null;
         banned: boolean;
+        bannedAt: Date | null;
+        banReason: string | null;
         
         hideEmail: boolean;
         hideImage: boolean;

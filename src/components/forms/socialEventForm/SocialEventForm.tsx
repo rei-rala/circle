@@ -40,13 +40,13 @@ const defaultSocialEvent: SocialEventDTO = {
 export const SocialEventForm = ({
     socialEvent: initialSocialEvent,
     mode = 'create',
-    user,
-    disabled = false
+    disabled = false,
+    adminOptions = false
 }: {
     socialEvent?: SocialEvent | null;
     mode?: EditorMode;
-    user?: User;
     disabled?: boolean;
+    adminOptions?: boolean;
 }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export const SocialEventForm = ({
         return compareChangesObject(socialEvent, initialSocialEvent);
     }, [socialEvent, initialSocialEvent]);
 
-    const disableForm = !user || mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit") || disabled
+    const disableForm = mode === 'read-only' || mode === 'delete' || isPastEvent && !(mode === "create" || mode === "edit") || disabled
 
     const handleFieldChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (disableForm) return;
@@ -291,7 +291,7 @@ export const SocialEventForm = ({
                 </>
             )}
 
-            {user?.role === "admin" && (
+            {adminOptions && (
                 <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
                     <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>
                     <div className="flex items-center gap-2 cursor-pointer">

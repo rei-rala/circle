@@ -1,7 +1,6 @@
 import { useSession } from 'next-auth/react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { Session, User } from 'next-auth';
-import { usePathname, useRouter } from 'next/navigation';
 
 const publicRoutes = ["", "/", "/home", "/login", "/logout"]
 const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
@@ -26,49 +25,32 @@ export const AuthContext = createContext<{
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: session, status, update } = useSession();
     const [user, setUser] = useState<User | null>(null);
-    const router = useRouter();
-    const pathname = usePathname();
 
     const isLoadingSession = status === 'loading';
-    const isUserBanned = !isLoadingSession && Boolean(session?.user.banned);
-    const isUserAdmitted = !isLoadingSession && Boolean(session?.user.admitted);
+    const isUserBanned = session?.user.banned;
+    const isUserAdmitted = session?.user.admitted;
 
     useEffect(() => {
-        if (isLoadingSession) return; // Still loading session, no redirect yet
+        if (session?.user) {
+            setUser(session.user);
+        } else {
+            setUser(null);
+        }
+    }, [session]);
 
-        const timeoutId = setTimeout(() => {
-            if (!session) {
-                if (!publicRoutes.includes(pathname)) {
-                    router.push('/login');
-                }
-            } else {
-                if (session.user.banned && !bannedUserAllowedRoutes.includes(pathname)) {
-                    router.push('/profile/banned');
-                } else if (!session.user.admitted) {
-                    if (!pendingAdmissionRoutes.includes(pathname)) {
-                        router.push('/profile/admission');
-                    }
-                } else {
-                    setUser(session.user);
-                }
-            }
-        }, 0);
-
-        return () => clearTimeout(timeoutId);
-    }, [session, isLoadingSession, pathname, router]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            update();
-        }, 5 * 60 * 1000); // 5 minutes
-        return () => clearInterval(interval);
-    }, [update]);
+    const updateUser = async () => {
+        const updatedSession = await update();
+        if (updatedSession?.user) {
+            setUser(updatedSession.user);
+        }
+        return updatedSession;
+    };
 
     return (
         <AuthContext.Provider value={{
             user,
             isLoadingSession,
-            update,
+            update: updateUser,
             isUserBanned,
             isUserAdmitted,
             status
@@ -84,51 +66,4 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
-};
-
-export const useUserBanned = () => {
-    const { isUserBanned } = useAuth();
-    const router = useRouter();
-    const pathname = usePathname();
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (isUserBanned && !bannedUserAllowedRoutes.includes(pathname)) {
-                router.push('/profile/banned');
-            }
-        }, 0);
-
-        return () => clearTimeout(timeoutId);
-    }, [isUserBanned, pathname, router]);
-
-    return isUserBanned;
-};
-
-export const useUserInAdmission = () => {
-    const { isUserAdmitted } = useAuth();
-    const router = useRouter();
-    const pathname = usePathname();
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (!isUserAdmitted && 
-                !pendingAdmissionRoutes.includes(pathname) && 
-                (pathname === '/events' || 
-                 (pathname.startsWith('/events/') && 
-                  (pathname.endsWith('/edit') || pathname.includes('/edit/'))))) {
-                router.push('/profile/admission');
-            }
-        }, 0);
-
-        return () => clearTimeout(timeoutId);
-    }, [isUserAdmitted, pathname, router]);
-
-    return !isUserAdmitted;
-};
-
-export const useUserBannedOrInAdmission = () => {
-    const isBanned = useUserBanned();
-    const isInAdmission = useUserInAdmission();
-
-    return isBanned || isInAdmission;
 };

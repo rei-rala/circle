@@ -17,7 +17,7 @@ export async function POST(request: Request): Promise<NextApiResponse<SocialEven
         }
 
         const isAdmin = session.user.role === "admin";
-        const isUserBanned = Boolean(session.user.banned);
+        const isUserBanned = session.user.banned;
 
         if (isUserBanned) {
             return NextResponse.json({ error: "No tienes permisos para crear eventos. Tu usuario está bloqueado." }, { status: 403 });
@@ -31,7 +31,8 @@ export async function POST(request: Request): Promise<NextApiResponse<SocialEven
                     status: "PUBLISHED",
                     date: {
                         gte: new Date()
-                    }
+                    },
+                    deleted: false
                 }
             });
 
@@ -101,7 +102,7 @@ export async function PUT(request: Request): Promise<NextApiResponse<SocialEvent
         }
 
         const isAdmin = session.user.role === "admin";
-        const isUserBanned = Boolean(session.user.banned);
+        const isUserBanned = session.user.banned;
 
         if (isUserBanned) {
             return NextResponse.json({ error: "No tienes permisos para crear eventos. Tu usuario está bloqueado." }, { status: 403 });
@@ -172,7 +173,7 @@ export async function DELETE(request: Request): Promise<NextApiResponse<boolean>
         }
 
         const isAdmin = session.user.role === "admin";
-        const isUserBanned = Boolean(session.user.banned);
+        const isUserBanned = session.user.banned;
 
         if (isUserBanned) {
             return NextResponse.json({ error: "No tienes permisos para eliminar eventos. Tu usuario está bloqueado." }, { status: 403 });
@@ -190,12 +191,12 @@ export async function DELETE(request: Request): Promise<NextApiResponse<boolean>
 
         if (isAdmin) {
             event = await prisma.socialEvent.findUnique({
-                where: { id },
+                where: { id, deleted: false },
                 include: { owner: true }
             }) as SocialEvent | null;
         } else {
             event = await prisma.socialEvent.findUnique({
-                where: { id, ownerId: session.user.id },
+                where: { id, ownerId: session.user.id, deleted: false },
                 include: { owner: true }
             }) as SocialEvent | null;
         }
@@ -212,9 +213,9 @@ export async function DELETE(request: Request): Promise<NextApiResponse<boolean>
         // Soft delete the event by updating its status and setting deletedAt
         const deleted = await prisma.socialEvent.update({
             where: { id },
-            data: { 
+            data: {
                 status: "CANCELLED",
-                deletedAt: new Date() 
+                deletedAt: new Date()
             }
         });
 

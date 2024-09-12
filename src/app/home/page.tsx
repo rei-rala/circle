@@ -54,9 +54,9 @@ export default async function AlternativeHome() {
       where: {
         public: true,
         date: {
-          gte: new Date() // Only fetch events that are not in the past
+          gte: new Date()
         },
-        deletedAt: undefined // Only fetch events that are not deleted
+        deleted: false
       },
       orderBy: {
         date: "asc",
