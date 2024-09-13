@@ -14,6 +14,8 @@ import { AuthProvider } from "@/contexts/AuthProvider"
 export const AppWithProviders = ({ children }: { children: ReactNode }) => {
     return (
         <FeatureProvider features={{
+            productionReady: false,
+
             socialEventsSearch: false,
             socialEventsCalendar: false,
             socialEventsGroups: false,

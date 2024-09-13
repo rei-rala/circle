@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
-import { createContext, useContext, useState, useEffect } from 'react';
-import { Session, User } from 'next-auth';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { User } from 'next-auth';
 
 // const publicRoutes = ["", "/", "/home", "/login", "/logout"]
 // const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
@@ -9,7 +9,7 @@ import { Session, User } from 'next-auth';
 export const AuthContext = createContext<{
     user: User | null;
     isLoadingSession: boolean;
-    update: () => Promise<Session | null>;
+    update: () => Promise<User | null>;
     isUserBanned: boolean;
     isUserAdmitted: boolean;
     status: 'loading' | 'authenticated' | 'unauthenticated';
@@ -24,7 +24,7 @@ export const AuthContext = createContext<{
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: session, status, update } = useSession();
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(session?.user ?? null);
 
     const isLoadingSession = status === 'loading';
     const isUserBanned = session?.user.banned || false;
@@ -38,13 +38,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [session]);
 
-    const updateUser = async () => {
-        const updatedSession = await update();
-        if (updatedSession?.user) {
-            setUser(updatedSession.user);
-        }
-        return updatedSession;
-    };
+    const updateUser = useCallback(async () => {
+        if (isLoadingSession) return null;
+
+
+        const user = await update()
+            .then(session => {
+                const user = session?.user ?? null;
+                setUser(user);
+                return user;
+            }).catch(() => {
+                return null;
+            });
+
+        return user;
+    }, [isLoadingSession, update]);
 
     return (
         <AuthContext.Provider value={{

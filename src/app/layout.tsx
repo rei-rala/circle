@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AppWithProviders } from "./providers";
-import { Suspense } from "react";
 
-import Loading from "@/components/Loading";
 import { UpperNavbar } from "@/components/navbars/UpperNavbar";
 import { LowerNavbar } from "@/components/navbars/LowerNavbar";
 

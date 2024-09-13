@@ -32,7 +32,7 @@ export function SocialEventCardSmall({ event, user }: { event: SocialEvent, user
             }
             <div className="flex-1">
                 <div className="font-medium">{event.title}</div>
-                <div className="flex flex-wrap items-center mb-2 text-sm">
+                <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
                     <UserHoverCard user={event.owner} />
                     {
                         isOwner && (

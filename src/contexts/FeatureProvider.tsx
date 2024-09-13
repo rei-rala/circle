@@ -1,6 +1,9 @@
+import { PRODUCTION_READY } from '@/constants';
 import React, { createContext, useContext, ReactNode } from 'react';
 
 type FeatureFlags = {
+    productionReady?: boolean;
+
     socialEventsSearch?: boolean;
     socialEventsCalendar?: boolean;
     socialEventsGroups?: boolean;
@@ -16,6 +19,8 @@ type FeatureContextType = {
 
 const defaultContextValue: FeatureContextType = {
     features: {
+        productionReady: PRODUCTION_READY ?? false,
+
         socialEventsSearch: false,
         socialEventsCalendar: false,
         socialEventsGroups: false,

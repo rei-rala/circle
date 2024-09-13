@@ -10,6 +10,7 @@ export const NEXTAUTH_URL = process.env.NEXTAUTH_URL as string;
 export const NODE_ENV = process.env.NODE_ENV as string;
 export const GOOGLE_ANALYTICS_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID as string
 export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
+export const PRODUCTION_READY = process.env.NEXT_PUBLIC_PRODUCTION_READY === "true"
 
 
 export const dummyUser: User = {

@@ -1,31 +1,44 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { AdminCard } from "./AdminCard";
 import getServerSession from "@/lib/getServerSession";
+import { cn } from "@/lib/utils";
 
 export const UserStatusAlert = async () => {
     const session = await getServerSession();
+    const user = session?.user;
 
-    const isUserBanned = session?.user?.banned;
-    const isUserAdmitted = session?.user?.admitted;
+    if (user && user.admitted && !user.banned) {
+        return null;
+    } 
 
-    if (isUserBanned || !isUserAdmitted) {
-        return (
-            <Card className="text-center p-4 rounded-lg border-yellow-600">
-                <CardHeader className="p-0">
-                    <CardTitle>{isUserBanned ? "Cuenta bloqueada" : "Cuenta pendiente de admision"}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-[#aaa]">
-                        {
-                            isUserBanned
-                                ? "Tu cuenta ha sido bloqueada. Contacta al administrador para más información."
-                                : "Tu acceso a la plataforma es limitado. Espera la aprobación del administrador."
-                        }
-                    </p>
-                </CardContent>
-            </Card>
-        )
+    let statusTitle = "";
+    let statusMessage = "";
+    let statusColor = "";
+
+    if (!user) {
+        statusTitle = "Sesión no iniciada";
+        statusMessage = "Inicia sesión para acceder a todas las funcionalidades.";
+    } else if (user.banned) {
+        statusTitle = "Cuenta bloqueada";
+        statusMessage = "Tu cuenta ha sido bloqueada. Contacta al administrador para más información.";
+        statusColor = "border-red-600";
+    } else if (!user.admitted) {
+        statusTitle = "Cuenta pendiente de admisión";
+        statusMessage = "Tu acceso a la plataforma es limitado. Espera la aprobación del administradors.";
+        statusColor = "border-yellow-600";
+    } else if (user.role === "admin") {
+       return <AdminCard user={user} />
     }
 
-    return <AdminCard user={session?.user} /> || null;
+    return (
+        <Card className={cn("text-center p-4 rounded-lg border-2", statusColor)}>
+            <CardHeader className="p-0">
+                <CardTitle>{statusTitle}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-[#aaa]">{statusMessage}</p>
+            </CardContent>
+        </Card>
+    );
+    
 }
