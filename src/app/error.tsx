@@ -1,6 +1,8 @@
 "use client"
 
 import { GoBackButton } from "@/components/GoBackButton"
+import Loading from "@/components/Loading"
+import { Suspense } from "react"
 
 export default function Error() {
     return (
@@ -12,7 +14,9 @@ export default function Error() {
                     <div className="text-sm text-[#cccccc] mb-4">
                         Por favor, contacta con el administrador si el error persiste.
                     </div>
-                    <GoBackButton className="mx-auto mt-4" />
+                    <Suspense fallback={<Loading />}>
+                        <GoBackButton className="mx-auto mt-4" />
+                    </Suspense>
                 </div>
             </div>
         </main>

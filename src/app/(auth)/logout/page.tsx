@@ -1,13 +1,15 @@
 "use client";
 
 import { GoBackButton } from "@/components/GoBackButton";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, LogOutIcon } from "lucide-react";
 
 import { signOut } from "next-auth/react";
+import { Suspense } from "react";
 
 export default function Logout({ searchParams: _searchParams }: { searchParams: { callbackUrl: string } }) {
-    const callbackUrl = "/" 
+    const callbackUrl = "/"
 
     const handleLogout = () => {
         signOut({ callbackUrl });
@@ -26,10 +28,12 @@ export default function Logout({ searchParams: _searchParams }: { searchParams: 
 
                     <div className="text-4xl font-bold mb-4">Cerrar Sesión en The Circle</div>
                     <div className="grid grid-cols-2 gap-4">
-                        <GoBackButton className="min-w-full flex justify-center h-10 px-4 py-2 ">
-                            <ChevronLeft className="w-5 h-5 mr-2" />
-                            Volver
-                        </GoBackButton>
+                        <Suspense fallback={<Loading />}>
+                            <GoBackButton className="min-w-full flex justify-center h-10 px-4 py-2 ">
+                                <ChevronLeft className="w-5 h-5 mr-2" />
+                                Volver
+                            </GoBackButton>
+                        </Suspense>
                         <Button
                             variant="outline"
                             className="w-full"
@@ -41,6 +45,6 @@ export default function Logout({ searchParams: _searchParams }: { searchParams: 
                     </div>
                 </div>
             </div>
-        </main>
+        </main >
     )
 }

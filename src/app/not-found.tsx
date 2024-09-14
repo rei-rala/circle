@@ -1,4 +1,6 @@
 import { GoBackButton } from "@/components/GoBackButton";
+import Loading from "@/components/Loading";
+import { Suspense } from "react";
 
 export default function NotFound() {
   return (
@@ -7,7 +9,9 @@ export default function NotFound() {
         <div className="bg-[#222222] p-8 rounded-lg text-center">
           <div className="text-4xl font-bold mb-4">404</div>
           <div className="text-lg mb-4">Página no encontrada</div>
-          <GoBackButton className="mx-auto mt-4" />
+          <Suspense fallback={<Loading />}>
+            <GoBackButton className="mx-auto mt-4" />
+          </Suspense>
         </div>
       </div>
     </main>
