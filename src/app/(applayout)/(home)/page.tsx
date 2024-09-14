@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   robots: "index, follow",
   alternates: {
-    canonical: "https://thecircleba.com.ar",
+    canonical: "https://thecircleba.com.ar/home",
     languages: {
-      "es-AR": "https://thecircleba.com.ar",
+      "es-AR": "https://thecircleba.com.ar/home",
     },
   },
 }

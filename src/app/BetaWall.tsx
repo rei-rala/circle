@@ -8,8 +8,9 @@ export const BetaWall = () => {
     const { user } = useAuth();
     const pathname = usePathname();
 
+    const validPathnames = ["/beta", "/home", "/"];
 
-    if (!PRODUCTION_READY && pathname !== "/beta" && (!user || !user.admitted)) {
+    if (!PRODUCTION_READY && !validPathnames.includes(pathname) && (!user || !user.admitted)) {
         redirect("/beta");
     }
 
