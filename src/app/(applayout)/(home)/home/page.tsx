@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     description: BRAND + " es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
     images: ["/icon.png"],
   },
-  manifest: "/manifest.json",
   robots: "index, follow",
   alternates: {
     canonical: "https://thecircleba.com.ar/home",
