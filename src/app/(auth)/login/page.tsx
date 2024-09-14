@@ -22,23 +22,14 @@ export default function Login() {
     ]
 
     return (
-        <main className="flex-1 overflow-auto bg-[#1a1a1a] p-4">
+        <main className="grid place-items-center min-h-svh min-w-svw overflow-auto p-4 bg-[url('/icon.png')] bg-no-repeat bg-center bg-contain">
             <LoginRedirect />
-            <div className="flex items-center justify-center h-full">
-                <div className="bg-[#222222] p-8 rounded-lg text-center">
-                    <picture>
-                        <source srcSet="/icon.webp" type="image/webp" />
-                        <source srcSet="/icon.png" type="image/png" />
-                        <source srcSet="/icon.jpg" type="image/jpg" />
-                        <img src="/icon.webp" alt="The Circle" className="mx-auto w-32 h-32 mb-4" />
-                    </picture>
-
-                    <div className="text-4xl font-bold mb-4">Iniciar Sesión en The Circle</div>
-                    <div className="grid gap-4">
-                        <Suspense fallback={<Loading />}>
-                            <LoginProviders providers={providers} />
-                        </Suspense>
-                    </div>
+            <div className="p-8 rounded-lg text-center bg-black bg-opacity-70">
+                <div className="text-4xl font-bold mb-4">Iniciar Sesión en The Circle</div>
+                <div className="grid gap-4">
+                    <Suspense fallback={<Loading />}>
+                        <LoginProviders providers={providers} />
+                    </Suspense>
                 </div>
             </div>
         </main>
