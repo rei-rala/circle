@@ -79,9 +79,9 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   robots: "index, follow",
   alternates: {
-    canonical: NEXTAUTH_URL,
+    canonical: "https://thecircleba.com.ar",
     languages: {
-      "es-AR": NEXTAUTH_URL,
+      "es-AR": "https://thecircleba.com.ar",
     },
   },
 };
@@ -91,8 +91,6 @@ export const viewport = {
   initialScale: 1,
   themeColor: "#000000",
 };
-
-
 
 export default function RootLayout({
   children,

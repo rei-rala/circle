@@ -2,14 +2,8 @@ import Link from "next/link";
 import { LayoutCard } from "../LayoutCard";
 import { SocialEventCardSmall } from "../SocialEvent/SocialEventCardSmall";
 import { dummyUser } from "@/constants";
-import getServerSession from "@/lib/getServerSession";
-import { socialEventFetch } from "@/services/socialEventsserver.services";
 
-export async function NextEvents() {
-    const session = await getServerSession();
-    const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
-    let events: SocialEvent[] = await socialEventFetch(!isUserBannedOrPendingAdmission);
-
+export async function NextEvents({ events }: { events: SocialEvent[] }) {
     if (events.find(e => !e.owner)) {
         events = events.map(event => ({
             ...event,

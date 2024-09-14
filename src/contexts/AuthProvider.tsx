@@ -2,8 +2,8 @@ import { useSession } from 'next-auth/react';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User } from 'next-auth';
 
-// const publicRoutes = ["", "/", "/home", "/login", "/logout"]
-// const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit", "/home"])
+// const publicRoutes = ["", "/", "/login", "/logout"]
+// const pendingAdmissionRoutes = publicRoutes.concat(["/profile/pending", "/profile/edit"])
 // const bannedUserAllowedRoutes = publicRoutes.concat(["/profile/banned", "/profile"])
 
 export const AuthContext = createContext<{

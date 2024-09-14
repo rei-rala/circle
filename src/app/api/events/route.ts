@@ -79,7 +79,6 @@ export async function POST(request: Request): Promise<NextApiResponse<SocialEven
 
             if (created.public) {
                 revalidatePath('/');
-                revalidatePath('/home');
             }
 
             return NextResponse.json({ data: created, message: "Evento creado exitosamente" }, { status: 201 });
@@ -151,7 +150,6 @@ export async function PUT(request: Request): Promise<NextApiResponse<SocialEvent
 
             if (updated.public) {
                 revalidatePath('/');
-                revalidatePath('/home');
             }
 
             return NextResponse.json({ data: updated, message: "Evento actualizado exitosamente" }, { status: 200 });
@@ -226,7 +224,6 @@ export async function DELETE(request: Request): Promise<NextApiResponse<boolean>
 
             if (deleted.public) {
                 revalidatePath('/');
-                revalidatePath('/home');
             }
 
             return NextResponse.json({ data: true, message: "Evento eliminado exitosamente" }, { status: 200 });

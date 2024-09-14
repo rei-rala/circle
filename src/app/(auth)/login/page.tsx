@@ -1,28 +1,32 @@
-"use client";
+import getServerSession from "@/lib/getServerSession";
 
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthProvider";
-import { ChromeIcon } from "lucide-react";
-
-import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { LoginProviders } from "./LoginProviders";
+import { ChromeIcon } from "lucide-react";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
 
-export default function Login({ searchParams }: { searchParams: { callbackUrl: string } }) {
-    const { user } = useAuth();
-    const callbackUrl = searchParams.callbackUrl || "/";
+export type LoginProvider = {
+    displayName: string;
+    Icon: React.ElementType;
+    name: string;
+}
 
-    const providers = [
-        {
-            displayName: "Google",
-            icon: ChromeIcon,
-            name: "google",
-        },
-    ]
 
-    if (user) {
+export default async function Login() {
+    const session = await getServerSession();
+
+    if (session) {
         redirect("/");
     }
 
+    const providers: LoginProvider[] = [
+        {
+            displayName: "Google",
+            Icon: ChromeIcon,
+            name: "google",
+        },
+    ]
 
     return (
         <main className="flex-1 overflow-auto bg-[#1a1a1a] p-4">
@@ -37,19 +41,9 @@ export default function Login({ searchParams }: { searchParams: { callbackUrl: s
 
                     <div className="text-4xl font-bold mb-4">Iniciar Sesión en The Circle</div>
                     <div className="grid gap-4">
-                        {
-                            providers.map((provider) => (
-                                <Button
-                                    key={provider.displayName}
-                                    variant="outline"
-                                    className="w-full"
-                                    onClick={() => signIn(provider.name, { callbackUrl })}
-                                >
-                                    <provider.icon className="w-5 h-5 mr-2" />
-                                    Iniciar sesión con {provider.displayName}
-                                </Button>
-                            ))
-                        }
+                        <Suspense fallback={<Loading />}>
+                            <LoginProviders providers={providers} />
+                        </Suspense>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ export default async function BetaPage() {
                     <>
                         <div className="text-4xl font-bold mb-4">¡Bienvenido!</div>
                         <p className="mb-4">Ya tienes acceso.</p>
-                        <Link href="/home">
+                        <Link href="/">
                             <Button>
                                 Comenzar
                             </Button>
