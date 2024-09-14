@@ -19,15 +19,25 @@ const staticFiles = [
     "/sitemap.xml",
     "/robots.txt",
 ];
-const validPathnames = ["/beta", "/"].concat(staticFiles);
+const betaAllowedPathnames = ["/beta", "/"];
 
 export const BetaWall = () => {
     const { user } = useAuth();
     const pathname = usePathname();
 
-
     if (PRODUCTION_READY) return null;
-    if (!validPathnames.includes(pathname) && (!user || !user.admitted)) {
+
+    // Check if the current pathname is a static file
+    const isStaticFile = staticFiles.some(file => pathname.startsWith(file));
+
+    // Allow access to static files and valid pathnames without restrictions
+    if (isStaticFile || betaAllowedPathnames.includes(pathname)) return null;
+
+    // Redirect unadmitted users or non-users to beta page
+    if (user?.admitted !== true) {
         redirect("/beta");
     }
+
+    // If user is admitted, allow access to all pages
+    return null;
 }
