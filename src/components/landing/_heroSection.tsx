@@ -27,27 +27,28 @@ export function HeroSection() {
             {!imageLoaded && (
                 <div className="absolute inset-0 bg-gray-300/10 animate-pulse aspect-square h-full" />
             )}
-            <Image
-                priority={true}
-                fill
-                src="/icon.png"
-                alt={BRAND + " Icon"}
-                placeholder="blur"
-                blurDataURL={placeholderHeroImage.blurDataURL}
-                onLoad={() => setImageLoaded(true)}
-                className={cn(
-                    "absolute inset-0 h-full w-full object-contain object-center transition-all duration-300 ease-in-out",
-                    isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75",
-                    !imageLoaded && "opacity-0"
-                )}
-            />
-            {/* 
+            <div className="absolute inset-0 h-[380px] w-[380px]">
+                <Image
+                    priority={true}
+                    fill
+                    src="/icon.png"
+                    alt={""} // decorative
+                    placeholder="blur"
+                    blurDataURL={placeholderHeroImage.blurDataURL}
+                    onLoad={() => setImageLoaded(true)}
+                    className={cn(
+                        "absolute inset-0 h-full w-full object-contain object-center transition-all duration-300 ease-in-out",
+                        isHovered ? "scale-105 opacity-50" : "scale-100 opacity-75",
+                        !imageLoaded && "opacity-0"
+                    )}
+                />
+                {/* 
             <picture>
                 <source srcSet="/icon.webp" type="image/webp" />
                 <source srcSet="/icon.png" type="image/png" />
                 <img
                     src="/icon.avif"
-                    alt={BRAND + " Icon"}
+                    alt={""}
                     // si esto no mejora el performance, byebye <img /> hola <Image />
                     loading="lazy"
                     className={cn(
@@ -57,6 +58,8 @@ export function HeroSection() {
                 />
             </picture>
             */}
+            </div>
+
             <div className={"relative z-10 h-full flex flex-col gap-4 justify-center items-center"}>
                 <h1 className="text-4xl font-bold mb-4" id="main-title">{BRAND}</h1>
                 <p className="text-lg max-w-[600px] text-center mb-8">

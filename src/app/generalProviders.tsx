@@ -22,7 +22,6 @@ export const GeneralProviders = ({ children }: { children: ReactNode }) => {
             burgerMenu: false,
             instagramCarousel: false,
         }}>
-            <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
             <SessionProvider>
                 <AuthProvider>
                     <PopoverManagerProvider>
@@ -37,6 +36,7 @@ export const GeneralProviders = ({ children }: { children: ReactNode }) => {
                 </AuthProvider>
             </SessionProvider>
 
+            <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
         </FeatureProvider >
     )
 }
