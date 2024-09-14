@@ -19,7 +19,7 @@ const staticFiles = [
     "/sitemap.xml",
     "/robots.txt",
 ];
-const validPathnames = ["/beta", "/home", "/"].concat(staticFiles);
+const validPathnames = ["/beta", "/"].concat(staticFiles);
 
 export const BetaWall = () => {
     const { user } = useAuth();
