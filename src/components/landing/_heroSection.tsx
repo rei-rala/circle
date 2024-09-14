@@ -21,10 +21,17 @@ export function HeroSection() {
         <section className="w-full h-[60vh] relative" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
             <div className="absolute inset-0 flex items-center justify-center">
                 <ImageWithLoader
-                    className={cn(isHovering ? "scale-110" : "scale-100")}
+                    className={cn(
+                        "inset-0 w-[300px] h-[300px]",
+                    )}
+                    containerClassName={cn(
+                        "transition-all duration-700 ease-in-out",
+                        isHovering ? "scale-110" : "scale-100"
+                    )}
                     priority={true}
                     src="/icon.png"
                     alt=""
+                    fill
                     width={380}
                     height={380}
                     placeholder="blur"

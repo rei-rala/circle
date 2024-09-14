@@ -8,6 +8,7 @@ interface ImageWithLoaderProps extends Omit<ImageProps, 'onLoad'> {
     placeholderColor?: string;
     placeholderProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     hoverEffect?: boolean;
+    containerClassName?: string;
 }
 
 export function ImageWithLoader({
@@ -15,6 +16,7 @@ export function ImageWithLoader({
     className,
     placeholderProps,
     alt,
+    containerClassName,
     ...props
 }: ImageWithLoaderProps) {
     const [imageLoaded, setImageLoaded] = useState(false);
@@ -26,27 +28,36 @@ export function ImageWithLoader({
         }
     }, [imageLoaded]);
 
+    const isFill = 'fill' in props && props.fill === true;
+
+    const containerClasses = cn(
+        "relative",
+        className,
+        containerClassName
+    );
+
+    const placeholderClasses = cn(
+        "animate-pulse absolute inset-0",
+        placeholderColor,
+        className,
+        isFill ? "w-full h-full" : "",
+        placeholderProps?.className
+    );
+
     return (
-        <div
-            className="relative"
-        >
+        <div className={containerClasses}>
             {!imageLoaded && (
-                <div className={cn(
-                    "animate-pulse absolute inset-0",
-                    placeholderColor,
-                    className,
-                    props.width && `w-[${props.width}px]`,
-                    props.height && `h-[${props.height}px]`,
-                    placeholderProps?.className
-                )} />
+                <div className={placeholderClasses} />
             )}
             <Image
                 {...props}
+                width={props.fill ? undefined : props.width}
+                height={props.fill ? undefined : props.height}
                 alt={alt}
                 onLoad={() => setImageLoaded(true)}
                 className={cn(
-                    "transition-all duration-700 ease-in-out",
-                    showImage ? "opacity-75" : "opacity-0",
+                    "transition-opacity duration-700 ease-in-out",
+                    showImage ? "opacity-100" : "opacity-0",
                     className
                 )}
             />
