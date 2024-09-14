@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
+import { Session, User } from "next-auth";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -103,4 +104,20 @@ export function fileToBase64(file: File): Promise<string> {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = error => reject(error);
   });
+}
+
+export function hasElevatedRole(curr?: User | Session | null) {
+  let role = "";
+
+  if (!curr) return false;
+
+  if ("role" in curr) {
+    role = curr.role || "";
+  } else if ("user" in curr) {
+    role = curr.user.role || "";
+  }
+
+  role = role?.toUpperCase();
+
+  return role === "ADMIN" || role === "MASTER";
 }

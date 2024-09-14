@@ -2,7 +2,7 @@ import { SocialEventForm } from "@/components/forms/socialEventForm/SocialEventF
 import { LayoutCard } from "@/components/LayoutCard";
 import { isDateInPast } from "@/lib/date-fns";
 import getServerSession from "@/lib/getServerSession";
-import { cn } from "@/lib/utils";
+import { cn, hasElevatedRole } from "@/lib/utils";
 import { prisma } from "@/prisma";
 import { notFound, redirect } from "next/navigation";
 
@@ -31,7 +31,7 @@ export async function EditEventPageComponent({
         }
     }) as SocialEvent | null
 
-    const isAdmin = session?.user.role?.toUpperCase() === "ADMIN";
+    const isAdmin = hasElevatedRole(session);
     const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
     const isOwner = socialEvent?.ownerId === session?.user.id;
 

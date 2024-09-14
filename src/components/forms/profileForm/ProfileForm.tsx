@@ -24,7 +24,7 @@ import {
 import { User } from "next-auth";
 import Image from "next/image";
 import { toast } from "sonner";
-import { compareChangesObject } from "@/lib/utils";
+import { compareChangesObject, hasElevatedRole } from "@/lib/utils";
 import { updateUserProfile } from "@/services/profile.services";
 import { defaultUser } from "@/constants";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -302,7 +302,7 @@ export const ProfileForm = () => {
             </div>
 
             {
-                user?.role === "admin" &&
+                hasElevatedRole(user) &&
                 (
                     <div className="flex flex-col gap-4 border-red-600 border-2 p-2 rounded-lg">
                         <h2 className="text-red-600 text-lg text-center font-semibold">Opciones de Administrador</h2>

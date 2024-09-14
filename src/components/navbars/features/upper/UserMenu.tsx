@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
-import { cn, getEmailUserName } from "@/lib/utils"
+import { cn, getEmailUserName, hasElevatedRole } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { CustomPopover } from "@/components/CustomPopover"
 import { UserAvatar } from "@/components/UserAvatar"
@@ -30,7 +30,7 @@ export const UserMenu = ({ className }: { className?: string }) => {
                             user={user}
                             className={cn(
                                 "border-2 border-solid cursor-pointer",
-                                user?.role === "admin"
+                                hasElevatedRole(user)
                                     ? "border-red-700 hover:border-red-400"
                                     : "border-slate-400 hover:border-white"
                             )}

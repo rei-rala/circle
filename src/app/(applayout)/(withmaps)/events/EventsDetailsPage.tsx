@@ -8,6 +8,7 @@ import { SocialEventAttendeesCard } from '@/components/SocialEvent/SocialEventAt
 import { dummyUser } from '@/constants';
 import { SocialEventJoin } from '@/components/SocialEvent/SocialEventJoin';
 import { SocialEventBannedFrom } from '@/components/SocialEvent/SocialEventBannedFrom';
+import { hasElevatedRole } from '@/lib/utils';
 
 
 export async function EventDetailsPageComponent({ id }: { id: string }) {
@@ -92,7 +93,7 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
 
     const isEventFinished = isDateInPast(event.date);
     const isUserLoggedIn = !!session?.user;
-    const isUserAdmin = session?.user?.role === "admin";
+    const isUserAdmin = hasElevatedRole(session?.user);
 
     const bannedOrNotAdmitted = session?.user?.banned || !session?.user?.admitted;
     const isUserOwner = session?.user?.id === event.ownerId;

@@ -2,14 +2,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, hasElevatedRole } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { User } from "next-auth";
 
 
 export const AdminCard = ({ user }: { user?: User }) => {
-    const isUserAdmin = user?.role?.toLowerCase() === "admin";
+    const isUserAdmin = hasElevatedRole(user);
 
     const [hide, setHide] = useState(false);
 

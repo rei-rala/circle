@@ -4,7 +4,7 @@ import { HoverCardProps, HoverCardTrigger, HoverCardTriggerProps } from "@radix-
 import { HoverCard, HoverCardContent } from "./ui/hover-card"
 import { User } from "next-auth"
 import { LocateIcon, MailIcon, MessageCircleCodeIcon, PhoneIcon, ScanFaceIcon } from "lucide-react"
-import { getUrlDomain, truncateString } from "@/lib/utils"
+import { getUrlDomain, hasElevatedRole, truncateString } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { UserAvatar } from "./UserAvatar"
 
@@ -27,7 +27,7 @@ const InfoItem = ({ icon: Icon, content, href }: { icon: React.ElementType, cont
 )
 
 export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTriggerProps }: UserHoverCardProps) => {
-    const isAdmin = user?.role?.toUpperCase() === "ADMIN"
+    const isAdmin = hasElevatedRole(user)
     const displayedUserText = isAdmin ? user?.alias || "Administrador" : user?.alias || user?.name || user?.email || "Usuario"
 
     return (

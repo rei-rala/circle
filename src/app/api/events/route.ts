@@ -6,6 +6,7 @@ import { isDateInPast } from '@/lib/date-fns';
 import { prisma } from '@/prisma';
 import { revalidatePath } from 'next/cache';
 import { isValid } from 'date-fns';
+import { hasElevatedRole } from '@/lib/utils';
 
 export async function POST(request: Request): Promise<NextApiResponse<SocialEvent>> {
     try {
@@ -16,7 +17,7 @@ export async function POST(request: Request): Promise<NextApiResponse<SocialEven
             return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
-        const isAdmin = session.user.role === "admin";
+        const isAdmin = hasElevatedRole(session);
         const isUserBanned = session.user.banned;
 
         if (isUserBanned) {
@@ -101,7 +102,7 @@ export async function PUT(request: Request): Promise<NextApiResponse<SocialEvent
             return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
-        const isAdmin = session.user.role === "admin";
+        const isAdmin = hasElevatedRole(session);
         const isUserBanned = session.user.banned;
 
         if (isUserBanned) {
@@ -172,7 +173,7 @@ export async function DELETE(request: Request): Promise<NextApiResponse<boolean>
             return NextResponse.json({ error: "No se encontró sesión de usuario" }, { status: 401 });
         }
 
-        const isAdmin = session.user.role === "admin";
+        const isAdmin = hasElevatedRole(session);
         const isUserBanned = session.user.banned;
 
         if (isUserBanned) {

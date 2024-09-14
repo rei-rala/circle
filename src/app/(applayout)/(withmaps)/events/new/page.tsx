@@ -4,6 +4,7 @@ import getServerSession from "@/lib/getServerSession";
 import { prisma } from "@/prisma";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { hasElevatedRole } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Crear Nuevo Evento",
@@ -20,7 +21,7 @@ export default async function NewEventPage() {
     }
 
     const { user } = session;
-    const isAdmin = user.role?.toUpperCase() === "ADMIN";
+    const isAdmin = hasElevatedRole(session);
 
     // Check user status and redirect if necessary
     if (user.banned) {

@@ -35,7 +35,7 @@ export const BetaWall = () => {
 
     // Redirect unadmitted users or non-users to beta page
     if (user?.admitted !== true) {
-        redirect("/beta");
+        //redirect("/beta");
     }
 
     // If user is admitted, allow access to all pages

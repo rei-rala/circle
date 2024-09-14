@@ -3,7 +3,7 @@ import { ClassValue } from "clsx";
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
 import { SocialEventsCalendar } from "./features/lower/SocialEventsCalendar";
-import { CreateMenu } from "./features/lower/CreateMenu";
+import { MainMenu } from "./features/lower/MainMenu";
 import { SocialEventsGroups } from "./features/lower/SocialEventsGroups";
 import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
 
@@ -16,7 +16,7 @@ export function LowerNavbar({ className }: { className?: ClassValue }) {
             </Link>
 
             <SocialEventsCalendar className="p-2 rounded-full hover:bg-[#333333]" />
-            <CreateMenu className="p-2 rounded-full hover:bg-[#333333]" />
+            <MainMenu className="p-2 rounded-full hover:bg-[#333333]" />
             <SocialEventsGroups />
             <UserMenuTempWrapper />
         </nav>

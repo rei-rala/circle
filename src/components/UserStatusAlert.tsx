@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { AdminCard } from "./AdminCard";
 import getServerSession from "@/lib/getServerSession";
-import { cn } from "@/lib/utils";
+import { cn, hasElevatedRole } from "@/lib/utils";
 
 export const UserStatusAlert = async () => {
     const session = await getServerSession();
@@ -26,7 +26,7 @@ export const UserStatusAlert = async () => {
         statusTitle = "Cuenta pendiente de admisión";
         statusMessage = "Tu acceso a la plataforma es limitado. Espera la aprobación del administradors.";
         statusColor = "border-yellow-600";
-    } else if (user.role === "admin") {
+    } else if (hasElevatedRole(user)) {
        return <AdminCard user={user} />
     }
 
