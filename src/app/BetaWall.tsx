@@ -31,7 +31,7 @@ export const BetaWall = () => {
     const isStaticFile = staticFiles.some(file => pathname.startsWith(file));
 
     // Allow access to static files and valid pathnames without restrictions
-    if (isStaticFile || betaAllowedPathnames.includes(pathname)) return null;
+    if (isStaticFile || betaAllowedPathnames.find(path => pathname === path)) return null;
 
     // Redirect unadmitted users or non-users to beta page
     if (user?.admitted !== true) {

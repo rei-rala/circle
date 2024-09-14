@@ -23,14 +23,14 @@ export default async function BetaPage() {
                 </div>
                 {!session?.user ? (
                     <>
-                        <div className="text-4xl font-bold mb-4">Versión Beta</div>
+                        <div className="text-4xl font-bold mb-4">{BRAND} Beta</div>
                         <p className="mb-4">Inicia sesión para probar nuestra nueva versión.</p>
                         <BetaSignInButton />
                     </>
                 ) : session?.user?.admitted === true ? (
                     <>
                         <div className="text-4xl font-bold mb-4">¡Bienvenido!</div>
-                        <p className="mb-4">Ya tienes acceso a la versión beta.</p>
+                        <p className="mb-4">Ya tienes acceso.</p>
                         <Link href="/home">
                             <Button>
                                 Comenzar
@@ -40,7 +40,9 @@ export default async function BetaPage() {
                 ) : (
                     <>
                         <div className="text-4xl font-bold mb-4">Casi listos</div>
-                        <p className="mb-4">Estamos terminando los últimos detalles.
+                        <p className="mb-4">
+                            Estamos terminando los últimos detalles.
+                            <br />
                             Si eres del equipo, vuelve más tarde para ver los cambios.
                         </p>
                     </>
