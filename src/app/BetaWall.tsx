@@ -10,14 +10,6 @@ export const BetaWall = () => {
 
 
     if (!PRODUCTION_READY && pathname !== "/beta" && (!user || !user.admitted)) {
-
-        console.log({
-            user,
-            pathname,
-            admitted: user?.admitted,
-            productionReady: PRODUCTION_READY,
-        })
-
         redirect("/beta");
     }
 

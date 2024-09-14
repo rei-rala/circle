@@ -1,13 +1,12 @@
+import "server-only"
 import { dummyUser } from "@/constants";
 import { prisma } from "@/prisma";
-import "server-only"
 
 export const socialEventFetch = async (fullData?: boolean) => {
     let events: SocialEvent[] = [];
     try {
 
         if (fullData) {
-
             events = await prisma.socialEvent.findMany({
                 take: 5,
                 where: {

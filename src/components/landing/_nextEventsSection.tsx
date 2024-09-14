@@ -2,9 +2,8 @@ import Link from "next/link";
 import { LayoutCard } from "../LayoutCard";
 import { SocialEventCardSmall } from "../SocialEvent/SocialEventCardSmall";
 import { dummyUser } from "@/constants";
-import { socialEventFetch } from "@/app/(home)/socialEventFetch";
 import getServerSession from "@/lib/getServerSession";
-
+import { socialEventFetch } from "@/services/socialEventsserver.services";
 
 export async function NextEvents() {
     const session = await getServerSession();

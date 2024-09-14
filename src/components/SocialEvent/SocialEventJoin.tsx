@@ -1,4 +1,4 @@
-import { joinEvent } from "@/app/events/[id]/actions";
+import { joinEvent } from "@/app/(applayout)/(withmaps)/events/[id]/actions";
 import { FormButton } from "../FormButton";
 
 

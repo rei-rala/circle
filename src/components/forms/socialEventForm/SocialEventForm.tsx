@@ -155,7 +155,7 @@ export const SocialEventForm = ({
         e.preventDefault();
 
         if (disableForm) {
-            console.log(socialEvent);
+            console.info(socialEvent);
             return;
         }
 

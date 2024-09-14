@@ -33,7 +33,7 @@ export default async function BetaPage() {
                         <p className="mb-4">Ya tienes acceso a la versión beta.</p>
                         <Link href="/home">
                             <Button>
-                                Ir al inicio
+                                Comenzar
                             </Button>
                         </Link>
                     </>

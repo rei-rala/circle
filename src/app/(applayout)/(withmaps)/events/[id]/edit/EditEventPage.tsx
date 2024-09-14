@@ -41,7 +41,6 @@ export async function EditEventPageComponent({
     ) {
         return notFound();
     }
-
     if (isUserBannedOrPendingAdmission) {
         const redirectUrl = "/profile" + (session?.user.admitted ? "/banned" : "/pending");
         redirect(redirectUrl);

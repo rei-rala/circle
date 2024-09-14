@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { AppWithProviders } from "./providers";
-
-import { UpperNavbar } from "@/components/navbars/UpperNavbar";
-import { LowerNavbar } from "@/components/navbars/LowerNavbar";
-
-
-import "./globals.css";
+import { GeneralProviders } from "./generalProviders";
 import { BRAND, NEXTAUTH_URL } from "@/constants";
-import { Footer } from "@/components/Footer";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -108,16 +102,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <AppWithProviders>
-          <div className="flex flex-col h-screen bg-[#1a1a1a] text-white min-h-full min-w-full max-h-[100svh]">
-            <UpperNavbar className="w-full flex-shrink-0" />
-            <div className="flex flex-col flex-grow gap-4 overflow-x-hidden overflow-y-scroll bg-[#1a1a1a] p-5 py-20">
-              {children}
-              <Footer />
-            </div>
-            <LowerNavbar className="w-full flex-shrink-0" />
-          </div>
-        </AppWithProviders>
+        <GeneralProviders>
+          {children}
+        </GeneralProviders>
       </body>
     </html>
   );

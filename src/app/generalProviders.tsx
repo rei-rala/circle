@@ -3,15 +3,14 @@
 import { Toaster } from "@/components/ui/sonner"
 import { FeatureProvider } from "@/contexts/FeatureProvider"
 import { PopoverManagerProvider } from "@/contexts/PopoverManagerProvider"
-import { LoadScript } from "@react-google-maps/api"
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from "react"
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { GOOGLE_ANALYTICS_ID, GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_API_KEY } from "@/constants"
+import { GOOGLE_ANALYTICS_ID } from "@/constants"
 import { AuthProvider } from "@/contexts/AuthProvider"
 
 
-export const AppWithProviders = ({ children }: { children: ReactNode }) => {
+export const GeneralProviders = ({ children }: { children: ReactNode }) => {
     return (
         <FeatureProvider features={{
             productionReady: false,
@@ -33,12 +32,7 @@ export const AppWithProviders = ({ children }: { children: ReactNode }) => {
                                 duration: 3000,
                             }}
                         />
-                        <LoadScript
-                            googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-                            libraries={GOOGLE_MAPS_LIBRARIES}
-                        >
-                            {children}
-                        </LoadScript>
+                        {children}
                     </PopoverManagerProvider>
                 </AuthProvider>
             </SessionProvider>
