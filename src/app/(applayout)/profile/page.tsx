@@ -1,4 +1,3 @@
-import { AdminCard } from "@/components/AdminCard";
 import { ProfileForm } from "@/components/forms/profileForm/ProfileForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserStatusAlert } from "@/components/UserStatusAlert";

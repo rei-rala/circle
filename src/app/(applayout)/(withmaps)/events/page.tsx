@@ -76,8 +76,10 @@ const fetchEvents = async (isAdmitted: boolean): Promise<SocialEvent[]> => {
   }
 };
 
+// Revalidate this page every 10 minutes (ISR)
+export const revalidate = 600;
 
-export default async function EventsPageComponent() {
+export default async function EventsPage() {
   const session = await getServerSession();
 
   if (!session?.user) {

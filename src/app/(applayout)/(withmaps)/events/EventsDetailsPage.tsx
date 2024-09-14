@@ -1,105 +1,41 @@
 import Link from 'next/link';
 import { SocialEventCard } from '@/components/SocialEvent/SocialEventCard';
 import { notFound, redirect } from 'next/navigation';
-import getServerSession from '@/lib/getServerSession';
 import { isDateInPast } from '@/lib/date-fns';
-import { prisma } from '@/prisma';
 import { SocialEventAttendeesCard } from '@/components/SocialEvent/SocialEventAttendeesCard';
 import { dummyUser } from '@/constants';
 import { SocialEventJoin } from '@/components/SocialEvent/SocialEventJoin';
 import { SocialEventBannedFrom } from '@/components/SocialEvent/SocialEventBannedFrom';
 import { hasElevatedRole } from '@/lib/utils';
+import { Session } from 'next-auth';
 
 
-export async function EventDetailsPageComponent({ id }: { id: string }) {
-    const session = await getServerSession();
-
-    const isUserBannedOrNotAdmitted = session?.user?.banned || !session?.user?.admitted;
-
-    let event: SocialEvent | null = null;
-
-    try {
-        if (session?.user && !isUserBannedOrNotAdmitted) {
-            event = await prisma.socialEvent.findUnique({
-                where: {
-                    id,
-                    deleted: false
-                },
-                select: {
-                    id: true,
-                    public: true,
-                    ownerId: true,
-                    title: true,
-                    status: true,
-                    date: true,
-                    time: true,
-                    description: true,
-                    photo: true,
-                    place: true,
-                    minAttendees: true,
-                    publicAttendees: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    deleted: true,
-                    owner: {
-                        select: {
-                            id: true,
-                            alias: true,
-                            name: true,
-                            bio: true,
-                            email: true,
-                            role: true,
-                            image: true,
-                            location: true,
-                            phone: true,
-                            socialMedia: true,
-                            hideEmail: true,
-                            hideImage: true,
-                            hidePhone: true,
-                        }
-                    },
-                    attendees: {
-                        select: {
-                            user: true,
-                        },
-                    }
-                }
-            }) as unknown as SocialEvent;
-        } else {
-            event = await prisma.socialEvent.findUnique({
-                where: { id, deleted: false },
-            }) as SocialEvent;
-
-            event.owner = dummyUser;
-        }
-
-    } catch (er) {
-        console.error("Error fetching event:", er)
-        event = null;
+export function EventDetailsPageComponent({ socialEvent, session }: { socialEvent: SocialEvent, session: Session | null }) {
+    if (!session?.user || session?.user?.banned || !session?.user?.admitted) {
+        socialEvent.owner = dummyUser;
     }
 
+    if (!socialEvent || !socialEvent.owner.id) return notFound();
+    if (!socialEvent.public && !session?.user?.id) return redirect(`/login?callbackUrl=/events/${socialEvent.id}`);
 
-    if (!event || !event.owner.id) return notFound();
-    if (!event.public && !session?.user?.id) return redirect(`/login?callbackUrl=/events/${id}`);
-
-    if (event.owner) {
-        if (event.owner.hideEmail) event.owner.email = "";
-        if (event.owner.hideImage) event.owner.image = "";
-        if (event.owner.hidePhone) event.owner.phone = "";
+    if (socialEvent.owner) {
+        if (socialEvent.owner.hideEmail) socialEvent.owner.email = "";
+        if (socialEvent.owner.hideImage) socialEvent.owner.image = "";
+        if (socialEvent.owner.hidePhone) socialEvent.owner.phone = "";
     }
     if (!session?.user.id) {
-        event.publicAttendees = false;
+        socialEvent.publicAttendees = false;
     }
 
-    const isEventFinished = isDateInPast(event.date);
+    const isEventFinished = isDateInPast(socialEvent.date);
     const isUserLoggedIn = !!session?.user;
     const isUserAdmin = hasElevatedRole(session?.user);
 
     const bannedOrNotAdmitted = session?.user?.banned || !session?.user?.admitted;
-    const isUserOwner = session?.user?.id === event.ownerId;
+    const isUserOwner = session?.user?.id === socialEvent.ownerId;
     const canEditEvent = !bannedOrNotAdmitted && !isEventFinished && isUserLoggedIn && (isUserAdmin || isUserOwner);
 
-    const eventUserAttendee = event.attendees?.filter(attendee => attendee.user.id === session?.user?.id);
+    const eventUserAttendee = socialEvent.attendees?.filter(attendee => attendee.user.id === session?.user?.id);
     const isUserAttending = eventUserAttendee?.length > 0;
     const attendeeBanCheck = eventUserAttendee?.find(attendee => attendee.user.id === session?.user?.id && attendee.bannedFromEvent);
     const canAttendEvent = !bannedOrNotAdmitted && !isEventFinished && isUserLoggedIn && !isUserOwner && !attendeeBanCheck;
@@ -112,21 +48,21 @@ export async function EventDetailsPageComponent({ id }: { id: string }) {
                 {canEditEvent && (
                     <Link
                         className='hover:underline cursor-pointer'
-                        href={`/events/${id}/edit`}
+                        href={`/events/${socialEvent.id}/edit`}
                     >
                         {isUserAdmin ? "Editar como Administrador" : "Editar tu evento"}
                     </Link>
                 )}
             </div>
 
-            <SocialEventCard event={event} session={session} />
+            <SocialEventCard event={socialEvent} session={session} />
 
-            {event.publicAttendees && (
-                <SocialEventAttendeesCard event={event} />
+            {socialEvent.publicAttendees && (
+                <SocialEventAttendeesCard event={socialEvent} />
             )}
 
             {
-                canAttendEvent && !isUserAttending && <SocialEventJoin event={event} />
+                canAttendEvent && !isUserAttending && <SocialEventJoin event={socialEvent} />
             }
 
             <SocialEventBannedFrom attendee={attendeeBanCheck} />

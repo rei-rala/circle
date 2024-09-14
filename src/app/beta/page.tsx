@@ -1,9 +1,9 @@
 import getServerSession from "@/lib/getServerSession";
-import { BetaSignInButton } from "./SignInButton";
 import Image from "next/image";
 import { BRAND } from "@/constants";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { BetaLogin } from "./BetaLogin";
+
+export const dynamic = 'force-static';
 
 export default async function BetaPage() {
     const session = await getServerSession();
@@ -21,32 +21,7 @@ export default async function BetaPage() {
                         className="object-contain"
                     />
                 </div>
-                {!session?.user ? (
-                    <>
-                        <div className="text-4xl font-bold mb-4">{BRAND} Beta</div>
-                        <p className="mb-4">Inicia sesión para probar nuestra nueva versión.</p>
-                        <BetaSignInButton />
-                    </>
-                ) : session?.user?.admitted === true ? (
-                    <>
-                        <div className="text-4xl font-bold mb-4">¡Bienvenido!</div>
-                        <p className="mb-4">Ya tienes acceso.</p>
-                        <Link href="/">
-                            <Button>
-                                Comenzar
-                            </Button>
-                        </Link>
-                    </>
-                ) : (
-                    <>
-                        <div className="text-4xl font-bold mb-4">Casi listos</div>
-                        <p className="mb-4">
-                            Estamos terminando los últimos detalles.
-                            <br />
-                            Si eres del equipo, vuelve más tarde para ver los cambios.
-                        </p>
-                    </>
-                )}
+                <BetaLogin session={session} />
             </div>
         </div>
     )

@@ -4,10 +4,15 @@ import { EventDetailsPageComponent } from '../EventsDetailsPage';
 import { Metadata, ResolvingMetadata } from 'next';
 import { prisma } from "@/prisma"
 import { BRAND } from '@/constants';
+import { notFound } from "next/navigation";
+import getServerSession from "@/lib/getServerSession";
 
 type Props = {
     params: { id: string }
 }
+
+// This function generates metadata for the event page
+// It's called separately for each request, allowing for dynamic metadata generation
 export async function generateMetadata(
     { params }: Props,
     parent: ResolvingMetadata
@@ -63,10 +68,38 @@ export async function generateMetadata(
     }
 }
 
-export default function EventDetailsPage({ params: { id } }: Props) {
+// Revalidate this page every 10 minutes (ISR)
+export const revalidate = 600; 
+
+// This is the main page component for the event details
+// It uses Suspense for better loading UX
+export default async function EventDetailsPage({ params: { id } }: Props) {
+    const session = await getServerSession();
+
+    if (!session?.user) {
+        return notFound();
+    }
+
+    const event = await prisma.socialEvent.findUnique({
+        where: {
+            id: id,
+            deleted: false
+        },
+        include: {
+            owner: true,
+            attendees: {
+                include: {
+                    user: true
+                }
+            }
+        }
+    }) as unknown as SocialEvent | null;
+
+    if (!event) return notFound();
+
     return (
         <Suspense fallback={<Loading title="Evento" />}>
-            <EventDetailsPageComponent id={id} />
+            <EventDetailsPageComponent socialEvent={event} session={session} />
         </Suspense>
     );
-};
+}

@@ -1,10 +1,9 @@
 "use client"
 
-import { signIn } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import { LoginProvider } from "./page";
-
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
 export function LoginProviders({ providers }: { providers: LoginProvider[] }) {
     const searchParams = useSearchParams();
@@ -18,7 +17,7 @@ export function LoginProviders({ providers }: { providers: LoginProvider[] }) {
                 className="w-full"
                 onClick={() => signIn(provider.name, { callbackUrl })}
             >
-                {<provider.Icon className="w-5 h-5 mr-2" />}
+                {provider.Icon}
                 Iniciar sesión con {provider.displayName}
             </Button>
         ))

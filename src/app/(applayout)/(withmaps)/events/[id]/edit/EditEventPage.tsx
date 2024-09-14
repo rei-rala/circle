@@ -3,33 +3,16 @@ import { LayoutCard } from "@/components/LayoutCard";
 import { isDateInPast } from "@/lib/date-fns";
 import getServerSession from "@/lib/getServerSession";
 import { cn, hasElevatedRole } from "@/lib/utils";
-import { prisma } from "@/prisma";
 import { notFound, redirect } from "next/navigation";
 
 export async function EditEventPageComponent({
-    id,
+    socialEvent,
     mode,
 }: {
-    id: string,
+    socialEvent: SocialEvent | null,
     mode: EditorMode
 }) {
-    const session = await getServerSession();
-    const socialEvent = await prisma.socialEvent.findUnique({
-        where: {
-            id,
-            deleted: false,
-        },
-        include: {
-            owner: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    role: true,
-                }
-            }
-        }
-    }) as SocialEvent | null
+    const session = await getServerSession()
 
     const isAdmin = hasElevatedRole(session);
     const isUserBannedOrPendingAdmission = !session?.user.admitted || session?.user.banned
