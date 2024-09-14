@@ -15,7 +15,7 @@ export function EventDetailsPageComponent({ socialEvent, session }: { socialEven
         socialEvent.owner = dummyUser;
     }
 
-    if (!socialEvent || !socialEvent.owner.id) return notFound();
+    if (!socialEvent || !socialEvent.owner) return notFound();
     if (!socialEvent.public && !session?.user?.id) return redirect(`/login?callbackUrl=/events/${socialEvent.id}`);
 
     if (socialEvent.owner) {

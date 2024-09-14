@@ -34,8 +34,8 @@ export const BetaWall = () => {
     if (isStaticFile || betaAllowedPathnames.find(path => pathname === path)) return null;
 
     // Redirect unadmitted users or non-users to beta page
-    if (user?.admitted) {
-        redirect("/beta?callbackUrl=" + pathname);
+    if (user?.admitted !== true) {
+        //redirect("/beta");
     }
 
     // If user is admitted, allow access to all pages
