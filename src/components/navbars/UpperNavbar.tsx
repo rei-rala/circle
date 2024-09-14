@@ -8,8 +8,10 @@ import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
 import { BurgerMenu } from "./features/upper/BurgerMenu";
 import { useEffect, useState } from "react";
 import { BRAND } from "@/constants";
+import { usePathname } from "next/navigation";
 
 export function UpperNavbar({ className }: { className?: ClassValue }) {
+    const pathname = usePathname();
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
@@ -33,7 +35,7 @@ export function UpperNavbar({ className }: { className?: ClassValue }) {
                 observer.unobserve(heroTitle);
             }
         };
-    }, []);
+    }, [pathname]);
 
     return (
         <header
