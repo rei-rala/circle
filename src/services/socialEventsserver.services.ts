@@ -2,7 +2,7 @@ import "server-only"
 import { dummyUser } from "@/constants";
 import { prisma } from "@/prisma";
 
-export const getSocialEvents = async (fullData?: boolean) => {
+export const getSocialEvents = async (fullData?: boolean | null) => {
     let events: SocialEvent[] = [];
     try {
 
@@ -35,11 +35,12 @@ export const getSocialEvents = async (fullData?: boolean) => {
                 },
             }) as unknown as SocialEvent[];
 
-            return events.map((event) => {
-                event.owner = dummyUser;
+            return events
+            // .map((event) => {
+            //     event.owner = dummyUser;
 
-                return event;
-            })
+            //     return event;
+            // })
         }
 
     } catch (err) {

@@ -1,16 +1,8 @@
 import Link from "next/link";
 import { LayoutCard } from "../LayoutCard";
 import { SocialEventCardSmall } from "../SocialEvent/SocialEventCardSmall";
-import { dummyUser } from "@/constants";
 
 export async function NextEvents({ events }: { events: SocialEvent[] }) {
-    if (events.find(e => !e.owner)) {
-        events = events.map(event => ({
-            ...event,
-            owner: dummyUser
-        }))
-    }
-
     return (
         // z-index is 10 because 'about' section overlaps the bottom of this section 😁 // yeah, intentional
         <section className="flex flex-col gap-4 z-10">

@@ -47,6 +47,6 @@ export function getFullDateAndHourWithSeparator(date: Date | string, separator =
     return `${getFullDate(date)} ${separator} ${getHour(date)}`
 }
 
-export function getNamedDateMinimal(date: Date | string) {
-    return `${format(date, "EEEE", { locale: es })} ${format(date, "d 'de' MMMM", { locale: es })}`
+export function getNamedDateMinimal(date: Date | string, separator = "/") {
+    return `${format(date, "EEEE", { locale: es })} ${format(date, `dd${separator}MM`, { locale: es })}`
 }

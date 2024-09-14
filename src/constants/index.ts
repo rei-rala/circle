@@ -14,7 +14,7 @@ export const PRODUCTION_READY = process.env.NEXT_PUBLIC_PRODUCTION_READY === "tr
 
 
 export const dummyUser: User = {
-    id: "dummy",
+    id: "",
     name: "Miembro de" + BRAND,
     email: "",
     alias: "Miembro⭕",

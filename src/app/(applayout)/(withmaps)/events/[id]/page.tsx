@@ -4,7 +4,7 @@ import { EventDetailsPageComponent } from '../EventsDetailsPage';
 import { Metadata, ResolvingMetadata } from 'next';
 import { prisma } from "@/prisma"
 import { BRAND } from '@/constants';
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import getServerSession from "@/lib/getServerSession";
 
 type Props = {
@@ -43,8 +43,8 @@ export async function generateMetadata(
             images: event.photo ? [
                 {
                     url: event.photo,
-                    width: 1200,
-                    height: 630,
+                    width: 300,
+                    height: 300,
                     alt: event.title,
                 }
             ] : [],
@@ -68,8 +68,8 @@ export async function generateMetadata(
     }
 }
 
-// Revalidate this page every 10 minutes (ISR)
-export const revalidate = 600; 
+// Force dynamic rendering for this route to ensure fresh data
+export const dynamic = 'force-dynamic';
 
 // This is the main page component for the event details
 // It uses Suspense for better loading UX
@@ -77,12 +77,12 @@ export default async function EventDetailsPage({ params: { id } }: Props) {
     const session = await getServerSession();
 
     if (!session?.user) {
-        return notFound();
+        return redirect("/login?callbackUrl=/events/" + id);
     }
 
     const event = await prisma.socialEvent.findUnique({
         where: {
-            id: id,
+            id,
             deleted: false
         },
         include: {
