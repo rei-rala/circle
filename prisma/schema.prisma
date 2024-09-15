@@ -147,7 +147,17 @@ model Notification {
   dismissedByUserIds String[]            @default([]) @db.ObjectId
   isDeleted          Boolean             @default(false)
   deletedAt          DateTime?
+
+  originUserId       String?             @db.ObjectId
+  relatedInfoType    NotificationRelatedInfoType?
+  relatedInfoId      String?             @db.ObjectId
 }
+
+enum NotificationRelatedInfoType {
+  USER
+  EVENT
+}
+
 
 enum NotificationType {
   MEMBER

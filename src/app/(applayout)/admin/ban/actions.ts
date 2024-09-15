@@ -1,13 +1,16 @@
-"use server";
+import "server-only";
 
 import { auth } from "@/auth";
 import { hasElevatedRole } from "@/lib/utils";
 import { prisma } from "@/prisma";
 import { revalidatePath } from "next/cache";
+import { User } from "@prisma/client";
+import { makeBanUserNotification } from "@/services/api/notifications.services";
 
 
 export async function banUser(formData: FormData) {
-    'use server'
+    "use server"
+
     try {
         const userId = formData.get("userId") as string;
         const banReason = formData.get("banReason") as string;
@@ -21,12 +24,21 @@ export async function banUser(formData: FormData) {
         }
 
         const userToBan = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { role: true }
-        });
+            where: {
+                id: userId
+            }
+        }) as User | null;
 
-        if (userToBan?.role === "MASTER") {
+        if (!userToBan) {
+            return { error: "Usuario no encontrado." }
+        }
+
+        if (userToBan.role === "MASTER") {
             return { error: "No se puede banear a este usuario." }
+        }
+
+        if (userToBan.banned) {
+            return { error: "El usuario ya está baneado." }
         }
 
         const user = await prisma.user.update({
@@ -42,6 +54,7 @@ export async function banUser(formData: FormData) {
 
         if (user.banned) {
             revalidatePath("/admissions")
+            await makeBanUserNotification(user, session?.user);
             return { message: "Usuario baneado correctamente" }
         } else {
             return { error: "Error al banear el usuario" }

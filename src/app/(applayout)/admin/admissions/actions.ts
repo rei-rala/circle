@@ -1,14 +1,14 @@
-"use server";
+import "server-only";
 
 import { auth } from "@/auth";
-import { BRAND, SHORT_BRAND } from "@/constants";
 import { hasElevatedRole } from "@/lib/utils";
 import { prisma } from "@/prisma";
-import { createNotificationUserAdmission } from "@/services/api/notifications.services";
+import { createUserAdmissionNotification } from "@/services/api/notifications.services";
 import { revalidatePath } from "next/cache";
-//import "server-only"
 
 export async function admitUser(formData: FormData): Promise<ApiResponse<boolean>> {
+    "use server";
+
     try {
         const userId = formData.get("userId") as string;
 
@@ -19,6 +19,17 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
 
         if (!isAdmin || isUserBanned) {
             return { error: "No tienes permisos para admitir usuarios." + (isUserBanned ? " Tu usuario está bloqueado." : "") }
+        }
+
+        const isAlreadyAdmitted = await prisma.user.findUnique({
+            where: {
+                id: userId,
+                admitted: true
+            }
+        })
+
+        if (isAlreadyAdmitted) {
+            return { error: "El usuario ya está admitido." }
         }
 
 
@@ -34,7 +45,7 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
 
         if (user.admitted) {
             revalidatePath("/admissions")
-            await createNotificationUserAdmission({ content: `${user.name} ha sido admitido en ${SHORT_BRAND}!` })
+            await createUserAdmissionNotification(user, session?.user);
             return { message: "Usuario admitido correctamente" }
         } else {
             return { error: "Error al admitir el usuario" }

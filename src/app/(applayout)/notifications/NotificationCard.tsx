@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export function NotificationCard({ notification }: { notification: AppNotification }) {
     const dismissAction = async () => {
         "use server"
-        await dismissNotification(notification.id);
+        await dismissNotification(notification.id!);
         revalidatePath("/notifications")
     }
 
@@ -24,7 +24,7 @@ export function NotificationCard({ notification }: { notification: AppNotificati
                     </div>
                     <p className="text-sm text-muted-foreground">{notification.content}</p>
                     <p className="text-xs text-gray-500 mt-2 text-center">
-                        {new Date(notification.createdAt).toLocaleString()}
+                        {new Date(notification.createdAt!).toLocaleString()}
                     </p>
                 </div>
             </div>

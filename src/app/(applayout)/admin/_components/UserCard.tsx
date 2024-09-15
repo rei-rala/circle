@@ -4,9 +4,8 @@ import { getFullDateAndHourWithSeparator } from "@/lib/date-fns"
 import { CalendarIcon, MailIcon, PhoneIcon, ScanFaceIcon, UserIcon } from "lucide-react"
 import { User } from "next-auth"
 import { Separator } from "@radix-ui/react-separator"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ClassValue } from "clsx"
+import { FormActionButton } from "@/components/forms/FormActionButton"
 
 export type UserCardProps = {
     user: User,
@@ -72,13 +71,12 @@ export const UserCard = ({ user, actionLabel, actionVariant = "default", actionC
                 {formAction && (
                     <form action={formAction}>
                         <input type="hidden" name="userId" value={user.id} />
-                        <Button
-                            type="submit"
+                        <FormActionButton
                             variant={actionVariant}
                             className={cn(actionClassName, "w-full")}
                         >
                             {actionLabel}
-                        </Button>
+                        </FormActionButton>
                     </form>
                 )}
             </CardContent>

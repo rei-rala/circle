@@ -1,11 +1,15 @@
-"use server";
+import "server-only";
 
 import { auth } from "@/auth";
 import { hasElevatedRole } from "@/lib/utils";
 import { prisma } from "@/prisma";
+import { makeAdminNotification } from "@/services/api/notifications.services";
+import { NotificationRelatedInfoType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function makeAdmin(formData: FormData): Promise<ApiResponse<boolean>> {
+    "use server";
+    
     try {
         const userId = formData.get("userId") as string;
 
@@ -15,6 +19,17 @@ export async function makeAdmin(formData: FormData): Promise<ApiResponse<boolean
 
         if (!isMaster) {
             return { error: "No tienes permisos para hacer administradores." }
+        }
+
+        const isAlreadyAdmin = await prisma.user.findUnique({
+            where: {
+                id: userId,
+                role: "ADMIN"
+            }
+        })
+
+        if (isAlreadyAdmin) {
+            return { error: "El usuario ya es administrador." }
         }
 
         const updatedUser = await prisma.user.update({
@@ -28,6 +43,7 @@ export async function makeAdmin(formData: FormData): Promise<ApiResponse<boolean
 
         if (hasElevatedRole(updatedUser)) {
             revalidatePath("/admin/admins")
+            await makeAdminNotification(updatedUser, session.user)
             return { message: "Usuario promovido a administrador correctamente" }
         } else {
             return { error: "Error al promover al usuario a administrador" }

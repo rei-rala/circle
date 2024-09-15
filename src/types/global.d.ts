@@ -1,4 +1,4 @@
-import { NotificationScope, NotificationSubtype, NotificationType } from "@prisma/client";
+import { NotificationRelatedInfoType, NotificationScope, NotificationSubtype, NotificationType } from "@prisma/client";
 import { User } from "next-auth";
 
 declare global {
@@ -72,20 +72,24 @@ declare global {
 
 
     type AppNotification = {
-        id: string
+        id?: string
         title: string
         content: string
         icon?: string
-        createdAt: Date
-        updatedAt: Date
+        createdAt?: Date
+        updatedAt?: Date
         scope: NotificationScope
         type: NotificationType
         subtype: NotificationSubtype
-        targetUserIds: string[]
-        seenByUserIds: string[]
-        dismissedByUserIds: string[]
-        isDeleted: boolean
+        originUserId?: string | null
+        targetUserIds?: string[]
+        seenByUserIds?: string[]
+        dismissedByUserIds?: string[]
+        isDeleted?: boolean
         deletedAt?: Date
+
+        relatedInfoType?: NotificationRelatedInfoType | null
+        relatedInfoId?: string | null
     }
 
     type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">

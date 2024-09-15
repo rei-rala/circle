@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 
 export default function NotificationsPage() {
     return (
-        <LayoutCard title="Notifications"
+        <LayoutCard title="Notificaciones"
             content={
                 <Suspense fallback={<Loading title="notificaciones" />}>
                     <NotificationsPageComponent />
