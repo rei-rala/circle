@@ -4,9 +4,7 @@
 import { CalendarIcon, ClockIcon, FilePenIcon, UsersIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { getFullDate, getHour, isDateInPast, shiftDateByDays } from "@/lib/date-fns";
@@ -19,8 +17,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { compareChangesObject, fileToBase64 } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { User } from "next-auth";
 import { FormActionButton } from "../FormActionButton";
+import { CustomDatePicker } from "@/components/DatePicker";
 
 type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees" | "publicAttendees">
 
@@ -225,17 +223,13 @@ export const SocialEventForm = ({
                         <CalendarIcon className="w-5 h-5" />
                         <Label htmlFor="date">Fecha</Label>
                     </div>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button id="date" variant="outline" className="w-full justify-start font-normal" disabled={disableForm}>
-                                {socialEvent.date ? getFullDate(socialEvent.date) : "Seleccionar fecha"}
-                                <div className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar fromDate={minDate} mode="single" onSelect={handleCalendarSelect} />
-                        </PopoverContent>
-                    </Popover>
+                    <CustomDatePicker
+                        id="date"
+                        selected={socialEvent.date}
+                        onChange={handleCalendarSelect}
+                        disabled={disableForm}
+                        minDate={minDate}
+                    />
                 </div>
                 <EventField icon={<ClockIcon className="w-5 h-5" />} label="Hora" id="time" name="time" placeholder="" value={String(socialEvent.time)} onChange={handleFieldChange} disabled={disableForm} type="time" />
             </div>
