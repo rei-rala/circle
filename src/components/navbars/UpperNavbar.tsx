@@ -28,6 +28,8 @@ export function UpperNavbar({ className }: { className?: ClassValue }) {
 
         if (heroTitle) {
             observer.observe(heroTitle);
+        } else {
+            setIsVisible(true);
         }
 
         return () => {
