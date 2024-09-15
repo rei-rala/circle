@@ -5,11 +5,12 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { UserAvatar } from '../UserAvatar';
 import { LayoutCard } from '../LayoutCard';
+import { hasElevatedRole } from '@/lib/utils';
 
 export const SocialEventAttendeesCard = ({ event }: { event: SocialEvent }) => {
     if (!event.publicAttendees) return null;
 
-    const ownerDisplayText = event.owner.role?.toUpperCase() === "ADMIN" ? event.owner.alias || "Administrador" : (event.owner.alias || event.owner.name || event.owner.email)
+    const ownerDisplayText = hasElevatedRole(event.owner) ? event.owner.alias || "Administrador" : (event.owner.alias || event.owner.name || event.owner.email)
 
     return (
         <LayoutCard

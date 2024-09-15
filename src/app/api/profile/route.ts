@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import { User } from 'next-auth';
+import { hasElevatedRole } from '@/lib/utils';
 
 export async function PUT(request: Request): Promise<NextApiResponse<User>> {
     const session = await auth();
@@ -16,7 +17,7 @@ export async function PUT(request: Request): Promise<NextApiResponse<User>> {
         return NextResponse.json({ error: 'Estás bloqueado. No puedes editar tu perfil.' }, { status: 403 });
     }
 
-    const isAdmin = session.user.role?.toUpperCase() === 'ADMIN';
+    const isAdmin = hasElevatedRole(session.user);
     const values: UserProfileDTO = await request.json();
     const { alias, bio, location, phone, socialMedia, hideEmail, hideImage, hidePhone } = values;
 

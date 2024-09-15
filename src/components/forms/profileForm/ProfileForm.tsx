@@ -340,7 +340,7 @@ export const ProfileForm = () => {
             }
 
             <div className="flex justify-end">
-                <FormActionButton disabled={loading || !enableForm}>
+                <FormActionButton disabled={loading || !enableForm} loading={loading}>
                     Guardar Cambios
                 </FormActionButton>
             </div>

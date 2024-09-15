@@ -329,10 +329,7 @@ export const SocialEventForm = ({
 
             <div className="flex justify-end">
 
-                <FormActionButton
-                    disabled={loading || disableForm || !hasChanges}
-                    className="transition-all duration-300 ease-in-out opacity-100 scale-100 translate-y-0"
-                >
+                <FormActionButton disabled={loading || disableForm || !hasChanges}>
                     {actionText}
                 </FormActionButton>
             </div>
