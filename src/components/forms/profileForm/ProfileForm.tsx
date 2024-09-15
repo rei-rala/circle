@@ -28,6 +28,7 @@ import { compareChangesObject, hasElevatedRole } from "@/lib/utils";
 import { updateUserProfile } from "@/services/profile.services";
 import { defaultUser } from "@/constants";
 import { useAuth } from "@/contexts/AuthProvider";
+import { FormActionButton } from "../FormActionButton";
 
 function checkUserProfileChanges(
     newUser: UserProfileDTO,
@@ -339,16 +340,9 @@ export const ProfileForm = () => {
             }
 
             <div className="flex justify-end">
-                <Button
-                    type="submit"
-                    disabled={loading || !enableForm}
-                >
-
-                    {loading
-                        ? <div className="animate-spin rounded-full w-4 h-4 border-t-4"></div>
-                        : "Guardar Cambios"
-                    }
-                </Button>
+                <FormActionButton disabled={loading || !enableForm}>
+                    Guardar Cambios
+                </FormActionButton>
             </div>
         </form >
     );

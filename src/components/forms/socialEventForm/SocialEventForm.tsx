@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { compareChangesObject, fileToBase64 } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { User } from "next-auth";
+import { FormActionButton } from "../FormActionButton";
 
 type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees" | "publicAttendees">
 
@@ -327,17 +328,13 @@ export const SocialEventForm = ({
             )}
 
             <div className="flex justify-end">
-                <Button
-                    type={loading ? "button" : "submit"}
+
+                <FormActionButton
                     disabled={loading || disableForm || !hasChanges}
                     className="transition-all duration-300 ease-in-out opacity-100 scale-100 translate-y-0"
                 >
-                    {loading ? (
-                        <div className="h-5 w-5 rounded-full border-2 border-t-transparent border-primary-foreground animate-spin"></div>
-                    ) : (
-                        actionText
-                    )}
-                </Button>
+                    {actionText}
+                </FormActionButton>
             </div>
         </form>
     )
