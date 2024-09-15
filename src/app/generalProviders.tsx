@@ -21,6 +21,7 @@ export const GeneralProviders = ({ children }: { children: ReactNode }) => {
             userSettings: false,
             burgerMenu: false,
             instagramCarousel: false,
+            notifications: true,
         }}>
             <SessionProvider>
                 <AuthProvider>

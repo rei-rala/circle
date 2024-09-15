@@ -1,6 +1,6 @@
 import { Landing } from "@/components/landing/Landing";
 import getServerSession from "@/lib/getServerSession";
-import { getSocialEvents } from "@/services/socialEventsserver.services";
+import { getSocialEvents } from "@/services/api/socialEventsserver.services";
 
 // This will make the page static at build time
 export const dynamic = 'force-static';

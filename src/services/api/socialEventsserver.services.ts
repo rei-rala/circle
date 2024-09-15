@@ -1,5 +1,4 @@
 import "server-only"
-import { dummyUser } from "@/constants";
 import { prisma } from "@/prisma";
 
 export const getSocialEvents = async (fullData?: boolean | null) => {

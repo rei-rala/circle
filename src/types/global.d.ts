@@ -1,3 +1,4 @@
+import { NotificationScope, NotificationSubtype, NotificationType } from "@prisma/client";
 import { User } from "next-auth";
 
 declare global {
@@ -26,7 +27,6 @@ declare global {
         lat: number,
         lng: number
     }
-
 
     type SocialEventStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED" | "DELETED"
 
@@ -70,7 +70,25 @@ declare global {
         bannedById: string | null;
     }
 
+
+    type AppNotification = {
+        id: string
+        title: string
+        content: string
+        icon?: string
+        createdAt: Date
+        updatedAt: Date
+        scope: NotificationScope
+        type: NotificationType
+        subtype: NotificationSubtype
+        targetUserIds: string[]
+        seenByUserIds: string[]
+        dismissedByUserIds: string[]
+        isDeleted: boolean
+        deletedAt?: Date
+    }
+
     type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
     type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees" | "publicAttendees">
-
+    type NotificationDTO = Pick<AppNotification, "id" | "title" | "content" | "icon" | "createdAt" | "type" | "subtype" | "scope" | "isDeleted" | "deletedAt">
 }

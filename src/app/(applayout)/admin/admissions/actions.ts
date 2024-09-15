@@ -1,8 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
+import { BRAND, SHORT_BRAND } from "@/constants";
 import { hasElevatedRole } from "@/lib/utils";
 import { prisma } from "@/prisma";
+import { createNotificationUserAdmission } from "@/services/api/notifications.services";
 import { revalidatePath } from "next/cache";
 //import "server-only"
 
@@ -32,6 +34,7 @@ export async function admitUser(formData: FormData): Promise<ApiResponse<boolean
 
         if (user.admitted) {
             revalidatePath("/admissions")
+            await createNotificationUserAdmission({ content: `${user.name} ha sido admitido en ${SHORT_BRAND}!` })
             return { message: "Usuario admitido correctamente" }
         } else {
             return { error: "Error al admitir el usuario" }

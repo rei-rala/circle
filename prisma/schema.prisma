@@ -30,12 +30,11 @@ model SocialEvent {
   attendees       Attendee[]        @relation("EventAttendees")
   publicAttendees Boolean           @default(true)
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  
-  deleted Boolean @default(false)
-  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
@@ -121,4 +120,50 @@ model Session {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// 1. NotificationType: Define los tipos principales de notificaciones.
+// 2. NotificationSubtype: Proporciona subtipos más específicos de notificaciones.
+// 3. NotificationScope: Determina el alcance o audiencia de la notificación.
+
+// Estos enums se utilizan como tipos para los campos 'type', 'subtype' y 'scope' en el modelo Notification,
+// respectivamente. Esto asegura que estos campos solo puedan tener valores predefinidos,
+// lo que ayuda a mantener la consistencia de los datos y facilita la lógica de negocio
+// relacionada con el manejo de diferentes tipos de notificaciones.
+
+model Notification {
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  content            String
+  icon               String?
+  link               String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  type               NotificationType
+  subtype            NotificationSubtype
+  scope              NotificationScope
+  targetUserIds      String[]            @default([]) @db.ObjectId
+  seenByUserIds      String[]            @default([]) @db.ObjectId
+  dismissedByUserIds String[]            @default([]) @db.ObjectId
+  isDeleted          Boolean             @default(false)
+  deletedAt          DateTime?
+}
+
+enum NotificationType {
+  MEMBER
+  GLOBAL
+  EVENT
+}
+
+enum NotificationSubtype {
+  GENERAL
+  ADMISSION
+  UPDATE
+  CUSTOM
+}
+
+enum NotificationScope {
+  GLOBAL
+  ADMIN
+  USER
 }

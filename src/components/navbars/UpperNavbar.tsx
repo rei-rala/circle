@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import { SocialEventsSearch } from "./features/upper/SocialEventsSearch";
 import { UserMenuTempWrapper } from "./features/UserMenuTempWrapper";
-import { BurgerMenu } from "./features/upper/BurgerMenu";
+import { Notifications } from "./features/upper/Notifications";
 import { useEffect, useState } from "react";
 import { BRAND } from "@/constants";
 import { usePathname } from "next/navigation";
@@ -43,21 +43,26 @@ export function UpperNavbar({ className }: { className?: ClassValue }) {
                 className,
                 "topbar",
                 isVisible ? "translate-y-0" : "-translate-y-full",
-                "bg-[#111] fixed top-0 left-0 right-0 transition-transform duration-300 flex items-center justify-center px-6 py-4 shadow z-50",
+                "bg-[#111] fixed top-0 left-0 right-0 transition-transform duration-300 grid grid-cols-[1fr_auto_1fr] items-center px-6 py-4 shadow z-40",
             )}
         >
-            <div className="flex items-center gap-2">
-                <BurgerMenu />
+            <div className="justify-self-start">
+                <UserMenuTempWrapper isUpper className="p-4 rounded-full hover:bg-[#333333]" />
             </div>
-            <div className="font-semibold text-lg">
-                <Link href="/" prefetch={true}>
-                    {BRAND}
-                </Link>
+            <div className="min-w-fit flex-grow flex flex-col items-center">
+                <div className="font-semibold text-lg">
+                    <Link href="/" prefetch={true}>
+                        {BRAND}
+                    </Link>
+                </div>
+                <div className="flex items-center gap-2">
+                    <SocialEventsSearch />
+                </div>
             </div>
-            <div className="flex items-center gap-2">
-                <SocialEventsSearch />
+
+            <div className="justify-self-end">
+                <Notifications className="p-2" />
             </div>
-            <UserMenuTempWrapper isUpper className="absolute right-0 p-4 rounded-full hover:bg-[#333333]" />
         </header>
     );
 }
