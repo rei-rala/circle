@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { GeneralProviders } from "./generalProviders";
-import { BRAND, NEXTAUTH_URL } from "@/constants";
+import { API_BASE_URL, BRAND } from "@/constants";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(API_BASE_URL),
   title: BRAND,
   description: BRAND + " es una comunidad social en Buenos Aires que organiza eventos para conectar personas y disfrutar de la ciudad. Únete y participa en experiencias únicas.",
   keywords: [
