@@ -49,6 +49,9 @@ model User {
 
   role String @default("USER")
 
+  gender    String?
+  birthDate DateTime?
+
   alias       String   @default("")
   bio         String   @default("")
   location    String   @default("")
@@ -148,16 +151,15 @@ model Notification {
   isDeleted          Boolean             @default(false)
   deletedAt          DateTime?
 
-  originUserId       String?             @db.ObjectId
-  relatedInfoType    NotificationRelatedInfoType?
-  relatedInfoId      String?             @db.ObjectId
+  originUserId    String?                      @db.ObjectId
+  relatedInfoType NotificationRelatedInfoType?
+  relatedInfoId   String?                      @db.ObjectId
 }
 
 enum NotificationRelatedInfoType {
   USER
   EVENT
 }
-
 
 enum NotificationType {
   MEMBER

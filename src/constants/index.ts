@@ -32,6 +32,8 @@ export const dummyUser: User = {
     banReason: "Dummy user",
     admitted: true,
     banned: false,
+    gender: "",
+    birthDate: null
 }
 
 
@@ -53,5 +55,7 @@ export const defaultUser: User = {
     banned: false,
     admittedAt: null,
     bannedAt: null,
-    banReason: null
+    banReason: null,
+    gender: "",
+    birthDate: null
 };

@@ -8,12 +8,14 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
 import {
+    CakeIcon,
     ImageIcon,
     ImageOffIcon,
     LocateIcon,
     MailIcon,
     MailXIcon,
     MessageCircleMoreIcon,
+    PersonStandingIcon,
     PhoneIcon,
     PhoneOffIcon,
     PlusIcon,
@@ -29,6 +31,8 @@ import { updateUserProfile } from "@/services/profile.services";
 import { defaultUser } from "@/constants";
 import { useAuth } from "@/contexts/AuthProvider";
 import { FormActionButton } from "../FormActionButton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CustomDatePicker } from "@/components/DatePicker";
 
 function checkUserProfileChanges(
     newUser: UserProfileDTO,
@@ -194,6 +198,55 @@ export const ProfileForm = () => {
                         value={String(formUser.email)}
                         onChange={handleFormFieldChange}
                         disabled
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                    <div className="flex items-center gap-2">
+                        <PersonStandingIcon className="w-5 h-5" />
+                        <Label htmlFor="gender">Sexo</Label>
+                    </div>
+                    <Select
+                        onValueChange={(value) => setFormUser({ ...formUser, gender: value })}
+                        defaultValue={formUser.gender ?? "masculino"}
+                        value={formUser.gender ?? undefined}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecciona tu sexo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="masculino">Masculino</SelectItem>
+                            <SelectItem value="femenino">Femenino</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="grid gap-2">
+                    <div className="flex items-center gap-2">
+                        <CakeIcon className="w-5 h-5" />
+                        <Label htmlFor="birthDate">Nacimiento</Label>
+                    </div>
+                    {/* 
+                    <CustomDatePicker
+                        id="birthDate"
+                        selected={formUser.birthDate ? new Date(formUser.birthDate) : undefined}
+                        onChange={(date) => setFormUser({ ...formUser, birthDate: date ?? new Date() })}
+                        disabled={false}
+                        minDate={new Date(1900, 1, 1)}
+                        className="max-w-full inline-block"
+                        showMonthYearPicker
+                        dateFormat="MM/yyyy"
+                        showFullMonthYearPicker
+                    /> */}
+                    <Input
+                        type="date"
+                        id="birthDate"
+                        name="birthDate"
+                        value={formUser.birthDate ? new Date(formUser.birthDate).toISOString().split('T')[0] : ''}
+                        onChange={(e) => setFormUser({ ...formUser, birthDate: new Date(e.target.value) })}
+                        min="1900-01-01"
+                        max={new Date().toISOString().split('T')[0]}
+                        className="max-w-full inline-block"
                     />
                 </div>
             </div>

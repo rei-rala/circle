@@ -225,7 +225,7 @@ export const SocialEventForm = ({
                     </div>
                     <CustomDatePicker
                         id="date"
-                        selected={socialEvent.date}
+                        selected={socialEvent.date ?? undefined}
                         onChange={handleCalendarSelect}
                         disabled={disableForm}
                         minDate={minDate}

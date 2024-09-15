@@ -19,7 +19,7 @@ export async function PUT(request: Request): Promise<NextApiResponse<User>> {
 
     const isAdmin = hasElevatedRole(session.user);
     const values: UserProfileDTO = await request.json();
-    const { alias, bio, location, phone, socialMedia, hideEmail, hideImage, hidePhone } = values;
+    const { alias, birthDate, gender, bio, location, phone, socialMedia, hideEmail, hideImage, hidePhone } = values;
 
     if (socialMedia.length > 5) socialMedia.length = 5;
 
@@ -32,6 +32,8 @@ export async function PUT(request: Request): Promise<NextApiResponse<User>> {
                 location,
                 phone,
                 socialMedia,
+                birthDate,
+                gender,
                 hideEmail: isAdmin ? hideEmail : false,
                 hideImage: isAdmin ? hideImage : false,
                 hidePhone: isAdmin ? hidePhone : false,

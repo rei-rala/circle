@@ -92,7 +92,7 @@ declare global {
         relatedInfoId?: string | null
     }
 
-    type UserProfileDTO = Pick<User, "alias" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
+    type UserProfileDTO = Pick<User, "alias" | "birthDate" | "gender" | "bio" | "location" | "phone" | "socialMedia" | "hideEmail" | "hideImage" | "hidePhone">
     type SocialEventDTO = Pick<SocialEvent, "id" | "public" | "title" | "photo" | "description" | "date" | "status" | "time" | "place" | "minAttendees" | "publicAttendees">
     type NotificationDTO = Pick<AppNotification, "id" | "title" | "content" | "icon" | "createdAt" | "type" | "subtype" | "scope" | "isDeleted" | "deletedAt">
 }
