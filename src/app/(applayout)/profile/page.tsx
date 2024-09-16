@@ -21,7 +21,7 @@ export default async function ProfilePage() {
                     <CardTitle>Editar Perfil</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ProfileForm />
+                    <ProfileForm user={session?.user} />
                 </CardContent>
             </Card>
         </>

@@ -4,7 +4,7 @@ import { HoverCardProps, HoverCardTrigger, HoverCardTriggerProps } from "@radix-
 import { HoverCard, HoverCardContent } from "./ui/hover-card"
 import { User } from "next-auth"
 import { CakeIcon, LocateIcon, MailIcon, MessageCircleCodeIcon, PersonStandingIcon, PhoneIcon, ScanFaceIcon } from "lucide-react"
-import { getUrlDomain, hasElevatedRole, truncateString } from "@/lib/utils"
+import { getUrlDomain, getZodiacSign, hasElevatedRole, truncateString } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { UserAvatar } from "./UserAvatar"
 import { format } from "date-fns"
@@ -26,24 +26,6 @@ const InfoItem = ({ icon: Icon, content, href }: { icon: React.ElementType, cont
         )}
     </div>
 )
-
-const getZodiacSign = (date: Date): { sign: string; emoji: string } => {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return { sign: "Aries", emoji: "♈" };
-    if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return { sign: "Tauro", emoji: "♉" };
-    if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return { sign: "Géminis", emoji: "♊" };
-    if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return { sign: "Cáncer", emoji: "♋" };
-    if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return { sign: "Leo", emoji: "♌" };
-    if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return { sign: "Virgo", emoji: "♍" };
-    if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return { sign: "Libra", emoji: "♎" };
-    if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return { sign: "Escorpio", emoji: "♏" };
-    if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return { sign: "Sagitario", emoji: "♐" };
-    if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return { sign: "Capricornio", emoji: "♑" };
-    if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return { sign: "Acuario", emoji: "♒" };
-    return { sign: "Piscis", emoji: "♓" };
-};
 
 export const UserHoverCard = ({ user, children, hoverCardProps, hoverCardTriggerProps }: UserHoverCardProps) => {
     const isAdmin = hasElevatedRole(user)
