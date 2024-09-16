@@ -123,7 +123,6 @@ export function hasElevatedRole(curr?: User | Session | null) {
 }
 
 export function getZodiacSign(date: Date): { sign: string; emoji: string } {
-  console.log(date);
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
@@ -140,3 +139,14 @@ export function getZodiacSign(date: Date): { sign: string; emoji: string } {
   if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return { sign: "Acuario", emoji: "♒" };
   return { sign: "Piscis", emoji: "♓" };
 };
+
+
+export function getGender(gender: string): { label: string; value: string; emoji: string } {
+  const genderMap: { [key: string]: { label: string; value: string; emoji: string } } = {
+    masculino: { label: "Masculino", value: "masculino", emoji: "♂️" },
+    femenino: { label: "Femenino", value: "femenino", emoji: "♀️" },
+  };
+
+  const normalizedGender = gender.toLowerCase().trim();
+  return genderMap[normalizedGender] || { label: "No especificado", value: "no_especificado", emoji: "⚧️" };
+}

@@ -26,7 +26,7 @@ import {
 import { User } from "next-auth";
 import Image from "next/image";
 import { toast } from "sonner";
-import { compareChangesObject, getZodiacSign, hasElevatedRole } from "@/lib/utils";
+import { compareChangesObject, getGender, getZodiacSign, hasElevatedRole } from "@/lib/utils";
 import { updateUserProfile } from "@/services/profile.services";
 import { defaultUser } from "@/constants";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -224,7 +224,11 @@ export const ProfileForm = ({ user }: { user: User }) => {
             <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                     <div className="flex items-center gap-2 h-5">
-                        <PersonStandingIcon className="w-5 h-5" />
+                        {
+                            formUser.gender
+                                ? getGender(formUser.gender).emoji
+                                : <PersonStandingIcon className="w-5 h-5" />
+                        }
                         <Label htmlFor="gender">Sexo</Label>
                     </div>
                     <Select
@@ -270,7 +274,7 @@ export const ProfileForm = ({ user }: { user: User }) => {
                         onChange={handleFormFieldChange}
                         min="1900-01-01"
                         max={new Date().toISOString().split('T')[0]}
-                        className="max-w-full inline-block text-gray-700 text-white"
+                        className="max-w-full inline-block text-white"
                     />
                 </div>
             </div>
