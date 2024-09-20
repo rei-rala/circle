@@ -4,7 +4,9 @@ import { User } from "next-auth";
 import { Input } from "@/components/ui/input";
 import { FilterableFields, useFilteredList } from "@/app/hooks/useFulterableField";
 import { UserCard } from "./UserCard";
-import { ClassValue } from "clsx";
+import { useEffect, useRef } from "react";
+
+import autoAnimate from "@formkit/auto-animate"
 
 type AdminActionContainerProps = {
     users: User[];
@@ -23,6 +25,7 @@ export function AdminActionContainer({
     actionClassName,
     formAction,
 }: AdminActionContainerProps) {
+    const container = useRef<HTMLDivElement | null>(null);
     const filterableFields: FilterableFields<User> = {
         name: (name) => typeof name === 'string',
         email: (email) => typeof email === 'string',
@@ -32,9 +35,13 @@ export function AdminActionContainer({
     };
 
     const { filteredList: filteredUsers, filter, setFilter } = useFilteredList(users, filterableFields);
+    
+    useEffect(() => {
+        if (container.current) autoAnimate(container.current);
+    }, [container]);
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4" ref={container}>
             {filteredUsers.length > 0 && (
                 <Input
                     type="text"
